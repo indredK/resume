@@ -60,9 +60,8 @@ html, body, #app {
 }
 
 .main-content {
-  height: calc(100vh - 140px);
-  min-height: 500px;
-  overflow: hidden;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
 }
 
 .nav-link {

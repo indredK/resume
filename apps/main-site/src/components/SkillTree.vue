@@ -30,7 +30,6 @@
                 >
                   <span class="skill-icon">{{ skill.icon || '📄' }}</span>
                   <span class="skill-name">{{ skill.name }}</span>
-                  <span v-if="skill.level" class="skill-level">{{ skill.level }}%</span>
                 </div>
               </div>
             </div>
@@ -43,7 +42,6 @@
             >
               <span class="skill-icon">{{ cat.icon || '📄' }}</span>
               <span class="skill-name">{{ cat.name }}</span>
-              <span v-if="cat.level" class="skill-level">{{ cat.level }}%</span>
             </div>
           </template>
         </div>
@@ -213,12 +211,6 @@ const handleSkillClick = (skill: SkillData) => {
   font-size: 13px;
   color: #f1f5f9;
   font-weight: 500;
-}
-
-.skill-level {
-  font-size: 11px;
-  color: var(--skill-color);
-  font-weight: bold;
 }
 
 .skill-item.single {

@@ -5,6 +5,14 @@ export interface SkillNode {
   color?: string
   level?: number
   link?: string
+  officialLink?: string
+  version?: string
+  releaseDate?: string
+  repo?: string
+  projectLink?: string
+  reason?: string
+  advantages?: string[]
+  disadvantages?: string[]
   children?: SkillNode[]
 }
 
