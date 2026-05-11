@@ -249,28 +249,28 @@ export const companies: Company[] = [
         ]
       },
       {
-        title: 'C语言学习助手',
+        title: 'SimpleApp - 工业自动控制系统',
         role: '独立开发',
         period: '2024 - 至今',
-        icon: '📚',
-        description: 'C语言学习辅助工具，提供代码示例、语法讲解、练习题库等功能，帮助初学者快速掌握C语言基础知识。',
-        tags: ['C语言', '教育', '工具'],
+        icon: '🏭',
+        description: '基于 Avalonia UI 和 .NET 10 的工业自动化监控应用程序，支持 Modbus TCP/RTU 通信，实现设备管理、实时监控、趋势分析和报警管理。',
+        tags: ['Avalonia UI', '.NET 10', 'MVVM', 'Modbus'],
         link: 'https://github.com/indredK/C-app',
         metrics: [
-          { value: '系统化', label: '学习路径', detail: '从基础语法到高级特性，提供完整的C语言学习路径' },
-          { value: '交互式', label: '学习方式', detail: '代码示例可直接运行，即时查看执行结果' },
-          { value: '实用工具', label: '辅助功能', detail: '提供常用代码片段、调试技巧等实用工具' }
+          { value: '跨平台', label: '桌面应用', detail: '基于 Avalonia UI 实现 Windows/macOS/Linux 跨平台支持' },
+          { value: 'Modbus', label: '工业通信', detail: '支持 Modbus TCP/RTU 协议，实现工业设备数据采集' },
+          { value: 'MVVM', label: '架构模式', detail: '采用 MVVM 架构，使用 CommunityToolkit.Mvvm 实现数据绑定' }
         ],
         approach: [
-          { title: '知识体系构建', detail: '系统梳理C语言知识点，从基础语法、数据类型、控制结构到指针、内存管理等高级特性。' },
-          { title: '代码示例库', detail: '收集整理大量经典代码示例，每个示例都配有详细注释和运行说明。' },
-          { title: '练习题库', detail: '设计不同难度的练习题，帮助学习者巩固所学知识，提供答案解析。' },
-          { title: '学习工具集成', detail: '集成常用的C语言开发工具和调试技巧，提升学习效率。' }
+          { title: 'Avalonia UI 跨平台', detail: '使用 Avalonia UI 12.0.2 框架构建现代化桌面应用，实现 Windows、macOS、Linux 全平台支持。' },
+          { title: 'MVVM 架构设计', detail: '采用 MVVM 设计模式，使用 CommunityToolkit.Mvvm 8.4.0 实现视图与业务逻辑分离，提升代码可维护性。' },
+          { title: 'Modbus 通信实现', detail: '实现 Modbus TCP/RTU 协议通信，支持工业设备数据采集与控制，提供 Mock 数据模拟功能。' },
+          { title: '实时监控与报警', detail: '实现设备状态实时监控、趋势数据分析、报警管理与确认处理，使用 Serilog 记录系统日志。' }
         ],
         futurePlans: [
-          '增加在线编译运行功能，支持浏览器内直接编写和运行C代码',
-          '引入AI辅助学习，提供智能答疑和代码审查功能',
-          '建立学习社区，支持学习者之间的交流和分享'
+          '增加更多工业协议支持（OPC UA、Profinet 等）',
+          '实现数据持久化存储，支持历史数据查询与导出',
+          '优化 UI 交互体验，增加数据可视化图表组件'
         ]
       }
     ]

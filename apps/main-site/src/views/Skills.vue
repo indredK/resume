@@ -43,7 +43,9 @@ const selectCategory = (id: string) => {
 
 .category-tabs-wrapper {
   @apply sticky top-[61px] z-40 py-4 border-b border-white/5;
-  background: rgba(2, 6, 23, 0.7);
+  background: rgba(2, 6, 23, 0.95);
+  backdrop-filter: blur(12px);
+  min-height: fit-content;
 }
 
 .category-tabs {
@@ -76,5 +78,6 @@ const selectCategory = (id: string) => {
 
 .tree-container {
   @apply flex-1 relative;
+  padding-top: 2rem;
 }
 </style>

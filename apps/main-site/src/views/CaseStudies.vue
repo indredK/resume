@@ -27,7 +27,7 @@
     </section>
 
     <!-- Main Content: Left-Right Layout -->
-    <section class="container mx-auto px-6 pt-20 pb-32">
+    <section class="container mx-auto px-6 pt-24 pb-32">
       <div class="main-layout">
         <!-- LEFT: Project Navigation -->
         <aside class="left-panel" v-if="currentCompany">
@@ -52,38 +52,6 @@
                   <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
               </div>
-            </div>
-          </div>
-
-          <!-- Philosophy -->
-          <div class="philosophy-mini glass-panel rounded-2xl p-6 mt-6">
-            <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold mb-4 tracking-wider uppercase">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-3 h-3">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-              </svg>
-              数据驱动 · 持续迭代
-            </div>
-            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                <path d="M2 17l10 5 10-5"></path>
-                <path d="M2 12l10 5 10-5"></path>
-              </svg>
-              方法论
-            </h4>
-            <div class="space-y-4">
-              <div v-for="p in principles" :key="p.title" class="flex items-start gap-3 group">
-                <span class="text-base mt-0.5 transition-transform group-hover:scale-110">{{ p.icon }}</span>
-                <div>
-                  <div class="text-xs font-bold text-white mb-1">{{ p.title }}</div>
-                  <div class="text-[11px] text-slate-600 leading-relaxed">{{ p.desc }}</div>
-                </div>
-              </div>
-            </div>
-            <div class="mt-5 pt-5 border-t border-slate-700/50">
-              <p class="text-[11px] text-slate-500 leading-relaxed">
-                按<span class="text-slate-400 font-medium">公司与项目维度</span>，量化呈现每一段经历中的<span class="text-slate-400 font-medium">核心成果</span>与<span class="text-slate-400 font-medium">方法论</span>
-              </p>
             </div>
           </div>
         </aside>

@@ -81,7 +81,8 @@ const navItems = ref([
   { name: '简历', path: '/' },
   { name: '技能树', path: '/skills' },
   { name: '项目', path: '/projects' },
-  { name: '成果', path: '/case-studies' }
+  { name: '成果', path: '/case-studies' },
+  { name: '关于我', path: '/about' }
 ])
 
 const scrollToSection = (hash) => {
@@ -116,10 +117,6 @@ html, body, #app {
   min-height: 100%;
   width: 100%;
   background: #020617;
-}
-
-.main-content {
-  min-height: calc(100vh - 73px);
 }
 
 .nav-link {

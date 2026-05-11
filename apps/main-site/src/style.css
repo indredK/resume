@@ -93,3 +93,19 @@ body {
 .animate-fade-in {
   animation: fadeInUp 0.5s ease-out forwards;
 }
+
+/* 页面布局统一配置 - 防止导航栏遮挡内容 */
+.main-content {
+  min-height: calc(100vh - 73px);
+  padding-top: 73px; /* 导航栏高度 */
+}
+
+/* 隐藏滚动条但保持滚动功能 */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

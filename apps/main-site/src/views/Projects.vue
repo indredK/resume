@@ -1,7 +1,7 @@
 <template>
-  <div class="container mx-auto px-4 py-12">
+  <div class="container mx-auto px-4 py-12 pt-24">
     <h1 class="text-4xl font-bold mb-8 text-center">
-      <span class="text-blue-400">项目</span>展示
+      <span class="text-blue-400">项目</span>
     </h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

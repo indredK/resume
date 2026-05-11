@@ -22,14 +22,19 @@ const routes = [
     component: () => import('@/views/CaseStudies.vue')
   },
   {
+    path: '/about',
+    name: 'About',
+    component: () => import('@/views/About.vue')
+  },
+  {
     path: '/:pathMatch(.*)*',
     redirect: '/'
   }
 ]
 
 const router = createRouter({
-  // 使用简单的 '/' 作为 base，提高本地开发兼容性
-  history: createWebHistory('/'),
+  // GitHub Pages 部署时需要设置正确的 base 路径
+  history: createWebHistory('/resume/'),
   routes
 })
 

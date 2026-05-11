@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting...</title>
+  <script>
+    // GitHub Pages SPA 重定向解决方案
+    // 将当前路径保存到 sessionStorage，然后重定向到根路径
+    sessionStorage.setItem('redirect', location.pathname + location.search + location.hash);
+    location.replace(location.origin + '/resume/');
+  </script>
+</head>
+<body>
+  <p>Redirecting...</p>
+</body>
+</html>
