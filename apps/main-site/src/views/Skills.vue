@@ -39,6 +39,7 @@ const selectCategory = (id: string) => {
 <style scoped>
 .skills-page {
   @apply relative min-h-full flex flex-col;
+  padding-top: 61px; /* 导航栏高度 */
 }
 
 .category-tabs-wrapper {
@@ -78,6 +79,6 @@ const selectCategory = (id: string) => {
 
 .tree-container {
   @apply flex-1 relative;
-  padding-top: 2rem;
+  padding-top: 1rem;
 }
 </style>

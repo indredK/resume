@@ -1,7 +1,7 @@
 <template>
-  <div class="about-page animate-fade-in">
+  <div class="about-page animate-fade-in" style="padding-top: 61px;">
     <!-- Hero Section -->
-    <section class="hero-section py-20 pt-28 relative overflow-hidden">
+    <section class="hero-section py-20 relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-purple-500/5 via-transparent to-transparent"></div>
       <div class="container mx-auto px-6 relative z-10 text-center">
         <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-bold mb-8 tracking-wider uppercase shadow-lg shadow-purple-500/10">

@@ -35,7 +35,23 @@ const routes = [
 const router = createRouter({
   // GitHub Pages 部署时需要设置正确的 base 路径
   history: createWebHistory('/resume/'),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    // 如果有保存的位置（浏览器前进/后退），恢复到该位置
+    if (savedPosition) {
+      return savedPosition
+    }
+    // 如果有锚点，滚动到锚点位置
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth',
+        top: 80 // 导航栏高度偏移
+      }
+    }
+    // 否则滚动到页面顶部
+    return { top: 0, behavior: 'smooth' }
+  }
 })
 
 export default router

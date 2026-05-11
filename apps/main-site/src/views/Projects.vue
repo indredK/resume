@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4 py-12 pt-24">
+  <div class="container mx-auto px-4 py-12" style="padding-top: calc(61px + 3rem);">
     <h1 class="text-4xl font-bold mb-8 text-center">
       <span class="text-blue-400">项目</span>
     </h1>

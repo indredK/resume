@@ -1,7 +1,7 @@
 <template>
-  <div class="home-page animate-fade-in">
+  <div class="home-page animate-fade-in" style="padding-top: 61px;">
     <!-- Resume Header (Hero) -->
-    <section class="resume-header py-16 pt-24 relative overflow-hidden">
+    <section class="resume-header py-16 relative overflow-hidden">
       <div class="container mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center gap-10">
         <div class="flex-1 text-center md:text-left">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold mb-6 tracking-wider uppercase">

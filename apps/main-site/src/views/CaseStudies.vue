@@ -1,5 +1,5 @@
 <template>
-  <div class="case-studies-page animate-fade-in">
+  <div class="case-studies-page animate-fade-in" style="padding-top: 61px;">
     <!-- Category Tabs -->
     <section class="category-tabs-section sticky top-16 z-40 backdrop-blur-xl bg-slate-950/90 border-b border-slate-800/50 flex items-center">
       <div class="container mx-auto px-6">
@@ -27,7 +27,7 @@
     </section>
 
     <!-- Main Content: Left-Right Layout -->
-    <section class="container mx-auto px-6 pt-24 pb-32">
+    <section class="container mx-auto px-6 pt-8 pb-32">
       <div class="main-layout">
         <!-- LEFT: Project Navigation -->
         <aside class="left-panel" v-if="currentCompany">
