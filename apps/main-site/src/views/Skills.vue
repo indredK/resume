@@ -1,17 +1,21 @@
 <template>
   <div class="skills-page">
-    <div class="category-tabs">
-      <button
-        v-for="cat in categories"
-        :key="cat.id"
-        class="category-tab"
-        :class="{ active: selectedCategory === cat.id }"
-        :style="{ '--cat-color': cat.color }"
-        @click="selectCategory(cat.id)"
-      >
-        <span class="cat-icon">{{ cat.icon }}</span>
-        <span class="cat-name">{{ cat.name }}</span>
-      </button>
+    <div class="category-tabs-wrapper glass-panel">
+      <div class="container mx-auto px-6">
+        <div class="category-tabs">
+          <button
+            v-for="cat in categories"
+            :key="cat.id"
+            class="category-tab"
+            :class="{ active: selectedCategory === cat.id }"
+            :style="{ '--cat-color': cat.color }"
+            @click="selectCategory(cat.id)"
+          >
+            <span class="cat-icon">{{ cat.icon }}</span>
+            <span class="cat-name">{{ cat.name }}</span>
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="tree-container">
@@ -34,60 +38,43 @@ const selectCategory = (id: string) => {
 
 <style scoped>
 .skills-page {
-  padding: 12px 20px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  @apply relative min-h-full flex flex-col;
+}
+
+.category-tabs-wrapper {
+  @apply sticky top-[61px] z-40 py-4 border-b border-white/5;
+  background: rgba(2, 6, 23, 0.7);
 }
 
 .category-tabs {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 12px;
-  flex-shrink: 0;
+  @apply flex gap-2 flex-wrap justify-center;
 }
 
 .category-tab {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 12px;
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid transparent;
-  border-radius: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: #94a3b8;
+  @apply flex items-center gap-2 px-4 py-1.5 rounded-xl border border-transparent cursor-pointer transition-all duration-300 text-slate-400;
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .category-tab:hover {
-  background: rgba(51, 65, 85, 0.8);
+  @apply bg-white/5 text-slate-200;
 }
 
 .category-tab.active {
-  border-color: var(--cat-color);
-  background: rgba(30, 41, 59, 0.95);
-  color: white;
+  @apply text-white border-white/10;
+  background: color-mix(in srgb, var(--cat-color) 20%, rgba(255, 255, 255, 0.05));
+  box-shadow: 0 0 20px -5px color-mix(in srgb, var(--cat-color) 30%, transparent);
+  border-color: color-mix(in srgb, var(--cat-color) 40%, transparent);
 }
 
 .cat-icon {
-  font-size: 12px;
+  @apply text-sm;
 }
 
 .cat-name {
-  font-size: 11px;
-  font-weight: 500;
+  @apply text-xs font-bold uppercase tracking-wide;
 }
 
 .tree-container {
-  flex: 1;
-  min-height: 0;
-  position: relative;
-  overflow: hidden;
-  border-radius: 8px;
-  background: rgba(15, 23, 42, 0.5);
+  @apply flex-1 relative;
 }
 </style>

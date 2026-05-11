@@ -17,14 +17,19 @@ const routes = [
     component: () => import('@/views/Projects.vue')
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import('@/views/About.vue')
+    path: '/case-studies',
+    name: 'CaseStudies',
+    component: () => import('@/views/CaseStudies.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/'
   }
 ]
 
 const router = createRouter({
-  history: createWebHistory('/resume/'),
+  // 使用简单的 '/' 作为 base，提高本地开发兼容性
+  history: createWebHistory('/'),
   routes
 })
 

@@ -1,19 +1,20 @@
 <template>
   <div class="skill-grid-page">
-    <div class="category-section" v-for="cat in displayData" :key="cat.id">
+    <div class="category-section animate-fade-in" v-for="(cat, index) in displayData" :key="cat.id" :style="{ animationDelay: `${index * 0.1}s` }">
       <div class="category-header" :style="{ '--cat-color': cat.color }">
-        <span class="cat-icon">{{ cat.icon }}</span>
-        <span class="cat-name">{{ cat.name }}</span>
+        <div class="header-content glass-panel">
+          <span class="cat-icon">{{ cat.icon }}</span>
+          <span class="cat-name">{{ cat.name }}</span>
+        </div>
       </div>
 
       <div class="category-tree">
-        <div class="tree-line" v-if="cat.children"></div>
         <div class="skills-row">
           <template v-if="cat.children">
             <div
               v-for="sub in cat.children"
               :key="sub.id"
-              class="skill-group"
+              class="skill-group glass-card"
             >
               <div class="group-header" v-if="sub.name">
                 <span class="group-icon">{{ sub.icon || '📁' }}</span>
@@ -28,15 +29,17 @@
                   :style="{ '--skill-color': skill.color || cat.color }"
                   @click="handleSkillClick(skill)"
                 >
+                  <div class="skill-dot" :style="{ background: skill.color || cat.color }"></div>
                   <span class="skill-icon">{{ skill.icon || '📄' }}</span>
                   <span class="skill-name">{{ skill.name }}</span>
+                  <span class="hover-arrow">→</span>
                 </div>
               </div>
             </div>
           </template>
           <template v-else>
             <div
-              class="skill-item single"
+              class="skill-item single glass-card"
               :style="{ '--skill-color': cat.color }"
               @click="handleSkillClick(cat)"
             >
@@ -93,127 +96,94 @@ const handleSkillClick = (skill: SkillData) => {
 
 <style scoped>
 .skill-grid-page {
-  padding: 16px 20px;
-  height: 100%;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  @apply container mx-auto px-4 py-8 flex flex-col gap-10;
 }
 
 .category-section {
-  background: rgba(30, 41, 59, 0.4);
-  border-radius: 12px;
-  padding: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  flex-shrink: 0;
+  @apply relative;
 }
 
 .category-header {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: linear-gradient(135deg, var(--cat-color) 0%, transparent 100%);
-  border-radius: 8px;
-  margin-bottom: 16px;
+  @apply mb-5 flex;
+}
+
+.header-content {
+  @apply flex items-center gap-2.5 px-4 py-2 rounded-xl border border-white/10;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
 }
 
 .cat-icon {
-  font-size: 20px;
+  @apply text-xl;
 }
 
 .cat-name {
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
+  @apply text-base font-bold text-white tracking-tight;
 }
 
 .category-tree {
-  position: relative;
-  padding-left: 20px;
-}
-
-.tree-line {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(180deg, var(--cat-color, #4ade80) 0%, transparent 100%);
-  border-radius: 1px;
+  @apply relative;
 }
 
 .skills-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
 }
 
 .skill-group {
-  background: rgba(51, 65, 85, 0.3);
-  border-radius: 8px;
-  padding: 12px;
-  min-width: 180px;
-  flex: 1;
+  @apply flex flex-col p-4 rounded-xl;
 }
 
 .group-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 10px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  @apply flex items-center gap-2 mb-3 pb-2 border-b border-white/5;
 }
 
 .group-icon {
-  font-size: 14px;
+  @apply text-sm opacity-60;
 }
 
 .group-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: #e2e8f0;
+  @apply text-[12px] font-bold text-slate-400 uppercase tracking-wider;
 }
 
 .group-skills {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  @apply flex flex-col gap-1.5;
 }
 
 .skill-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid var(--skill-color);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  @apply flex items-center gap-2.5 p-2.5 rounded-lg cursor-pointer transition-all duration-300;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
 }
 
 .skill-item:hover {
-  transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2),
-              0 0 8px color-mix(in srgb, var(--skill-color) 30%, transparent);
-  background: rgba(51, 65, 85, 0.9);
+  @apply bg-white/5 -translate-y-0.5;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.skill-dot {
+  @apply w-1 h-1 rounded-full shadow-[0_0_6px_var(--skill-color)];
 }
 
 .skill-icon {
-  font-size: 14px;
+  @apply text-sm;
 }
 
 .skill-name {
-  flex: 1;
-  font-size: 13px;
-  color: #f1f5f9;
-  font-weight: 500;
+  @apply flex-1 text-[13px] text-slate-400 font-medium transition-colors duration-300;
+}
+
+.skill-item:hover .skill-name {
+  @apply text-slate-100;
+}
+
+.hover-arrow {
+  @apply text-slate-600 opacity-0 transition-all duration-300 -translate-x-1;
+}
+
+.skill-item:hover .hover-arrow {
+  @apply opacity-100 translate-x-0;
 }
 
 .skill-item.single {
-  width: 100%;
+  @apply w-full flex-row p-4;
 }
 </style>

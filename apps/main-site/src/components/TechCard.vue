@@ -22,15 +22,20 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  category: {
-    type: Object,
-    required: true
-  }
-})
+<script setup lang="ts">
+interface Category {
+  icon: string
+  title: string
+  color: string
+  items: string[]
+  link: string
+}
 
-const handleClick = () => {
-  window.open(category.link, '_blank')
+const props = defineProps<{
+  category: Category
+}>()
+
+const handleClick = (): void => {
+  window.open(props.category.link, '_blank')
 }
 </script>

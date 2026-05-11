@@ -35,15 +35,25 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  category: {
-    type: Object,
-    required: true
-  }
-})
+<script setup lang="ts">
+interface Skill {
+  name: string
+  level: number
+  link?: string
+}
 
-const openLink = (url) => {
+interface Category {
+  icon: string
+  name: string
+  color: string
+  skills: Skill[]
+}
+
+defineProps<{
+  category: Category
+}>()
+
+const openLink = (url: string): void => {
   if (url) {
     window.open(url, '_blank')
   }

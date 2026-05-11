@@ -44,11 +44,17 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  project: {
-    type: Object,
-    required: true
-  }
-})
+<script setup lang="ts">
+interface Project {
+  name: string
+  color: string
+  description: string
+  tech: string[]
+  repo?: string
+  url?: string
+}
+
+defineProps<{
+  project: Project
+}>()
 </script>
