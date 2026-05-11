@@ -39,9 +39,20 @@
         <h2 class="text-2xl font-bold mb-4 text-purple-400">联系方式</h2>
         <div class="space-y-3">
           <p class="text-slate-300">
+            <span class="text-slate-500">在线预览:</span>
+            <a
+              href="https://indredk.github.io/resume/"
+              target="_blank"
+              class="text-green-400 hover:underline ml-2"
+            >
+              indredk.github.io/resume
+            </a>
+          </p>
+          <p class="text-slate-300">
             <span class="text-slate-500">GitHub:</span>
             <a
               href="https://github.com/kindred-resume-hub"
+              target="_blank"
               class="text-blue-400 hover:underline ml-2"
             >
               github.com/kindred-resume-hub
