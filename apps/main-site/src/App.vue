@@ -11,7 +11,7 @@
               v-for="item in navItems"
               :key="item.path"
               :to="item.path"
-              class="text-slate-300 hover:text-green-400 transition-colors"
+              class="nav-link"
             >
               {{ item.name }}
             </router-link>
@@ -20,7 +20,7 @@
       </nav>
     </header>
 
-    <main>
+    <main class="main-content">
       <router-view />
     </main>
 
@@ -45,3 +45,59 @@ const navItems = ref([
   { name: '关于我', path: '/about' }
 ])
 </script>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.main-content {
+  height: calc(100vh - 140px);
+  min-height: 500px;
+  overflow: hidden;
+}
+
+.nav-link {
+  color: #94a3b8;
+  transition: all 0.2s ease;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.nav-link:hover {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+}
+
+.nav-link.router-link-active {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.15);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.6);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.9);
+}
+</style>

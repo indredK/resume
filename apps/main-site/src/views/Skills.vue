@@ -1,72 +1,93 @@
 <template>
-  <div class="container mx-auto px-4 py-12">
-    <h1 class="text-4xl font-bold mb-8 text-center">
-      <span class="text-green-400">技能</span>树
-    </h1>
+  <div class="skills-page">
+    <div class="category-tabs">
+      <button
+        v-for="cat in categories"
+        :key="cat.id"
+        class="category-tab"
+        :class="{ active: selectedCategory === cat.id }"
+        :style="{ '--cat-color': cat.color }"
+        @click="selectCategory(cat.id)"
+      >
+        <span class="cat-icon">{{ cat.icon }}</span>
+        <span class="cat-name">{{ cat.name }}</span>
+      </button>
+    </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <SkillCategory
-        v-for="category in skillTree"
-        :key="category.name"
-        :category="category"
-      />
+    <div class="tree-container">
+      <SkillTree :category="selectedCategory" />
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import SkillCategory from '@/components/SkillCategory.vue'
+import SkillTree from '@/components/SkillTree.vue'
+import { categories } from '@/data/index'
 
-const skillTree = ref([
-  {
-    name: '前端技术',
-    icon: '⚡',
-    color: 'green',
-    skills: [
-      { name: 'Vue 3', level: 90, link: 'https://github.com/kindred-resume-hub/vue-portfolio' },
-      { name: 'React 18', level: 85, link: 'https://github.com/kindred-resume-hub/react-portfolio' },
-      { name: 'Qiankun 微前端', level: 80, link: 'https://github.com/kindred-resume-hub/qiankun-main' },
-      { name: 'TypeScript', level: 85, link: '' },
-      { name: 'TailwindCSS', level: 90, link: '' },
-      { name: 'Vite/Webpack', level: 85, link: '' }
-    ]
-  },
-  {
-    name: '后端技术',
-    icon: '🔧',
-    color: 'blue',
-    skills: [
-      { name: 'Node.js', level: 88, link: 'https://github.com/kindred-resume-hub/node-api' },
-      { name: 'Python FastAPI', level: 82, link: 'https://github.com/kindred-resume-hub/python-api' },
-      { name: 'Go', level: 75, link: '' },
-      { name: 'PostgreSQL', level: 80, link: '' },
-      { name: 'MongoDB', level: 78, link: '' },
-      { name: 'Redis', level: 76, link: '' }
-    ]
-  },
-  {
-    name: '桌面端技术',
-    icon: '🖥️',
-    color: 'purple',
-    skills: [
-      { name: 'Electron', level: 85, link: 'https://github.com/kindred-resume-hub/electron-demo' },
-      { name: 'Wails (Go)', level: 72, link: 'https://github.com/kindred-resume-hub/wails-demo' },
-      { name: 'Tauri', level: 68, link: '' },
-      { name: '桌面端开发', level: 85, link: '' }
-    ]
-  },
-  {
-    name: 'DevOps',
-    icon: '🚀',
-    color: 'orange',
-    skills: [
-      { name: 'Docker', level: 88, link: 'https://github.com/kindred-resume-hub/docker-demo' },
-      { name: 'GitHub Actions', level: 85, link: '' },
-      { name: 'Kubernetes', level: 72, link: '' },
-      { name: 'AWS', level: 75, link: '' },
-      { name: 'CI/CD', level: 88, link: '' }
-    ]
-  }
-])
+const selectedCategory = ref('all')
+
+const selectCategory = (id: string) => {
+  selectedCategory.value = id
+}
 </script>
+
+<style scoped>
+.skills-page {
+  padding: 12px 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.category-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.category-tab {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #94a3b8;
+}
+
+.category-tab:hover {
+  background: rgba(51, 65, 85, 0.8);
+}
+
+.category-tab.active {
+  border-color: var(--cat-color);
+  background: rgba(30, 41, 59, 0.95);
+  color: white;
+}
+
+.cat-icon {
+  font-size: 12px;
+}
+
+.cat-name {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.tree-container {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.5);
+}
+</style>
