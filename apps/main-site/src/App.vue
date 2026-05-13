@@ -43,7 +43,7 @@
           <div class="text-slate-400">
             <p class="font-bold text-slate-200 text-lg mb-2">Portfolio Hub</p>
             <p class="text-sm leading-relaxed">
-              钟邮深的个人技术能力展示中心。<br>
+              Zhong 的个人技术能力展示中心。<br>
               专注 IoT 物联网与高性能 Web 架构设计。
             </p>
           </div>

@@ -12,7 +12,7 @@
             前端开发工程师 | 5年经验
           </div>
           <h1 class="text-6xl font-black mb-4 tracking-tighter text-white">
-            钟邮深
+            Zhong
           </h1>
           <p class="text-xl text-slate-400 max-w-2xl mb-8 leading-relaxed font-medium">
             深耕 <span class="text-blue-400">IoT 物联网</span> 与 <span class="text-emerald-400">微前端架构</span>。

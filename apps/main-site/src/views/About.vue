@@ -12,7 +12,7 @@
           关于我
         </div>
         <h1 class="text-4xl md:text-5xl font-black tracking-tighter text-white mb-6 leading-tight">
-          钟邮深 <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400">INTJ</span>
+          Zhong <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400">INTJ</span>
         </h1>
         <p class="text-base md:text-lg text-slate-400 max-w-3xl mx-auto leading-relaxed font-light">
           建筑师型人格 · 理性思考者 · 追求卓越的工程师
