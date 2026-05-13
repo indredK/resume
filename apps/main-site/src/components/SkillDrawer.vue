@@ -1,151 +1,152 @@
 <template>
-  <Teleport to="body">
-    <Transition name="drawer">
-      <div v-if="visible" class="drawer-overlay" @click.self="$emit('close')">
-        <div class="drawer-content glass-panel" :style="{ '--theme-color': getColor() }">
-        <!-- Toast 通知 -->
-        <Transition name="toast">
-          <div v-if="notification" class="toast-container" :class="notification.type">
-            <span class="toast-icon">
-              <svg v-if="notification.type === 'success'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-3 h-3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <svg v-else-if="notification.type === 'error'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-3 h-3"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-3 h-3"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            </span>
-            {{ notification.message }}
+  <BaseDrawer :visible="visible" :is-nested="isNested" @close="$emit('close')">
+    <!-- Toast 通知 -->
+    <Transition name="toast">
+      <div v-if="notification" class="toast-container" :class="notification.type">
+        <span class="toast-icon">
+          <svg v-if="notification.type === 'success'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-3 h-3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <svg v-else-if="notification.type === 'error'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-3 h-3"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-3 h-3"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </span>
+        {{ notification.message }}
+      </div>
+    </Transition>
+
+    <div class="drawer-header">
+      <div class="header-main">
+        <div class="skill-icon-wrapper" :style="{ background: `color-mix(in srgb, ${getColor()} 20%, transparent)` }">
+          <span class="skill-icon">{{ getIcon() }}</span>
+        </div>
+        <div class="skill-info-main">
+          <h2 class="skill-name">
+            {{ skill.name || '未命名' }}
+            <span v-if="skill.version" class="skill-version">{{ skill.version }}</span>
+          </h2>
+          <p v-if="skill.children?.length" class="skill-count">
+            {{ skill.children.length }} Sub-technologies
+          </p>
+        </div>
+        <div class="header-actions">
+          <button
+            v-if="skill.repo"
+            class="action-btn refresh"
+            :class="{ 'is-loading': loading }"
+            @click="refreshVersion"
+            title="获取最新版本"
+          >
+            <svg class="refresh-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 4v6h-6"></path>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+          </button>
+          <a
+            v-if="skill.officialLink"
+            :href="skill.officialLink"
+            target="_blank"
+            class="action-btn official"
+            title="官网"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </a>
+          <button class="action-btn close" @click="$emit('close')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div v-if="skill.reason" class="reason-box">
+        {{ skill.reason }}
+      </div>
+    </div>
+
+    <div ref="drawerBodyRef" class="drawer-body custom-scrollbar">
+      <div class="skill-detail-grid">
+        <!-- 子技术/生态列表 -->
+        <div v-if="skill.children?.length" class="detail-section">
+          <h3 class="section-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            </svg>
+            Ecosystem
+          </h3>
+          <div class="eco-list">
+            <div
+              v-for="child in skill.children"
+              :key="child.id || child.name"
+              class="eco-item glass-card"
+              @click="handleChildClick(child)"
+            >
+              <span class="eco-icon">{{ child.icon || '📁' }}</span>
+              <div class="eco-info">
+                <span class="eco-name">{{ child.name }}</span>
+                <div class="eco-meta">
+                  <span v-if="child.version" class="eco-ver">{{ child.version }}</span>
+                  <span v-if="child.releaseDate" class="eco-date">{{ child.releaseDate }}</span>
+                </div>
+              </div>
+              <span class="eco-arrow">↗</span>
+            </div>
           </div>
-        </Transition>
+        </div>
 
-        <div class="drawer-header">
-            <div class="header-main">
-              <div class="skill-icon-wrapper" :style="{ background: `color-mix(in srgb, ${getColor()} 20%, transparent)` }">
-                <span class="skill-icon">{{ getIcon() }}</span>
-              </div>
-              <div class="skill-info-main">
-                <h2 class="skill-name">
-                  {{ skill.name || '未命名' }}
-                </h2>
-                <p v-if="skill.children?.length" class="skill-count">
-                  {{ skill.children.length }} Sub-technologies
-                </p>
-              </div>
-              <div class="header-actions">
-                <button
-                  v-if="skill.repo"
-                  class="action-btn refresh"
-                  :class="{ 'is-loading': loading }"
-                  @click="refreshVersion"
-                  title="获取最新版本"
-                >
-                  <svg class="refresh-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M23 4v6h-6"></path>
-                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-                  </svg>
-                </button>
-                <a
-                  v-if="skill.officialLink"
-                  :href="skill.officialLink"
-                  target="_blank"
-                  class="action-btn official"
-                  title="官网"
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="2" y1="12" x2="22" y2="12"></line>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                  </svg>
-                </a>
-                <button class="action-btn close" @click="$emit('close')">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div v-if="skill.version" class="version-banner">
-              <span class="version-tag">{{ skill.version }}</span>
-              <span v-if="skill.releaseDate" class="release-date">Released on {{ skill.releaseDate }}</span>
-            </div>
-
-            <div v-if="skill.reason" class="reason-box">
-              {{ skill.reason }}
+        <!-- 优势 -->
+        <div v-if="skill.advantages?.length" class="detail-section">
+          <h3 class="section-label success">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Key Advantages
+          </h3>
+          <div class="pros-cons-grid">
+            <div v-for="(adv, idx) in skill.advantages" :key="idx" class="pro-item">
+              <span class="bullet"></span>
+              {{ adv }}
             </div>
           </div>
+        </div>
 
-          <div class="drawer-body custom-scrollbar">
-            <div class="skill-detail-grid">
-              <!-- 子技术/生态列表 -->
-              <div v-if="skill.children?.length" class="detail-section">
-                <h3 class="section-label">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
-                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                  </svg>
-                  Ecosystem
-                </h3>
-                <div class="eco-list">
-                  <div
-                    v-for="child in skill.children"
-                    :key="child.id || child.name"
-                    class="eco-item glass-card"
-                    @click="handleChildClick(child)"
-                  >
-                    <span class="eco-icon">{{ child.icon || '📁' }}</span>
-                    <div class="eco-info">
-                      <span class="eco-name">{{ child.name }}</span>
-                      <div class="eco-meta">
-                        <span v-if="child.version" class="eco-ver">{{ child.version }}</span>
-                        <span v-if="child.releaseDate" class="eco-date">{{ child.releaseDate }}</span>
-                      </div>
-                    </div>
-                    <span class="eco-arrow">↗</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 优势 -->
-              <div v-if="skill.advantages?.length" class="detail-section">
-                <h3 class="section-label success">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                  Key Advantages
-                </h3>
-                <div class="pros-cons-grid">
-                  <div v-for="(adv, idx) in skill.advantages" :key="idx" class="pro-item">
-                    <span class="bullet"></span>
-                    {{ adv }}
-                  </div>
-                </div>
-              </div>
-
-              <!-- 劣势 -->
-              <div v-if="skill.disadvantages?.length" class="detail-section">
-                <h3 class="section-label danger">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="15" y1="9" x2="9" y2="15"></line>
-                    <line x1="9" y1="9" x2="15" y2="15"></line>
-                  </svg>
-                  Considerations
-                </h3>
-                <div class="pros-cons-grid">
-                  <div v-for="(dis, idx) in skill.disadvantages" :key="idx" class="con-item">
-                    <span class="bullet"></span>
-                    {{ dis }}
-                  </div>
-                </div>
-              </div>
+        <!-- 劣势 -->
+        <div v-if="skill.disadvantages?.length" class="detail-section">
+          <h3 class="section-label danger">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+            Considerations
+          </h3>
+          <div class="pros-cons-grid">
+            <div v-for="(dis, idx) in skill.disadvantages" :key="idx" class="con-item">
+              <span class="bullet"></span>
+              {{ dis }}
             </div>
           </div>
         </div>
       </div>
-    </Transition>
-  </Teleport>
+    </div>
+  </BaseDrawer>
+
+  <!-- 嵌套抽屉 -->
+  <SkillDrawer
+    v-if="nestedSkill"
+    :visible="nestedDrawerVisible"
+    :skill="nestedSkill"
+    :is-nested="true"
+    @close="closeNestedDrawer"
+  />
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onUnmounted } from 'vue'
+import { ref, watch, onUnmounted, computed } from 'vue'
+import BaseDrawer from './BaseDrawer.vue'
+import { useDrawer } from '@/composables/useDrawer'
 
 interface SkillData {
   id?: string
@@ -165,14 +166,21 @@ interface SkillData {
   children?: SkillData[]
 }
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   visible: boolean
   skill: SkillData
-}>()
+  isNested?: boolean
+}>(), {
+  isNested: false
+})
 
 const loading = ref(false)
 const notification = ref<{ message: string; type: 'success' | 'error' | 'info' } | null>(null)
 let notificationTimer: any = null
+
+// 嵌套抽屉状态
+const nestedDrawerVisible = ref(false)
+const nestedSkill = ref<SkillData | null>(null)
 
 const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
   if (notificationTimer) clearTimeout(notificationTimer)
@@ -187,18 +195,25 @@ const emit = defineEmits<{
   select: [skill: SkillData]
 }>()
 
-// 锁定背景滚动逻辑
-watch(() => props.visible, (isVisible) => {
-  if (isVisible) {
-    document.body.style.overflow = 'hidden'
-  } else {
-    document.body.style.overflow = ''
-    notification.value = null // 关闭抽屉时清除通知
-  }
-}, { immediate: true })
+// 抽屉滚动管理（仅非嵌套抽屉）
+const drawerBodyRef = ref<HTMLElement | null>(null)
+const visibleComputed = computed(() => props.visible)
+
+if (!props.isNested) {
+  useDrawer(drawerBodyRef, visibleComputed, {
+    skillId: () => props.skill.id || props.skill.name,
+    skillName: () => props.skill.name
+  })
+} else {
+  // 嵌套抽屉只需监听关闭时清理通知
+  watch(() => props.visible, (isVisible) => {
+    if (!isVisible) {
+      notification.value = null
+    }
+  })
+}
 
 onUnmounted(() => {
-  document.body.style.overflow = ''
   if (notificationTimer) clearTimeout(notificationTimer)
 })
 
@@ -213,11 +228,21 @@ const getColor = (): string => {
 }
 
 const handleChildClick = (child: SkillData) => {
-  if (child.officialLink) {
+  // 如果子项有详细信息（reason、advantages、disadvantages 或 children），打开嵌套抽屉
+  if (child.reason || child.advantages?.length || child.disadvantages?.length || child.children?.length) {
+    nestedSkill.value = child
+    nestedDrawerVisible.value = true
+  } else if (child.officialLink) {
+    // 否则直接打开官网
     window.open(child.officialLink, '_blank')
-  } else {
-    emit('select', child)
   }
+}
+
+const closeNestedDrawer = () => {
+  nestedDrawerVisible.value = false
+  setTimeout(() => {
+    nestedSkill.value = null
+  }, 300)
 }
 
 const fetchWithTimeout = async (url: string, options: any = {}, timeout = 8000) => {
@@ -295,15 +320,6 @@ const refreshVersion = async () => {
 </script>
 
 <style scoped>
-.drawer-overlay {
-  @apply fixed inset-0 z-[1000] bg-black/60 backdrop-blur-sm flex justify-end;
-}
-
-.drawer-content {
-  @apply w-full max-w-lg h-full shadow-2xl flex flex-col relative;
-  border-left: 1px solid rgba(255, 255, 255, 0.05);
-}
-
 .toast-container {
   @apply absolute top-4 left-1/2 -translate-x-1/2 z-[110] px-4 py-2 rounded-lg text-xs font-bold shadow-lg flex items-center gap-2 border whitespace-nowrap;
   backdrop-filter: blur(8px);
@@ -361,6 +377,10 @@ const refreshVersion = async () => {
   @apply text-2xl font-bold text-white tracking-tight;
 }
 
+.skill-version {
+  @apply ml-2 px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-400 text-xs font-bold align-middle;
+}
+
 .skill-count {
   @apply text-xs font-medium text-slate-500 uppercase tracking-wider;
 }
@@ -381,53 +401,58 @@ const refreshVersion = async () => {
   @apply text-blue-400 bg-blue-500/10;
 }
 
-.action-btn.close:hover {
-  @apply text-rose-400 bg-rose-500/10;
-}
-
 .refresh-svg {
-  @apply w-4 h-4;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.is-loading .refresh-svg {
+.action-btn.refresh.is-loading .refresh-svg {
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.version-banner {
-  @apply flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white/5 border border-white/5;
+.action-btn.official:hover {
+  @apply text-emerald-400 bg-emerald-500/10;
 }
 
-.version-tag {
-  @apply px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-400 text-[10px] font-bold border border-blue-500/20;
-}
-
-.release-date {
-  @apply text-[11px] text-slate-500 font-medium;
+.action-btn.close:hover {
+  @apply text-rose-400 bg-rose-500/10;
 }
 
 .reason-box {
-  @apply text-sm leading-relaxed text-slate-400 p-4 rounded-xl bg-white/[0.02] border-l-2 border-[--theme-color];
+  @apply p-4 rounded-xl bg-white/5 border border-white/5 text-sm text-slate-300 leading-relaxed;
 }
 
 .drawer-body {
-  @apply flex-1 overflow-y-auto px-8 pb-12;
+  @apply flex-1 overflow-y-auto px-8 py-4;
 }
 
 .skill-detail-grid {
-  @apply flex flex-col gap-10;
+  @apply flex flex-col gap-4;
+}
+
+.detail-section {
+  @apply mb-2;
 }
 
 .section-label {
-  @apply flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest mb-4;
+  @apply flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest mb-3;
 }
 
-.section-label.success { @apply text-emerald-500/70; }
-.section-label.danger { @apply text-rose-500/70; }
+.section-label.success {
+  @apply text-emerald-400;
+}
+
+.section-label.danger {
+  @apply text-rose-400;
+}
 
 .eco-list {
   @apply flex flex-col gap-3;
@@ -483,21 +508,6 @@ const refreshVersion = async () => {
 
 .pro-item .bullet { @apply bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]; }
 .con-item .bullet { @apply bg-rose-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]; }
-
-/* 过渡动画 */
-.drawer-enter-active, .drawer-leave-active {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.drawer-enter-active .drawer-content, .drawer-leave-active .drawer-content {
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.drawer-enter-from { opacity: 0; }
-.drawer-enter-from .drawer-content { transform: translateX(100%); }
-
-.drawer-leave-to { opacity: 0; }
-.drawer-leave-to .drawer-content { transform: translateX(100%); }
 
 /* 自定义滚动条 */
 .custom-scrollbar::-webkit-scrollbar {

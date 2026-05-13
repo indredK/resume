@@ -7,6 +7,29 @@ export interface Metric {
 export interface Approach {
   title: string
   detail: string
+  requirement?: string
+  implementation?: string
+  tech?: string[]
+  selectionReason?: string
+  alternatives?: {
+    name: string
+    pros: string
+    cons: string
+    selected?: boolean
+  }[]
+  challenges?: {
+    problem: string
+    solution: string
+  }[]
+}
+
+export interface Module {
+  title: string
+  icon: string
+  business: string
+  tech: string[]
+  approach: Approach[]
+  futurePlans: string[]
 }
 
 export interface Project {
@@ -20,6 +43,7 @@ export interface Project {
   metrics: Metric[]
   approach: Approach[]
   futurePlans: string[]
+  modules?: Module[]
 }
 
 export interface Stat {

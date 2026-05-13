@@ -138,12 +138,12 @@
               <div class="detail-header glass-panel rounded-3xl p-8 md:p-10 mb-8 relative overflow-hidden">
                 <div class="absolute inset-0 opacity-20" :class="'bg-gradient-to-br from-' + currentCompany.color + '-600/10 via-transparent to-transparent'"></div>
                 <div class="relative z-10">
-                  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
-                    <div class="flex items-center gap-5">
+                  <div class="flex flex-col md:grid md:grid-cols-[7fr_3fr] md:items-start gap-4 mb-6">
+                    <div class="flex items-center gap-5 min-w-0">
                       <div class="icon-box w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-xl" :class="'bg-' + currentCompany.color + '-500/10'">
                         {{ currentProject.icon }}
                       </div>
-                      <div>
+                      <div class="min-w-0 flex-1">
                         <h2 class="text-3xl font-bold text-white mb-2">{{ currentProject.title }}</h2>
                         <p class="text-sm text-slate-500">
                           <span :class="'text-' + currentCompany.color + '-400 font-semibold'">{{ currentCompany.shortName }}</span>
@@ -154,8 +154,8 @@
                         </p>
                       </div>
                     </div>
-                    <div class="flex flex-wrap gap-2">
-                      <span v-for="tag in currentProject.tags" :key="tag" class="px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400 border border-' + currentCompany.color + '-500/20'">
+                    <div class="flex flex-wrap gap-1.5 md:justify-end md:items-start">
+                      <span v-for="tag in currentProject.tags" :key="tag" class="px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400 border border-' + currentCompany.color + '-500/20'">
                         {{ tag }}
                       </span>
                     </div>
@@ -173,69 +173,176 @@
                 </div>
               </div>
 
-              <!-- Metrics -->
-              <div class="mb-8">
-                <h3 class="detail-section-title">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-emerald-400"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
-                  核心数据提升
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                  <div v-for="metric in currentProject.metrics" :key="metric.label" class="metric-card rounded-2xl p-6 group">
-                    <div class="text-3xl font-black mb-2" :class="'text-' + currentCompany.color + '-400'">{{ metric.value }}</div>
-                    <div class="text-sm text-slate-300 font-semibold mb-2">{{ metric.label }}</div>
-                    <div class="text-xs text-slate-600 leading-relaxed">{{ metric.detail }}</div>
-                  </div>
+              <!-- Module Tabs (if project has modules) -->
+              <div v-if="currentProject.modules && currentProject.modules.length > 0" class="mb-8">
+                <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+                  <button
+                    v-for="(module, mIdx) in currentProject.modules"
+                    :key="module.title"
+                    @click="selectModule(mIdx)"
+                    class="module-tab relative flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all flex-shrink-0"
+                    :class="[
+                      activeModule === mIdx
+                        ? 'bg-' + currentCompany.color + '-500/20 text-' + currentCompany.color + '-400 border border-' + currentCompany.color + '-500/30'
+                        : 'bg-slate-800/50 text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-transparent'
+                    ]"
+                  >
+                    <span>{{ module.icon }}</span>
+                    <span>{{ module.title }}</span>
+                  </button>
                 </div>
               </div>
 
-              <!-- Approach -->
-              <div class="mb-8">
-                <h3 class="detail-section-title">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-blue-400"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                  我是如何做到的
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div v-for="(step, i) in currentProject.approach" :key="i" class="approach-step rounded-xl p-5 flex gap-4">
-                    <div class="step-number w-9 h-9 rounded-lg flex-shrink-0 flex items-center justify-center text-sm font-black" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">
-                      {{ i + 1 }}
-                    </div>
-                    <div>
-                      <h4 class="text-sm font-bold text-white mb-2">{{ step.title }}</h4>
-                      <p class="text-xs text-slate-500 leading-relaxed">{{ step.detail }}</p>
+              <!-- Module Detail View (if module selected) -->
+              <template v-if="currentModule">
+                <!-- Module Business -->
+                <div class="mb-8">
+                  <h3 class="detail-section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-emerald-400"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                    业务需求
+                  </h3>
+                  <div class="rounded-2xl p-6" :class="'bg-' + currentCompany.color + '-500/5 border border-' + currentCompany.color + '-500/10'">
+                    <p class="text-sm text-slate-400 leading-relaxed">{{ currentModule.business }}</p>
+                  </div>
+                </div>
+
+                <!-- Module Tech Stack -->
+                <div class="mb-8">
+                  <h3 class="detail-section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-cyan-400"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    技术选型
+                  </h3>
+                  <div class="flex flex-wrap gap-2">
+                    <span v-for="tech in currentModule.tech" :key="tech" class="px-4 py-2 rounded-xl text-sm font-bold" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400 border border-' + currentCompany.color + '-500/20'">
+                      {{ tech }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Module Approach -->
+                <div class="mb-8">
+                  <h3 class="detail-section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-blue-400"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    实现思路
+                  </h3>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div 
+                      v-for="(step, i) in currentModule.approach" 
+                      :key="i" 
+                      class="approach-step rounded-xl p-5 flex gap-4 cursor-pointer transition-all hover:bg-white/5 hover:-translate-y-0.5"
+                      @click="openApproachDrawer(step, i + 1, currentModule.title)"
+                    >
+                      <div class="step-number w-9 h-9 rounded-lg flex-shrink-0 flex items-center justify-center text-sm font-black" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">
+                        {{ i + 1 }}
+                      </div>
+                      <div class="flex-1">
+                        <h4 class="text-sm font-bold text-white mb-2 flex items-center justify-between">
+                          {{ step.title }}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-slate-600 transition-transform">→</svg>
+                        </h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">{{ step.detail }}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <!-- Future Plans -->
-              <div>
-                <h3 class="detail-section-title">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-purple-400"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                  未来我会如何做
-                </h3>
-                <div class="future-plans rounded-2xl p-6" :class="'bg-' + currentCompany.color + '-500/5 border border-' + currentCompany.color + '-500/10'">
-                  <ul class="space-y-4">
-                    <li v-for="(plan, i) in currentProject.futurePlans" :key="i" class="flex items-start gap-3 text-sm text-slate-400 leading-relaxed">
-                      <span class="mt-0.5 w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center text-xs font-bold" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">→</span>
-                      {{ plan }}
-                    </li>
-                  </ul>
+                <!-- Module Future Plans -->
+                <div>
+                  <h3 class="detail-section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-purple-400"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    未来规划
+                  </h3>
+                  <div class="future-plans rounded-2xl p-6" :class="'bg-' + currentCompany.color + '-500/5 border border-' + currentCompany.color + '-500/10'">
+                    <ul class="space-y-4">
+                      <li v-for="(plan, i) in currentModule.futurePlans" :key="i" class="flex items-start gap-3 text-sm text-slate-400 leading-relaxed">
+                        <span class="mt-0.5 w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center text-xs font-bold" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">→</span>
+                        {{ plan }}
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              </template>
+
+              <!-- Project Overview (if no module selected) -->
+              <template v-else>
+                <!-- Metrics -->
+                <div class="mb-8">
+                  <h3 class="detail-section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-emerald-400"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                    核心数据提升
+                  </h3>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div v-for="metric in currentProject.metrics" :key="metric.label" class="metric-card rounded-2xl p-6 group">
+                      <div class="text-3xl font-black mb-2" :class="'text-' + currentCompany.color + '-400'">{{ metric.value }}</div>
+                      <div class="text-sm text-slate-300 font-semibold mb-2">{{ metric.label }}</div>
+                      <div class="text-xs text-slate-600 leading-relaxed">{{ metric.detail }}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Approach -->
+                <div class="mb-8">
+                  <h3 class="detail-section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-blue-400"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    我是如何做到的
+                  </h3>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div 
+                      v-for="(step, i) in currentProject.approach" 
+                      :key="i" 
+                      class="approach-step rounded-xl p-5 flex gap-4 cursor-pointer transition-all hover:bg-white/5 hover:-translate-y-0.5"
+                      @click="openApproachDrawer(step, i + 1, currentProject.title)"
+                    >
+                      <div class="step-number w-9 h-9 rounded-lg flex-shrink-0 flex items-center justify-center text-sm font-black" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">
+                        {{ i + 1 }}
+                      </div>
+                      <div class="flex-1">
+                        <h4 class="text-sm font-bold text-white mb-2 flex items-center justify-between">
+                          {{ step.title }}
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-slate-600 transition-transform">→</svg>
+                        </h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">{{ step.detail }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Future Plans -->
+                <div>
+                  <h3 class="detail-section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-purple-400"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    未来我会如何做
+                  </h3>
+                  <div class="future-plans rounded-2xl p-6" :class="'bg-' + currentCompany.color + '-500/5 border border-' + currentCompany.color + '-500/10'">
+                    <ul class="space-y-4">
+                      <li v-for="(plan, i) in currentProject.futurePlans" :key="i" class="flex items-start gap-3 text-sm text-slate-400 leading-relaxed">
+                        <span class="mt-0.5 w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center text-xs font-bold" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">→</span>
+                        {{ plan }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </template>
             </div>
           </transition>
         </main>
       </div>
     </section>
   </div>
+
+  <ApproachDrawer
+    :visible="drawerVisible"
+    :approach-data="currentApproach"
+    @close="closeDrawer"
+  />
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { companies, principles } from '@/data/caseStudies'
-import type { Company } from '@/data/types'
+import type { Company, Module, Approach } from '@/data/types'
+import ApproachDrawer from '@/components/ApproachDrawer.vue'
 
-// 定义类别标签
 interface Category {
   id: string
   name: string
@@ -244,14 +351,37 @@ interface Category {
   companyIndex: number
 }
 
+interface ApproachDetail {
+  step: number
+  title: string
+  moduleName: string
+  requirement: string
+  implementation: string
+  tech: string[]
+  selectionReason: string
+  alternatives: {
+    name: string
+    pros: string
+    cons: string
+    selected?: boolean
+  }[]
+  challenges: {
+    problem: string
+    solution: string
+  }[]
+}
+
 const categories: Category[] = [
   { id: 'milesight', name: '星纵物联', icon: '🏢', color: 'emerald', companyIndex: 0 },
   { id: 'highway', name: '高速工程顾问', icon: '🏗️', color: 'blue', companyIndex: 1 },
   { id: 'personal', name: '个人项目', icon: '🚀', color: 'purple', companyIndex: 2 }
 ]
 
-const activeCategory = ref<string>('milesight') // 当前激活的类别
-const activeProject = ref<number | null>(null) // null 表示只选中公司，未选中具体项目
+const activeCategory = ref<string>('milesight')
+const activeProject = ref<number | null>(null)
+const activeModule = ref<number | null>(null)
+const drawerVisible = ref(false)
+const currentApproach = ref<ApproachDetail | null>(null)
 
 const currentCategory = computed<Category | undefined>(() => categories.find(cat => cat.id === activeCategory.value))
 const currentCompany = computed<Company | null>(() => {
@@ -262,14 +392,44 @@ const currentProject = computed(() => {
   if (activeProject.value === null || !currentCompany.value) return null
   return currentCompany.value.projects[activeProject.value]
 })
+const currentModule = computed<Module | null>(() => {
+  if (activeModule.value === null || !currentProject.value || !currentProject.value.modules) return null
+  return currentProject.value.modules[activeModule.value] || null
+})
 
 function selectCategory(categoryId: string): void {
   activeCategory.value = categoryId
-  activeProject.value = null // 切换类别时，清除项目选择
+  activeProject.value = null
+  activeModule.value = null
 }
 
 function selectProject(pIdx: number): void {
   activeProject.value = pIdx
+  activeModule.value = null
+}
+
+function selectModule(mIdx: number): void {
+  activeModule.value = mIdx
+}
+
+function openApproachDrawer(approach: Approach, step: number, moduleName: string): void {
+  currentApproach.value = {
+    step,
+    title: approach.title,
+    moduleName,
+    requirement: approach.requirement || '暂无详细需求描述',
+    implementation: approach.implementation || '暂无详细实现描述',
+    tech: approach.tech || [],
+    selectionReason: approach.selectionReason || '暂无技术选型说明',
+    alternatives: approach.alternatives || [],
+    challenges: approach.challenges || []
+  }
+  drawerVisible.value = true
+}
+
+function closeDrawer(): void {
+  drawerVisible.value = false
+  currentApproach.value = null
 }
 </script>
 

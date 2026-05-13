@@ -440,6 +440,53 @@ export const frontendSkills: SkillNode = {
           level: 75,
           children: [
             {
+              id: 'jquery',
+              name: 'jQuery',
+              level: 85,
+              officialLink: 'https://jquery.com',
+              repo: 'jquery/jquery',
+              version: 'v3.7.1',
+              reason: 'jQuery 曾是前端开发的基石,简化了 DOM 操作和浏览器兼容性处理,虽然现代框架已取代其地位,但仍有大量存量项目在使用。',
+              advantages: [
+                '简化 DOM 操作,链式调用优雅',
+                '抹平浏览器兼容性差异',
+                '插件生态极其丰富',
+                '学习曲线平缓',
+                '文档和教程资源丰富',
+                '轻量级,易于集成'
+              ],
+              disadvantages: [
+                '现代框架已取代其地位',
+                '性能不如原生 API',
+                '不适合构建复杂应用',
+                '缺乏组件化和状态管理',
+                '维护模式,不再积极开发'
+              ]
+            },
+            {
+              id: 'backbone',
+              name: 'Backbone.js',
+              level: 60,
+              officialLink: 'https://backbonejs.org',
+              repo: 'jashkenas/backbone',
+              version: 'v1.6.0',
+              reason: 'Backbone 是早期的 MVC 框架,提供了模型、视图、集合等概念,是现代前端框架的先驱。',
+              advantages: [
+                '轻量级,核心代码简洁',
+                'MVC 架构清晰',
+                '灵活度高,不强制约束',
+                '与 jQuery 配合良好',
+                '历史悠久,稳定可靠'
+              ],
+              disadvantages: [
+                '已过时,社区不活跃',
+                '缺乏现代特性',
+                '双向绑定需要手动实现',
+                '大型项目维护困难',
+                '招聘市场需求极少'
+              ]
+            },
+            {
               id: 'svelte',
               name: 'Svelte',
               level: 75,
@@ -861,6 +908,481 @@ export const frontendSkills: SkillNode = {
             '组件种类有限',
             '文档相对简单',
             '社区比 Chakra UI 小'
+          ]
+        }
+      ]
+    },
+    {
+      id: 'fe-concepts',
+      name: '核心概念',
+      children: [
+        {
+          id: 'fe-routing',
+          name: '路由与导航',
+          level: 92,
+          children: [
+            {
+              id: 'navigation-guards',
+              name: '路由守卫',
+              level: 92,
+              reason: '路由守卫是前端路由的核心机制,用于在路由跳转前后执行逻辑,实现权限控制、数据预加载、页面埋点等功能。',
+              advantages: [
+                '权限验证:检查用户是否有权访问页面',
+                '登录拦截:未登录用户重定向到登录页',
+                '数据预加载:进入页面前先加载必要数据',
+                '页面离开确认:表单未保存时提示用户',
+                '页面标题修改:动态设置 document.title',
+                '埋点统计:记录页面访问日志'
+              ],
+              disadvantages: [
+                '过度使用会增加路由跳转延迟',
+                '异步守卫处理不当会导致白屏',
+                '守卫链过长时调试困难'
+              ]
+            },
+            {
+              id: 'scroll-behavior',
+              name: '滚动行为',
+              level: 85,
+              reason: '控制路由切换时的页面滚动位置,提升用户体验,避免导航栏遮挡内容等问题。',
+              advantages: [
+                '路由切换时自动滚动到顶部',
+                '浏览器前进/后退时恢复滚动位置',
+                '锚点跳转支持平滑滚动',
+                '可设置导航栏高度偏移'
+              ],
+              disadvantages: [
+                '某些浏览器兼容性问题',
+                '与第三方滚动库可能冲突'
+              ]
+            },
+            {
+              id: 'lazy-loading',
+              name: '路由懒加载',
+              level: 90,
+              reason: '按需加载路由组件,减少首屏加载时间,提升应用性能。',
+              advantages: [
+                '减少首屏 JS 体积',
+                '提升首屏加载速度',
+                '按需加载,节省带宽',
+                '支持预加载和预取'
+              ],
+              disadvantages: [
+                '首次进入子页面有加载延迟',
+                '需要合理规划代码分割粒度'
+              ]
+            }
+          ]
+        },
+        {
+          id: 'fe-performance',
+          name: '性能优化',
+          level: 95,
+          children: [
+            {
+              id: 'code-splitting',
+              name: '代码分割',
+              level: 90,
+              reason: '将代码拆分成多个 bundle,按需加载,是前端性能优化的核心手段。',
+              advantages: [
+                '减少首屏加载时间',
+                '提升缓存命中率',
+                '支持并行加载',
+                '降低内存占用'
+              ],
+              disadvantages: [
+                '过度分割会增加 HTTP 请求',
+                '需要合理规划分割策略'
+              ]
+            },
+            {
+              id: 'tree-shaking',
+              name: 'Tree Shaking',
+              level: 88,
+              reason: '移除未使用的代码,减少打包体积,是现代构建工具的标配功能。',
+              advantages: [
+                '自动移除死代码',
+                '减少打包体积',
+                '提升运行性能',
+                '支持 ESM 模块'
+              ],
+              disadvantages: [
+                '需要 ESM 格式支持',
+                '副作用代码可能被误删',
+                '第三方库支持不一'
+              ]
+            },
+            {
+              id: 'virtual-scroll',
+              name: '虚拟滚动',
+              level: 85,
+              reason: '只渲染可见区域的列表项,处理大数据列表的最佳方案。',
+              advantages: [
+                '支持百万级数据渲染',
+                'DOM 节点数量恒定',
+                '滚动流畅不卡顿',
+                '内存占用低'
+              ],
+              disadvantages: [
+                '实现复杂度高',
+                '动态高度处理困难',
+                '某些场景下有闪烁'
+              ]
+            },
+            {
+              id: 'debounce-throttle',
+              name: '防抖与节流',
+              level: 92,
+              reason: '控制函数执行频率,优化高频事件处理,是性能优化的基础技巧。',
+              advantages: [
+                '减少函数执行次数',
+                '降低性能开销',
+                '提升用户体验',
+                '简单易用'
+              ],
+              disadvantages: [
+                '延迟响应可能影响体验',
+                '需要根据场景选择策略'
+              ]
+            },
+            {
+              id: 'memo-cache',
+              name: '缓存与记忆化',
+              level: 88,
+              reason: '缓存计算结果,避免重复计算,React.memo、useMemo、Vue computed 等都是记忆化的应用。',
+              advantages: [
+                '避免重复计算',
+                '提升渲染性能',
+                '减少不必要的更新',
+                '降低 CPU 占用'
+              ],
+              disadvantages: [
+                '过度使用增加内存占用',
+                '缓存失效策略需要考虑',
+                '调试相对困难'
+              ]
+            }
+          ]
+        },
+        {
+          id: 'fe-security',
+          name: '前端安全',
+          level: 90,
+          children: [
+            {
+              id: 'xss',
+              name: 'XSS 防护',
+              level: 90,
+              reason: '跨站脚本攻击是最常见的前端安全问题,必须对用户输入进行转义和过滤。',
+              advantages: [
+                '防止恶意脚本注入',
+                '保护用户数据安全',
+                '现代框架默认转义',
+                'CSP 策略增强防护'
+              ],
+              disadvantages: [
+                '过度转义影响功能',
+                '富文本场景处理复杂'
+              ]
+            },
+            {
+              id: 'csrf',
+              name: 'CSRF 防护',
+              level: 85,
+              reason: '跨站请求伪造攻击利用用户身份执行恶意操作,需要 Token 验证等机制防护。',
+              advantages: [
+                'Token 验证有效防护',
+                'SameSite Cookie 增强安全',
+                '双重提交 Cookie 方案',
+                '验证 Referer 头'
+              ],
+              disadvantages: [
+                '需要后端配合',
+                'Token 管理增加复杂度'
+              ]
+            },
+            {
+              id: 'https',
+              name: 'HTTPS 与加密',
+              level: 88,
+              reason: 'HTTPS 加密传输是现代 Web 应用的标配,保护数据传输安全。',
+              advantages: [
+                '数据传输加密',
+                '防止中间人攻击',
+                'SEO 友好',
+                '浏览器信任标识'
+              ],
+              disadvantages: [
+                '证书成本(Let\'s Encrypt 免费)',
+                '性能开销(可忽略)'
+              ]
+            },
+            {
+              id: 'auth',
+              name: '认证与授权',
+              level: 92,
+              reason: '前端需要实现 JWT、OAuth、SSO 等认证机制,配合路由守卫实现权限控制。',
+              advantages: [
+                'JWT 无状态认证',
+                'OAuth 第三方登录',
+                'SSO 单点登录',
+                'RBAC 角色权限控制'
+              ],
+              disadvantages: [
+                'Token 存储安全问题',
+                '刷新 Token 机制复杂',
+                '权限粒度设计困难'
+              ]
+            }
+          ]
+        },
+        {
+          id: 'fe-state',
+          name: '状态管理',
+          level: 93,
+          children: [
+            {
+              id: 'client-state',
+              name: '客户端状态',
+              level: 90,
+              reason: '管理组件间共享的 UI 状态,如表单数据、弹窗状态等。',
+              advantages: [
+                '组件间数据共享',
+                '状态可预测',
+                '时间旅行调试',
+                '中间件扩展'
+              ],
+              disadvantages: [
+                '小型项目过度设计',
+                '学习成本高',
+                '样板代码多'
+              ]
+            },
+            {
+              id: 'server-state',
+              name: '服务端状态',
+              level: 88,
+              reason: '管理从服务器获取的数据,如用户信息、列表数据等,TanStack Query 是代表方案。',
+              advantages: [
+                '自动缓存和同步',
+                '乐观更新',
+                '背景刷新',
+                '分页和无限滚动'
+              ],
+              disadvantages: [
+                '需要改变思维模式',
+                '配置项多',
+                '错误处理复杂'
+              ]
+            },
+            {
+              id: 'global-state',
+              name: '全局状态',
+              level: 85,
+              reason: '跨组件、跨页面的全局状态管理,如用户登录状态、主题配置等。',
+              advantages: [
+                '全局访问',
+                '持久化存储',
+                '响应式更新',
+                '类型安全'
+              ],
+              disadvantages: [
+                '过度使用导致耦合',
+                '调试困难',
+                '性能开销'
+              ]
+            }
+          ]
+        },
+        {
+          id: 'fe-rendering',
+          name: '渲染模式',
+          level: 90,
+          children: [
+            {
+              id: 'csr',
+              name: 'CSR 客户端渲染',
+              level: 85,
+              reason: '传统 SPA 渲染模式,所有渲染在浏览器完成,适合交互复杂的应用。',
+              advantages: [
+                '交互体验流畅',
+                '前后端分离',
+                '部署简单',
+                '开发效率高'
+              ],
+              disadvantages: [
+                'SEO 不友好',
+                '首屏加载慢',
+                '白屏时间长'
+              ]
+            },
+            {
+              id: 'ssr',
+              name: 'SSR 服务端渲染',
+              level: 88,
+              reason: '服务器生成 HTML,首屏快速呈现,SEO 友好,Next.js/Nuxt 的核心能力。',
+              advantages: [
+                'SEO 友好',
+                '首屏加载快',
+                '社交分享预览',
+                '更好的性能指标'
+              ],
+              disadvantages: [
+                '服务器压力大',
+                '开发复杂度高',
+                '部署成本高',
+                '某些浏览器 API 不可用'
+              ]
+            },
+            {
+              id: 'ssg',
+              name: 'SSG 静态生成',
+              level: 82,
+              reason: '构建时生成静态 HTML,性能最优,适合内容型网站。',
+              advantages: [
+                '性能最优',
+                'CDN 友好',
+                '安全性高',
+                '成本低'
+              ],
+              disadvantages: [
+                '内容更新需要重新构建',
+                '动态内容支持弱',
+                '构建时间长'
+              ]
+            },
+            {
+              id: 'isr',
+              name: 'ISR 增量静态再生',
+              level: 80,
+              reason: 'Next.js 独创的渲染模式,结合 SSG 和 SSR 优点,按需重新生成页面。',
+              advantages: [
+                '兼顾性能和实时性',
+                '按需更新',
+                'CDN 缓存',
+                '降低服务器压力'
+              ],
+              disadvantages: [
+                '配置复杂',
+                '缓存策略难把握',
+                '仅 Next.js 支持'
+              ]
+            }
+          ]
+        },
+        {
+          id: 'fe-testing',
+          name: '测试策略',
+          level: 85,
+          children: [
+            {
+              id: 'unit-test',
+              name: '单元测试',
+              level: 85,
+              reason: '测试独立函数和组件,Jest/Vitest 是主流工具。',
+              advantages: [
+                '快速反馈',
+                '易于调试',
+                '覆盖率高',
+                '重构保障'
+              ],
+              disadvantages: [
+                '编写成本高',
+                '维护成本高',
+                '无法覆盖集成问题'
+              ]
+            },
+            {
+              id: 'e2e-test',
+              name: 'E2E 测试',
+              level: 80,
+              reason: '模拟用户操作,测试完整流程,Playwright/Cypress 是代表工具。',
+              advantages: [
+                '覆盖真实场景',
+                '发现集成问题',
+                '用户视角测试',
+                '自动化回归'
+              ],
+              disadvantages: [
+                '运行慢',
+                '维护成本高',
+                '环境依赖多',
+                '调试困难'
+              ]
+            },
+            {
+              id: 'visual-test',
+              name: '视觉回归测试',
+              level: 70,
+              reason: '对比截图发现 UI 变化,Chromatic/Percy 是代表工具。',
+              advantages: [
+                '发现视觉 bug',
+                '自动化对比',
+                '历史记录',
+                'CI/CD 集成'
+              ],
+              disadvantages: [
+                '成本高',
+                '误报多',
+                '存储占用大'
+              ]
+            }
+          ]
+        },
+        {
+          id: 'fe-accessibility',
+          name: '可访问性',
+          level: 80,
+          children: [
+            {
+              id: 'aria',
+              name: 'ARIA 属性',
+              level: 80,
+              reason: 'ARIA 属性让屏幕阅读器能正确理解页面结构,是无障碍开发的基础。',
+              advantages: [
+                '屏幕阅读器支持',
+                '键盘导航',
+                '语义化增强',
+                '法律合规'
+              ],
+              disadvantages: [
+                '学习成本高',
+                '测试困难',
+                '浏览器支持差异'
+              ]
+            },
+            {
+              id: 'keyboard',
+              name: '键盘导航',
+              level: 82,
+              reason: '确保所有功能都能通过键盘操作,是可访问性的核心要求。',
+              advantages: [
+                '无障碍用户友好',
+                '提升效率',
+                '法律合规',
+                '更好的用户体验'
+              ],
+              disadvantages: [
+                '开发成本增加',
+                '测试工作量大'
+              ]
+            },
+            {
+              id: 'color-contrast',
+              name: '色彩对比度',
+              level: 75,
+              reason: 'WCAG 要求文字和背景有足够对比度,确保视障用户可读。',
+              advantages: [
+                '视障用户友好',
+                '法律合规',
+                '更好的可读性',
+                '品牌形象提升'
+              ],
+              disadvantages: [
+                '设计限制',
+                '美观性权衡'
+              ]
+            }
           ]
         }
       ]
