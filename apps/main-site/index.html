@@ -4,8 +4,47 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portfolio Hub - 个人技术能力展示中心</title>
+    <link rel="modulepreload" href="/src/main.js" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <style>
+      #app-loading {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #020617;
+        z-index: 9999;
+        transition: opacity 0.3s ease;
+      }
+      #app-loading.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(59, 130, 246, 0.1);
+        border-top-color: #3b82f6;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
     <script>
-      // GitHub Pages SPA 重定向恢复
+      window.addEventListener('load', function() {
+        document.getElementById('app-loading').classList.add('hidden');
+        setTimeout(function() {
+          var el = document.getElementById('app-loading');
+          if (el) el.remove();
+        }, 300);
+      });
+    </script>
+    <script>
       (function() {
         var redirect = sessionStorage.getItem('redirect');
         if (redirect) {
@@ -16,6 +55,9 @@
     </script>
   </head>
   <body>
+    <div id="app-loading">
+      <div class="loading-spinner"></div>
+    </div>
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
   </body>

@@ -194,7 +194,16 @@
 </template>
 
 <script setup lang="ts">
-import { principles } from '@/data/caseStudies'
+import { ref, onMounted } from 'vue'
+import { useCaseStudiesData } from '@/composables/useCaseStudiesData'
+
+const { loadPrinciples } = useCaseStudiesData()
+const principles = ref<Array<{title: string, icon: string, desc: string}>>([])
+
+onMounted(async () => {
+  const data = await loadPrinciples()
+  principles.value = data
+})
 </script>
 
 <style scoped>

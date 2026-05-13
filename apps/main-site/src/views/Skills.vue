@@ -4,7 +4,7 @@
       <div class="container mx-auto px-6">
         <div class="category-tabs">
           <button
-            v-for="cat in categories"
+            v-for="cat in categoriesRef"
             :key="cat.id"
             class="category-tab"
             :class="{ active: selectedCategory === cat.id }"
@@ -25,11 +25,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import SkillTree from '@/components/SkillTree.vue'
-import { categories } from '@/data/index'
+import { useSkillsData } from '@/composables/useSkillsData'
 
 const selectedCategory = ref('all')
+const categoriesRef = ref<Array<{id: string, name: string, icon: string, color: string}>>([])
+
+const { loadCategories } = useSkillsData()
+
+onMounted(async () => {
+  categoriesRef.value = await loadCategories()
+})
 
 const selectCategory = (id: string) => {
   selectedCategory.value = id

@@ -1,55 +1,60 @@
 <template>
   <div class="skill-grid-page">
-    <div class="category-section animate-fade-in" v-for="(cat, index) in displayData" :key="cat.id" :style="{ animationDelay: `${index * 0.1}s` }">
-      <div class="category-header" :style="{ '--cat-color': cat.color }">
-        <div class="header-content glass-panel">
-          <span class="cat-icon">{{ cat.icon }}</span>
-          <span class="cat-name">{{ cat.name }}</span>
+    <div v-if="loading" class="flex items-center justify-center py-20">
+      <div class="animate-spin w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+    </div>
+    <template v-else>
+      <div class="category-section animate-fade-in" v-for="(cat, index) in displayData" :key="cat.id" :style="{ animationDelay: `${index * 0.1}s` }">
+        <div class="category-header" :style="{ '--cat-color': cat.color }">
+          <div class="header-content glass-panel">
+            <span class="cat-icon">{{ cat.icon }}</span>
+            <span class="cat-name">{{ cat.name }}</span>
+          </div>
         </div>
-      </div>
 
-      <div class="category-tree">
-        <div class="skills-row">
-          <template v-if="cat.children">
-            <div
-              v-for="sub in cat.children"
-              :key="sub.id"
-              class="skill-group glass-card"
-            >
-              <div class="group-header" v-if="sub.name">
-                <span class="group-icon">{{ sub.icon || '📁' }}</span>
-                <span class="group-name">{{ sub.name }}</span>
-              </div>
+        <div class="category-tree">
+          <div class="skills-row">
+            <template v-if="cat.children">
+              <div
+                v-for="sub in cat.children"
+                :key="sub.id"
+                class="skill-group glass-card"
+              >
+                <div class="group-header" v-if="sub.name">
+                  <span class="group-icon">{{ sub.icon || '📁' }}</span>
+                  <span class="group-name">{{ sub.name }}</span>
+                </div>
 
-              <div class="group-skills">
-                <div
-                  v-for="skill in (sub.children || [sub])"
-                  :key="skill.id || skill.name"
-                  class="skill-item"
-                  :style="{ '--skill-color': skill.color || cat.color }"
-                  @click="handleSkillClick(skill)"
-                >
-                  <div class="skill-dot" :style="{ background: skill.color || cat.color }"></div>
-                  <span class="skill-icon">{{ skill.icon || '📄' }}</span>
-                  <span class="skill-name">{{ skill.name }}</span>
-                  <span class="hover-arrow">→</span>
+                <div class="group-skills">
+                  <div
+                    v-for="skill in (sub.children || [sub])"
+                    :key="skill.id || skill.name"
+                    class="skill-item"
+                    :style="{ '--skill-color': skill.color || cat.color }"
+                    @click="handleSkillClick(skill)"
+                  >
+                    <div class="skill-dot" :style="{ background: skill.color || cat.color }"></div>
+                    <span class="skill-icon">{{ skill.icon || '📄' }}</span>
+                    <span class="skill-name">{{ skill.name }}</span>
+                    <span class="hover-arrow">→</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </template>
-          <template v-else>
-            <div
-              class="skill-item single glass-card"
-              :style="{ '--skill-color': cat.color }"
-              @click="handleSkillClick(cat)"
-            >
-              <span class="skill-icon">{{ cat.icon || '📄' }}</span>
-              <span class="skill-name">{{ cat.name }}</span>
-            </div>
-          </template>
+            </template>
+            <template v-else>
+              <div
+                class="skill-item single glass-card"
+                :style="{ '--skill-color': cat.color }"
+                @click="handleSkillClick(cat)"
+              >
+                <span class="skill-icon">{{ cat.icon || '📄' }}</span>
+                <span class="skill-name">{{ cat.name }}</span>
+              </div>
+            </template>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
 
     <SkillDrawer
       :visible="drawerVisible"
@@ -60,9 +65,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { skillTreeData } from '@/data/index'
+import { ref, computed, onMounted } from 'vue'
 import SkillDrawer from '@/components/SkillDrawer.vue'
+import { useSkillsData } from '@/composables/useSkillsData'
 
 interface SkillData {
   id?: string
@@ -78,14 +83,22 @@ const props = defineProps<{
   category: string
 }>()
 
+const { loading, loadSkillTreeData } = useSkillsData()
+const skillTreeData = ref<SkillData[]>([])
+
+onMounted(async () => {
+  skillTreeData.value = await loadSkillTreeData()
+})
+
 const drawerVisible = ref(false)
 const selectedSkill = ref<SkillData | null>(null)
 
 const displayData = computed(() => {
+  if (!skillTreeData.value.length) return []
   if (props.category === 'all') {
-    return skillTreeData
+    return skillTreeData.value
   }
-  return skillTreeData.filter((c: SkillData) => c.id === props.category)
+  return skillTreeData.value.filter((c: SkillData) => c.id === props.category)
 })
 
 const handleSkillClick = (skill: SkillData) => {

@@ -338,11 +338,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { companies, principles } from '@/data/caseStudies'
+import { ref, computed, onMounted } from 'vue'
 import type { Company, Module, Approach } from '@/data/types'
 import ApproachDrawer from '@/components/ApproachDrawer.vue'
 import { useScrollReset } from '@/composables/useScrollReset'
+import { useCaseStudiesData } from '@/composables/useCaseStudiesData'
 
 interface Category {
   id: string
@@ -384,11 +384,18 @@ const activeModule = ref<number | null>(null)
 const drawerVisible = ref(false)
 const currentApproach = ref<ApproachDetail | null>(null)
 const { scrollToTop } = useScrollReset()
+const { loadCompanies } = useCaseStudiesData()
+
+const companies = ref<Company[]>([])
+
+onMounted(async () => {
+  companies.value = await loadCompanies()
+})
 
 const currentCategory = computed<Category | undefined>(() => categories.find(cat => cat.id === activeCategory.value))
 const currentCompany = computed<Company | null>(() => {
   const cat = currentCategory.value
-  return cat ? companies[cat.companyIndex] : null
+  return cat && companies.value.length > 0 ? companies.value[cat.companyIndex] : null
 })
 const currentProject = computed(() => {
   if (activeProject.value === null || !currentCompany.value) return null
