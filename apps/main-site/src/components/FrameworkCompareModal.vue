@@ -8,7 +8,7 @@
               <span class="modal-icon">{{ skill.icon || '⚖️' }}</span>
               <div>
                 <h2>{{ skill.name }}</h2>
-                <p class="subtitle">技术对比详情</p>
+                <p class="subtitle">{{ subtitle }}</p>
               </div>
             </div>
             <button class="close-btn" @click="$emit('close')">
@@ -23,16 +23,21 @@
             <aside v-if="tocItems.length > 1" class="modal-toc">
               <div class="toc-title">{{ tocTitle }}</div>
               <nav class="toc-nav">
-                <button
-                  v-for="item in tocItems"
-                  :key="item.id"
-                  class="toc-item"
-                  :class="{ active: activeTocId === item.id }"
-                  @click="scrollToTocItem(item)"
-                >
-                  <span class="toc-item-icon">{{ item.icon }}</span>
-                  <span class="toc-item-name">{{ item.name }}</span>
-                </button>
+                <template v-for="item in tocItems" :key="item.id">
+                  <div v-if="item.type === 'group'" class="toc-group-header">
+                    <span class="toc-item-icon">{{ item.icon }}</span>
+                    <span class="toc-item-name">{{ item.name }}</span>
+                  </div>
+                  <button
+                    v-else
+                    class="toc-item"
+                    :class="{ active: activeTocId === item.id, 'toc-subitem': item.type === 'subitem' }"
+                    @click="scrollToTocItem(item)"
+                  >
+                    <span class="toc-item-icon">{{ item.icon }}</span>
+                    <span class="toc-item-name">{{ item.name }}</span>
+                  </button>
+                </template>
               </nav>
             </aside>
 
@@ -52,7 +57,71 @@
                   </div>
                 </div>
 
-                <div class="comparison-items">
+                <!-- 技能详情卡片（无对比数据，直接展示 reason/advantages/disadvantages） -->
+                <div v-if="isSkillDetailCard(card)" class="skill-detail-card">
+                  <div v-if="card.reason" class="reason-box">
+                    <p class="reason-text">{{ card.reason }}</p>
+                    <div class="reason-meta">
+                      <a v-if="card.officialLink" :href="card.officialLink" target="_blank" class="inline-link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5">
+                          <circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line>
+                          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                        官网
+                      </a>
+                    </div>
+                  </div>
+
+                  <div v-if="card.advantages?.length || card.disadvantages?.length" class="skill-pros-cons-grid">
+                    <div v-if="card.advantages?.length" class="skill-col adv-col">
+                      <div class="skill-col-badge adv">
+                        <span class="badge-icon">✅</span>
+                        <span class="badge-name">优势</span>
+                      </div>
+                      <ul class="detail-list">
+                        <li v-for="(adv, idx) in card.advantages" :key="idx" class="adv-item">{{ adv }}</li>
+                      </ul>
+                    </div>
+
+                    <div v-if="card.disadvantages?.length" class="skill-col dis-col">
+                      <div class="skill-col-badge dis">
+                        <span class="badge-icon">⚠️</span>
+                        <span class="badge-name">劣势</span>
+                      </div>
+                      <ul class="detail-list disadvantage-list">
+                        <li v-for="(dis, idx) in card.disadvantages" :key="idx" class="dis-item">{{ dis }}</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div v-if="card.children?.length" class="detail-section">
+                    <h4 class="section-title common">
+                      <span class="section-title-icon">📦</span>
+                      子技术
+                    </h4>
+                    <div class="eco-list">
+                      <div
+                        v-for="child in card.children"
+                        :key="child.id"
+                        class="eco-item glass-card"
+                        @click="handleCardSelect(child)"
+                      >
+                        <span class="eco-icon">{{ child.icon || '📁' }}</span>
+                        <div class="eco-info">
+                          <span class="eco-name">{{ child.name }}</span>
+                          <div class="eco-meta">
+                            <span v-if="child.version" class="eco-ver">{{ child.version }}</span>
+                            <span v-if="child.level" class="eco-level">Lv.{{ child.level }}</span>
+                          </div>
+                        </div>
+                        <span class="eco-arrow">↗</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 对比数据卡片 -->
+                <div v-else class="comparison-items">
                   <div
                     v-for="item in card.items"
                     :key="item.id"
@@ -67,24 +136,26 @@
                         <span class="tool-label">{{ item.name }}</span>
                       </div>
 
-                      <div class="detail-section" v-if="item.advantages?.length">
-                        <h4 class="section-title advantage">
-                          <span class="section-title-icon">✅</span>
-                          优势
-                        </h4>
-                        <ul class="detail-list">
-                          <li v-for="(adv, idx) in item.advantages" :key="idx" class="adv-item">{{ adv }}</li>
-                        </ul>
-                      </div>
+                      <div v-if="item.advantages?.length || item.disadvantages?.length" class="skill-pros-cons-grid">
+                        <div v-if="item.advantages?.length" class="skill-col adv-col">
+                          <div class="skill-col-badge adv">
+                            <span class="badge-icon">✅</span>
+                            <span class="badge-name">优势</span>
+                          </div>
+                          <ul class="detail-list">
+                            <li v-for="(adv, idx) in item.advantages" :key="idx" class="adv-item">{{ adv }}</li>
+                          </ul>
+                        </div>
 
-                      <div class="detail-section" v-if="item.disadvantages?.length">
-                        <h4 class="section-title disadvantage-title">
-                          <span class="section-title-icon">⚠️</span>
-                          劣势
-                        </h4>
-                        <ul class="detail-list disadvantage-list">
-                          <li v-for="(dis, idx) in item.disadvantages" :key="idx" class="dis-item">{{ dis }}</li>
-                        </ul>
+                        <div v-if="item.disadvantages?.length" class="skill-col dis-col">
+                          <div class="skill-col-badge dis">
+                            <span class="badge-icon">⚠️</span>
+                            <span class="badge-name">劣势</span>
+                          </div>
+                          <ul class="detail-list disadvantage-list">
+                            <li v-for="(dis, idx) in item.disadvantages" :key="idx" class="dis-item">{{ dis }}</li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
 
@@ -149,48 +220,25 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, nextTick, onUnmounted } from 'vue'
-import type { SkillNode } from '../data/types'
+import type { SkillNode, ComparisonItem } from '../data/types'
 import { useEscClose } from '@/composables/useEscClose'
 import { lockBodyScroll, unlockBodyScroll } from '@/composables/useScrollLock'
 
-interface SkillData {
-  id?: string
-  name: string
-  icon?: string
-  color?: string
-  children?: SkillNode[]
-  items?: ComparisonItem[]
-  description?: string
-  cardColor?: string
-}
-
-interface ComparisonItem {
+interface TocItem {
   id: string
   name: string
   icon?: string
-  level?: number
-  color?: string
-  vueItems?: string[]
-  reactItems?: string[]
-  commonItems?: string[]
-  advantages?: string[]
-  disadvantages?: string[]
-}
-
-interface TocEntry {
-  id: string
-  name: string
-  icon?: string
-  type: 'section' | 'item'
+  type: 'section' | 'item' | 'group' | 'subitem'
 }
 
 const props = defineProps<{
   visible: boolean
-  skill: SkillData
+  skill: SkillNode
 }>()
 
 const emit = defineEmits<{
   close: []
+  select: [skill: SkillNode]
 }>()
 
 useEscClose(() => props.visible, () => emit('close'))
@@ -199,12 +247,34 @@ const modalBodyRef = ref<HTMLElement | null>(null)
 const activeTocId = ref<string | null>(null)
 let tocObserver: IntersectionObserver | null = null
 
+function collectLeaves(node: SkillNode): SkillNode[] {
+  const leaves: SkillNode[] = []
+  if (node.children?.length) {
+    for (const child of node.children) {
+      if (child.children?.length) {
+        leaves.push(...collectLeaves(child))
+      } else if (child.reason || child.advantages?.length || child.disadvantages?.length) {
+        leaves.push(child)
+      }
+    }
+  } else if (node.reason || node.advantages?.length || node.disadvantages?.length) {
+    leaves.push(node)
+  }
+  return leaves
+}
+
 const comparisonCards = computed(() => {
   if (!props.skill) return []
-  if (props.skill.children?.length) {
+  if (props.skill.children?.length && props.skill.children[0]?.items?.length) {
     return props.skill.children
   }
   if (props.skill.items?.length) {
+    return [props.skill]
+  }
+  if (props.skill.children?.length) {
+    return collectLeaves(props.skill)
+  }
+  if (props.skill.reason || props.skill.advantages?.length || props.skill.disadvantages?.length) {
     return [props.skill]
   }
   return []
@@ -212,20 +282,34 @@ const comparisonCards = computed(() => {
 
 const isSingleCard = computed(() => comparisonCards.value.length === 1)
 
-const tocTitle = computed(() => {
-  return isSingleCard.value ? '对比维度' : '目录导航'
+const isComparisonMode = computed(() => {
+  return !!(props.skill.items?.length || (props.skill.children?.length && props.skill.children[0]?.items?.length))
 })
 
-const tocItems = computed<TocEntry[]>(() => {
-  if (comparisonCards.value.length > 1) {
-    return comparisonCards.value.map((card) => ({
-      id: card.id!,
-      name: card.name,
-      icon: card.icon,
-      type: 'section' as const,
-    }))
-  }
-  if (comparisonCards.value.length === 1) {
+const subtitle = computed(() => {
+  if (isComparisonMode.value) return '技术对比详情'
+  if (props.skill.children?.length && !isSingleCard.value) return '分类技术详情'
+  if (props.skill.reason || props.skill.advantages?.length) return '技能详情'
+  return '子技术详情'
+})
+
+const tocTitle = computed(() => {
+  if (isComparisonMode.value && !isSingleCard.value) return '模块导航'
+  if (isComparisonMode.value) return '对比维度'
+  if (!isSingleCard.value) return '分类导航'
+  return '目录'
+})
+
+const tocItems = computed<TocItem[]>(() => {
+  if (isComparisonMode.value) {
+    if (comparisonCards.value.length > 1) {
+      return comparisonCards.value.map((card) => ({
+        id: card.id,
+        name: card.name,
+        icon: card.icon,
+        type: 'section' as const,
+      }))
+    }
     const card = comparisonCards.value[0]
     return (card.items || []).map((item: ComparisonItem) => ({
       id: item.id,
@@ -234,15 +318,63 @@ const tocItems = computed<TocEntry[]>(() => {
       type: 'item' as const,
     }))
   }
+
+  if (props.skill.children?.length && comparisonCards.value.length > 0) {
+    const items: TocItem[] = []
+    const hasNested = props.skill.children.some(
+      (child) => !child.items?.length && child.children?.length,
+    )
+    for (const child of props.skill.children) {
+      if (child.items?.length) continue
+      const leaves = collectLeaves(child)
+      if (leaves.length === 0) continue
+      if (hasNested) {
+        items.push({
+          id: child.id,
+          name: child.name,
+          icon: child.icon,
+          type: 'group',
+        })
+        for (const leaf of leaves) {
+          items.push({
+            id: leaf.id,
+            name: leaf.name,
+            icon: leaf.icon,
+            type: 'subitem',
+          })
+        }
+      } else {
+        for (const leaf of leaves) {
+          items.push({
+            id: leaf.id,
+            name: leaf.name,
+            icon: leaf.icon,
+            type: 'section',
+          })
+        }
+      }
+    }
+    return items
+  }
+
   return []
 })
 
-const isBuildToolCard = (card: SkillData) => {
+const isBuildToolCard = (card: SkillNode) => {
   return card.id === 'fe-build-eco'
 }
 
-const scrollToTocItem = (toc: TocEntry) => {
-  const prefix = toc.type === 'section' ? 'section' : 'item'
+const isSkillDetailCard = (card: SkillNode) => {
+  return !card.items?.length && (card.reason || card.advantages?.length || card.disadvantages?.length)
+}
+
+const handleCardSelect = (skill: SkillNode) => {
+  emit('select', skill)
+}
+
+const scrollToTocItem = (toc: TocItem) => {
+  if (toc.type === 'group') return
+  const prefix = toc.type === 'section' || toc.type === 'subitem' ? 'section' : 'item'
   const el = document.getElementById(`${prefix}-${toc.id}`)
   if (el) {
     el.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -255,8 +387,8 @@ const setupScrollSpy = () => {
 
   cleanupScrollSpy()
 
-  const observeSelector = isSingleCard.value ? '[data-item-id]' : '[data-section-id]'
-  const idAttribute = isSingleCard.value ? 'data-item-id' : 'data-section-id'
+  const observeSelector = (isSingleCard.value && isComparisonMode.value) ? '[data-item-id]' : '[data-section-id]'
+  const idAttribute = (isSingleCard.value && isComparisonMode.value) ? 'data-item-id' : 'data-section-id'
 
   tocObserver = new IntersectionObserver(
     (entries) => {
@@ -459,6 +591,16 @@ onUnmounted(() => {
   box-shadow: inset 3px 0 0 rgba(255, 255, 255, 0.5);
 }
 
+.toc-group-header {
+  @apply flex items-center gap-2 px-2 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider mt-3 first:mt-0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.toc-subitem {
+  @apply pl-6;
+  font-size: 11px;
+}
+
 .toc-item-icon {
   @apply text-base flex-shrink-0;
   width: 20px;
@@ -545,6 +687,38 @@ onUnmounted(() => {
   border: 1px solid rgba(97, 218, 251, 0.2);
 }
 
+/* Skill detail pros/cons grid - 统一样式 */
+.skill-pros-cons-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-4;
+}
+
+.skill-col {
+  @apply rounded-lg p-4;
+}
+
+.adv-col {
+  background: rgba(52, 211, 153, 0.05);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+.dis-col {
+  background: rgba(248, 113, 113, 0.05);
+  border: 1px solid rgba(248, 113, 113, 0.2);
+}
+
+.skill-col-badge {
+  @apply flex items-center gap-2 mb-3 pb-2;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.skill-col-badge.adv {
+  @apply text-emerald-400;
+}
+
+.skill-col-badge.dis {
+  @apply text-red-400;
+}
+
 .framework-badge {
   @apply flex items-center gap-2 mb-3 pb-2;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -629,5 +803,81 @@ onUnmounted(() => {
 .detail-list.common-list li::before {
   content: '\25C8';
   @apply text-amber-500 text-xs;
+}
+
+/* Skill detail card */
+.skill-detail-card {
+  @apply space-y-4;
+}
+
+.skill-detail-card .reason-box {
+  @apply p-4 rounded-xl mb-1;
+  background: rgba(100, 149, 237, 0.08);
+  border: 1px solid rgba(100, 149, 237, 0.15);
+}
+
+.reason-text {
+  @apply text-[13px] text-slate-300 leading-relaxed;
+}
+
+.reason-meta {
+  @apply mt-2 pt-2 flex gap-3;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.inline-link {
+  @apply inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 transition-colors;
+}
+
+.eco-list {
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-2;
+}
+
+.eco-item {
+  @apply flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.eco-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.eco-icon {
+  @apply text-xl flex-shrink-0;
+}
+
+.eco-info {
+  @apply flex-1 min-w-0;
+}
+
+.eco-name {
+  @apply block text-sm font-medium text-white truncate;
+}
+
+.eco-meta {
+  @apply flex gap-2 mt-0.5;
+}
+
+.eco-ver {
+  @apply text-[11px] text-slate-500;
+}
+
+.eco-level {
+  @apply text-[11px] text-emerald-500 font-mono;
+}
+
+.eco-arrow {
+  @apply text-slate-500 text-lg flex-shrink-0 transition-transform duration-200;
+}
+
+.eco-item:hover .eco-arrow {
+  @apply text-white;
+  transform: translateX(2px);
+}
+
+/* Override section-title.common for 子技术 heading */
+.section-title.common {
+  @apply text-amber-400;
 }
 </style>

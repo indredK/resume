@@ -1,5 +1,5 @@
 <template>
-  <BaseDrawer :visible="visible" :is-nested="isNested" @close="$emit('close')">
+  <BaseDrawer :visible="visible" @close="$emit('close')">
     <!-- Toast 通知 -->
     <Transition name="toast">
       <div v-if="notification" class="toast-container" :class="notification.type">
@@ -132,15 +132,6 @@
       </div>
     </div>
   </BaseDrawer>
-
-  <!-- 嵌套抽屉 -->
-  <SkillDrawer
-    v-if="nestedSkill"
-    :visible="nestedDrawerVisible"
-    :skill="nestedSkill"
-    :is-nested="true"
-    @close="closeNestedDrawer"
-  />
 </template>
 
 <script setup lang="ts">
@@ -166,21 +157,14 @@ interface SkillData {
   children?: SkillData[]
 }
 
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   visible: boolean
   skill: SkillData
-  isNested?: boolean
-}>(), {
-  isNested: false
-})
+}>()
 
 const loading = ref(false)
 const notification = ref<{ message: string; type: 'success' | 'error' | 'info' } | null>(null)
 let notificationTimer: any = null
-
-// 嵌套抽屉状态
-const nestedDrawerVisible = ref(false)
-const nestedSkill = ref<SkillData | null>(null)
 
 const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
   if (notificationTimer) clearTimeout(notificationTimer)
@@ -195,23 +179,19 @@ const emit = defineEmits<{
   select: [skill: SkillData]
 }>()
 
-// 抽屉滚动管理（仅非嵌套抽屉）
 const drawerBodyRef = ref<HTMLElement | null>(null)
 const visibleComputed = computed(() => props.visible)
 
-if (!props.isNested) {
-  useDrawer(drawerBodyRef, visibleComputed, {
-    skillId: () => props.skill.id || props.skill.name,
-    skillName: () => props.skill.name
-  })
-} else {
-  // 嵌套抽屉只需监听关闭时清理通知
-  watch(() => props.visible, (isVisible) => {
-    if (!isVisible) {
-      notification.value = null
-    }
-  })
-}
+useDrawer(drawerBodyRef, visibleComputed, {
+  skillId: () => props.skill.id || props.skill.name,
+  skillName: () => props.skill.name,
+})
+
+watch(() => props.visible, (isVisible) => {
+  if (!isVisible) {
+    notification.value = null
+  }
+})
 
 onUnmounted(() => {
   if (notificationTimer) clearTimeout(notificationTimer)
@@ -228,21 +208,17 @@ const getColor = (): string => {
 }
 
 const handleChildClick = (child: SkillData) => {
-  // 如果子项有详细信息（reason、advantages、disadvantages 或 children），打开嵌套抽屉
+  // 如果子项有详细信息，发出 select 事件让父组件打开对比弹窗
   if (child.reason || child.advantages?.length || child.disadvantages?.length || child.children?.length) {
-    nestedSkill.value = child
-    nestedDrawerVisible.value = true
+    emit('select', child)
   } else if (child.officialLink) {
     // 否则直接打开官网
     window.open(child.officialLink, '_blank')
   }
 }
 
-const closeNestedDrawer = () => {
-  nestedDrawerVisible.value = false
-  setTimeout(() => {
-    nestedSkill.value = null
-  }, 300)
+const closeDrawer = () => {
+  emit('close')
 }
 
 const fetchWithTimeout = async (url: string, options: any = {}, timeout = 8000) => {

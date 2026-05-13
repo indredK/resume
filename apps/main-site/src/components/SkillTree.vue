@@ -29,8 +29,7 @@
                   <div
                     v-for="skill in (sub.children || [sub])"
                     :key="skill.id || skill.name"
-                    class="skill-item"
-                    :class="{ 'glass-card': skill.items?.length }"
+                    class="skill-item glass-card"
                     :style="{ '--skill-color': skill.color || cat.color }"
                     @click="handleSkillClick(skill)"
                   >
@@ -57,23 +56,17 @@
       </div>
     </template>
 
-    <SkillDrawer
-      :visible="drawerVisible && !isFrameworkCompare"
-      :skill="selectedSkill"
-      @close="drawerVisible = false"
-    />
-
     <FrameworkCompareModal
       :visible="modalVisible"
       :skill="selectedSkill"
       @close="modalVisible = false"
+      @select="handleModalSelect"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import SkillDrawer from '@/components/SkillDrawer.vue'
 import FrameworkCompareModal from '@/components/FrameworkCompareModal.vue'
 import { useSkillsData } from '@/composables/useSkillsData'
 import type { SkillNode } from '@/data/types'
@@ -89,13 +82,8 @@ onMounted(async () => {
   skillTreeData.value = await loadSkillTreeData()
 })
 
-const drawerVisible = ref(false)
 const modalVisible = ref(false)
 const selectedSkill = ref<SkillNode | null>(null)
-
-const isFrameworkCompare = computed(() => {
-  return selectedSkill.value?.id === 'fe-comparison'
-})
 
 const displayData = computed(() => {
   if (!skillTreeData.value.length) return []
@@ -107,13 +95,11 @@ const displayData = computed(() => {
 
 const handleSkillClick = (skill: SkillNode) => {
   selectedSkill.value = skill
-  if (skill.id === 'fe-comparison') {
-    modalVisible.value = true
-  } else if ((skill as any).items?.length) {
-    modalVisible.value = true
-  } else {
-    drawerVisible.value = true
-  }
+  modalVisible.value = true
+}
+
+const handleModalSelect = (skill: SkillNode) => {
+  selectedSkill.value = skill
 }
 </script>
 
@@ -211,7 +197,7 @@ const handleSkillClick = (skill: SkillNode) => {
 }
 
 .skill-item.glass-card {
-  @apply p-4;
+  @apply p-2.5;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
