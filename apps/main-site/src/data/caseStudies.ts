@@ -286,16 +286,16 @@ export const companies: Company[] = [
         period: '2025.02 - 2025.07',
         icon: '🌐',
         description: '从零构建定制化网关后台管理系统，替代传统 jQuery 架构，设计可复用组件库支撑 9 种网关型号扩展。',
-        tags: ['Vue3', '架构迁移', '组件库'],
+        tags: ['React', '架构迁移', '组件库'],
         metrics: [
           { value: '9+', label: '网关型号复用', detail: '统一的模块化组件体系，让新增网关型号的开发成本降低 60%+' },
-          { value: '100%', label: '架构现代化', detail: '从 jQuery 全面迁移到 Vue3 Composition API，代码可维护性质的飞跃' },
+          { value: '100%', label: '架构现代化', detail: '从 jQuery 全面迁移到 React Hooks，代码可维护性质的飞跃' },
           { value: '60%+', label: '新型号开发效率提升', detail: '组件化 + 配置化设计，新增型号只需编写差异化配置' }
         ],
         approach: [
           { title: '组件化抽象分层', detail: '将网关管理功能拆分为「基础层（通用 UI）+ 协议层（通信逻辑）+ 业务层（设备特性）」三级架构，最大化代码复用。' },
           { title: '配置驱动渲染', detail: '设计 JSON Schema 驱动的动态表单系统，新增网关型号只需编写配置文件，无需修改组件代码。' },
-          { title: '渐进式迁移策略', detail: '在 Vue3 应用中保留 jQuery 兼容层，确保迁移期间功能不受影响，逐步替换并最终完全移除旧代码。' },
+          { title: '渐进式迁移策略', detail: '在 React 应用中保留 jQuery 兼容层，确保迁移期间功能不受影响，逐步替换并最终完全移除旧代码。' },
           { title: '嵌入式协议对接', detail: '与固件团队紧密协作，设计统一的前端-嵌入式接口规范，封装 API 适配层屏蔽协议差异。' }
         ],
         futurePlans: [

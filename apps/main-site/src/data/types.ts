@@ -70,6 +70,19 @@ export interface Principle {
   desc: string
 }
 
+export interface ComparisonItem {
+  id: string
+  name: string
+  icon?: string
+  level?: number
+  color?: string
+  vueItems?: string[]
+  reactItems?: string[]
+  commonItems?: string[]
+  advantages?: string[]
+  disadvantages?: string[]
+}
+
 export interface SkillNode {
   id: string
   name: string
@@ -83,4 +96,7 @@ export interface SkillNode {
   reason?: string
   advantages?: string[]
   disadvantages?: string[]
+  description?: string
+  cardColor?: string
+  items?: ComparisonItem[]
 }

@@ -119,6 +119,10 @@ html, body, #app {
   background: #020617;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 .nav-link {
   @apply px-4 py-2 rounded-lg text-sm font-medium text-slate-400 transition-all duration-300;
 }

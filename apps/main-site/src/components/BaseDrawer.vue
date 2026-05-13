@@ -11,14 +11,18 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { useEscClose } from '@/composables/useEscClose'
+
+const props = defineProps<{
   visible: boolean
   isNested?: boolean
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   close: []
 }>()
+
+useEscClose(() => props.visible, () => emit('close'))
 </script>
 
 <style scoped>

@@ -127,7 +127,7 @@
           <section>
             <h2 class="section-title">自我评价</h2>
             <div class="glass-panel p-6 rounded-3xl text-xs text-slate-400 leading-relaxed">
-              Vue3 前端工程师，5年企业级后台系统与物联网平台开发经验。具备 UniApp 跨端开发能力，擅长复杂权限体系、工业数据可视化与组件化架构设计。注重工程化实践与代码质量。
+              精通 Vue3 与 React 双框架，具备从 0 到 1 构建复杂系统的完整能力。5年企业级后台系统与物联网平台开发经验，主导过多个大型项目的前端架构设计。擅长复杂权限体系、工业数据可视化、微前端架构设计与组件化开发。注重工程化实践与代码质量，具备优秀的技术领导力和跨团队协作能力。
             </div>
           </section>
         </div>
@@ -147,9 +147,9 @@ const statistics = ref([
 ])
 
 const skillSummary = ref([
-  { title: '框架与语言', items: ['Vue3', 'React', 'TypeScript', 'UniApp', 'Pinia', 'Redux'] },
-  { title: '工程化与 UI', items: ['Vite', 'Webpack', 'UnoCSS', 'Element Plus', 'Ant Design'] },
-  { title: '业务与可视化', items: ['RBAC 权限', 'WebSocket', 'GIS 地图', '实时数据仪表盘'] }
+  { title: '框架与语言', items: ['Vue3', 'React', 'TypeScript', 'UniApp', 'Svelte'] },
+  { title: '工程化与 UI', items: ['Vite', 'single-spa', 'Ant Design', 'Element Plus', 'ECharts'] },
+  { title: '业务与可视化', items: ['WebSocket', 'MQTT', 'RBAC 权限', 'GIS 地图', '工业 IoT'] }
 ])
 
 const projects = ref([
@@ -177,7 +177,7 @@ const projects = ref([
     title: '特殊网关后台系统',
     highlights: [
       '设计模块化组件体系，为后续 9 种网关型号扩展提供统一技术框架',
-      '主导从 jQuery 到 Vue3 的架构迁移，建立标准化的前端工程化规范',
+      '主导从 jQuery 到 React 的架构迁移，建立标准化的前端工程化规范',
       '实现设备参数配置、状态监控与权限管理功能'
     ],
     icon: '🌐',
@@ -190,12 +190,12 @@ const experiences = ref([
     period: '2023.02 - 2025.11',
     company: '厦门星纵物联科技有限公司',
     position: '前端开发工程师',
-    techStack: ['Vue3', 'TS', 'UniApp', 'WebSocket'],
+    techStack: ['React', 'Vue3', 'WebSocket', 'ECharts', 'UniApp', 'MQTT'],
     summary: '负责物联网平台核心开发，主导网关系统架构升级与传感器配置移动端应用。',
     details: [
       '支撑 40+ 类工业设备与 200+ 种传感器的接入管理，独立负责设备管理、规则引擎等核心模块',
       '基于 UniApp 独立开发 Toolbox App，支持蓝牙/WiFi 扫描及固件升级，解决工业现场调试痛点',
-      '主导特殊网关后台从 jQuery 到 Vue3 的完整迁移，设计可复用组件库支撑 9 种型号扩展',
+      '主导特殊网关后台从 jQuery 到 React 的完整迁移，设计可复用组件库支撑 9 种网关型号扩展',
       '参与工业路由器 Web 管理后台开发，实现 LAN/WAN/VPN/APN 等复杂网络配置功能'
     ]
   },
@@ -203,7 +203,7 @@ const experiences = ref([
     period: '2020.12 - 2023.01',
     company: '深圳高速工程顾问有限公司',
     position: '前端开发工程师',
-    techStack: ['React', 'single-spa', 'Vite', 'Redux'],
+    techStack: ['React', 'single-spa', 'Ant Design', 'ECharts', 'Bpmn.js'],
     summary: '主导微前端架构体系建设，构建颗粒度精确到按钮级的 RBAC 权限系统。',
     details: [
       '主导 4 个子应用的从零构建与 single-spa 跨框架（Svelte/React）生命周期通信',

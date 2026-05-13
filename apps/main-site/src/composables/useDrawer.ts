@@ -1,4 +1,5 @@
 import { ref, watch, onUnmounted, nextTick, type Ref, type ComputedRef } from 'vue'
+import { lockBodyScroll, unlockBodyScroll } from './useScrollLock'
 
 /**
  * 抽屉组件的滚动管理 Hook
@@ -11,15 +12,6 @@ export function useDrawer(
   visible: ComputedRef<boolean>,
   watchProps: Record<string, any> = {}
 ) {
-  // 锁定背景滚动
-  const lockBackgroundScroll = () => {
-    document.body.style.overflow = 'hidden'
-  }
-
-  const unlockBackgroundScroll = () => {
-    document.body.style.overflow = ''
-  }
-
   // 防止滚动冒泡到底层
   const handleWheel = (e: WheelEvent) => {
     const el = drawerBodyRef.value
@@ -50,7 +42,7 @@ export function useDrawer(
   // 监听抽屉可见性
   watch(visible, (isVisible) => {
     if (isVisible) {
-      lockBackgroundScroll()
+      lockBodyScroll()
       scrollToTop()
       
       // 绑定滚动事件
@@ -58,7 +50,7 @@ export function useDrawer(
         drawerBodyRef.value.addEventListener('wheel', handleWheel, { passive: false })
       }
     } else {
-      unlockBackgroundScroll()
+      unlockBodyScroll()
       
       if (drawerBodyRef.value) {
         drawerBodyRef.value.removeEventListener('wheel', handleWheel)
@@ -81,7 +73,7 @@ export function useDrawer(
 
   // 组件卸载时清理
   onUnmounted(() => {
-    unlockBackgroundScroll()
+    unlockBodyScroll()
     if (drawerBodyRef.value) {
       drawerBodyRef.value.removeEventListener('wheel', handleWheel)
     }
@@ -89,7 +81,5 @@ export function useDrawer(
 
   return {
     scrollToTop,
-    lockBackgroundScroll,
-    unlockBackgroundScroll,
   }
 }

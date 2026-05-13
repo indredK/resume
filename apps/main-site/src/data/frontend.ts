@@ -556,6 +556,243 @@ export const frontendSkills: SkillNode = {
       ]
     },
     {
+      id: 'fe-comparison',
+      name: '技术选型',
+      level: 95,
+      color: '#f59e0b',
+      icon: '⚖️',
+      children: [
+        {
+          id: 'fe-framework-eco',
+          name: '框架生态对比',
+          icon: '🖥️',
+          level: 95,
+          description: 'Vue vs React 核心生态对比',
+          cardColor: '#8b5cf6',
+          items: [
+            {
+              id: 'fe-core-principle',
+              name: '核心原理',
+              icon: '⚙️',
+              level: 95,
+              vueItems: [
+                '响应式系统基于 Proxy,自动追踪依赖',
+                '模板编译时优化,自动分析依赖',
+                '组合式 API(Composition API)让逻辑复用更灵活',
+                '单文件组件(SFC)模板、样式、逻辑合一'
+              ],
+              reactItems: [
+                '虚拟 DOM + Hooks,手动声明式更新',
+                '运行时 Reconciler,灵活性强',
+                'Server Components 让服务端渲染更高效',
+                'JSX 让 UI 和逻辑完全融合'
+              ],
+              disadvantages: [
+                'Vue: 深层响应式有性能开销,需注意数据结构设计',
+                'React: 频繁重渲染需要 memo/useCallback 手动优化'
+              ]
+            },
+            {
+              id: 'fe-state-compare',
+              name: '状态管理',
+              icon: '🔄',
+              level: 92,
+              vueItems: [
+                'Pinia(官方推荐),响应式自动追踪',
+                'computed 和 watch 让派生状态更直观',
+                '小型项目更简单,状态管理更统一'
+              ],
+              reactItems: [
+                'Redux Toolkit、Zustand、Jotai 选择更多',
+                '状态管理适合大型复杂应用,生态成熟',
+                '选择众多,可以根据项目规模灵活选择'
+              ],
+              disadvantages: [
+                'React: 状态管理学习曲线因选择众多而变陡',
+                'Vue: 响应式在深层对象场景有性能开销'
+              ]
+            },
+            {
+              id: 'fe-ui-compare',
+              name: 'UI 组件库',
+              icon: '🎨',
+              level: 90,
+              vueItems: [
+                'Element Plus、Naive UI、Vuetify 组件丰富质量高',
+                '内置 Transition、KeepAlive 等动画组件'
+              ],
+              reactItems: [
+                'Ant Design、Material UI、Chakra UI 生态庞大',
+                'Headless UI(Radix) 在 React 生态更成熟',
+                'Suspense 让数据获取和代码分割更优雅'
+              ],
+              commonItems: [
+                'Tailwind CSS 两者都完美支持'
+              ],
+              disadvantages: [
+                'Vue: Vuetify、Quasar 倾向完整组件,灵活性稍差',
+                'React: styled-components 等 CSS-in-JS 方案更丰富'
+              ]
+            },
+            {
+              id: 'fe-ssr-compare',
+              name: 'SSR 服务端渲染',
+              icon: '🌐',
+              level: 90,
+              vueItems: [
+                'Nuxt.js,文件约定路由,开箱即用',
+                'auto-import 减少样板代码'
+              ],
+              reactItems: [
+                'Next.js(最成熟),App Router 引领业界潮流',
+                'Server Actions 让前后端协作更紧密'
+              ],
+              commonItems: [
+                'Nuxt 3 和 Next.js 14 都支持 Server Components',
+                '两者都支持 SSG、ISR 等渲染模式'
+              ],
+              disadvantages: [
+                'SSR 调试比 CSR 更复杂',
+                'Nuxt 学习曲线比 Vue 更陡',
+                'Next.js App Router 和 Pages Router 风格差异大'
+              ]
+            },
+            {
+              id: 'fe-learning-docs',
+              name: '学习曲线与文档',
+              icon: '📚',
+              level: 90,
+              vueItems: [
+                '官方文档最友好,中文社区活跃',
+                '上手最容易,渐进式学习路径',
+                'Vue School、哔哩哔哩教程丰富'
+              ],
+              reactItems: [
+                '官方文档清晰,概念简单(一切皆组件)',
+                'TypeScript 支持完善,类型推导好'
+              ],
+              disadvantages: [
+                'React: 新概念多(Hooks/Context/Suspense),学习曲线较陡',
+                'Vue: 组合式 API 需要一定基础才能驾驭'
+              ]
+            },
+            {
+              id: 'fe-community-enterprise',
+              name: '社区与企业采用',
+              icon: '🏢',
+              level: 88,
+              vueItems: [
+                'GitHub 43W+ stars,国内使用率最高',
+                '尤雨溪主导,国内阿里/滴滴/字节大量使用',
+                '知名用户:阿里巴巴/滴滴/GitLab/Laravel'
+              ],
+              reactItems: [
+                'GitHub 25W+ stars,NPM 下载量遥遥领先',
+                'Facebook/Meta 主导,Meta 员工参与核心开发',
+                '知名用户:Facebook/Instagram/Netflix/Airbnb'
+              ],
+              disadvantages: [
+                'React: 核心团队扩张导致 API 变化频繁',
+                'Vue: 社区相对小,国际化企业案例较少'
+              ]
+            }
+          ]
+        },
+        {
+          id: 'fe-mobile-eco',
+          name: '移动端框架对比',
+          icon: '📱',
+          level: 88,
+          description: '跨平台移动开发框架对比',
+          cardColor: '#06b6d4',
+          items: [
+            {
+              id: 'fe-rn-vs-uni',
+              name: 'React Native vs UniApp',
+              icon: '⚡',
+              level: 88,
+              reactItems: [
+                'React Native: 原生体验,大厂验证(Instagram/Discord)',
+                '底层由原生渲染,性能更接近原生',
+                'RN 社区更大,第三方库更丰富',
+                'Flipper 调试工具成熟'
+              ],
+              vueItems: [
+                'UniApp: 一套代码多端运行(小程序/H5/App)',
+                '上手更快,生态更广(支持更多平台)',
+                '基于 Weex,Vue 开发者友好'
+              ],
+              disadvantages: [
+                'React Native: 学习曲线陡,原生模块开发复杂',
+                'Vue UniApp: 性能不如原生,部分平台特性支持不完整'
+              ]
+            }
+          ]
+        },
+        {
+          id: 'fe-build-eco',
+          name: '构建工具对比',
+          icon: '🔧',
+          level: 86,
+          description: '前端构建工具深度对比',
+          cardColor: '#f59e0b',
+          items: [
+            {
+              id: 'fe-vite-detail',
+              name: 'Vite',
+              icon: '⚡',
+              level: 90,
+              color: '#fbbf24',
+              advantages: [
+                '冷启动毫秒级,热更新无需刷新整个页面',
+                '基于 ESM,Nuxt/Next 都采用,现代工程标配',
+                '零配置,开箱即用,约定优于配置',
+                '内置 TypeScript/CSS/JSON 模块化支持',
+                'Vue/React 官方集成,配置少到几乎不需要'
+              ],
+              disadvantages: [
+                '生产构建依赖 Rollup,某些 webpack 特性暂不支持',
+                '深度定制时仍需了解 Rollup 配置'
+              ]
+            },
+            {
+              id: 'fe-webpack-detail',
+              name: 'Webpack',
+              icon: '📦',
+              level: 85,
+              color: '#8b5cf6',
+              advantages: [
+                '生态最成熟,插件最全,适合复杂大型项目',
+                'Code Splitting 能力强,代码分割策略成熟',
+                '配置灵活,定制性强,可控制构建方方面面',
+                'Loader/Plugin 生态丰富,扩展性极强'
+              ],
+              disadvantages: [
+                '冷启动慢,配置复杂,学习成本高',
+                '配置文件复杂,TypeScript 配置类型支持差'
+              ]
+            },
+            {
+              id: 'fe-esbuild-detail',
+              name: 'esbuild',
+              icon: '🚀',
+              level: 80,
+              color: '#f97316',
+              advantages: [
+                'Go 语言编写,编译速度是其他工具的 10-100 倍',
+                'API 简洁,集成到项目只需几行代码',
+                '内置 TypeScript、JSX、minification 支持'
+              ],
+              disadvantages: [
+                '功能相对较少,生态不如 webpack 完善',
+                '自定义配置选项有限'
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       id: 'fe-mobile',
       name: '移动端框架',
       children: [

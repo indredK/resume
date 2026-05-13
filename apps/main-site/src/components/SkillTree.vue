@@ -30,6 +30,7 @@
                     v-for="skill in (sub.children || [sub])"
                     :key="skill.id || skill.name"
                     class="skill-item"
+                    :class="{ 'glass-card': skill.items?.length }"
                     :style="{ '--skill-color': skill.color || cat.color }"
                     @click="handleSkillClick(skill)"
                   >
@@ -57,9 +58,15 @@
     </template>
 
     <SkillDrawer
-      :visible="drawerVisible"
+      :visible="drawerVisible && !isFrameworkCompare"
       :skill="selectedSkill"
       @close="drawerVisible = false"
+    />
+
+    <FrameworkCompareModal
+      :visible="modalVisible"
+      :skill="selectedSkill"
+      @close="modalVisible = false"
     />
   </div>
 </template>
@@ -67,43 +74,46 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import SkillDrawer from '@/components/SkillDrawer.vue'
+import FrameworkCompareModal from '@/components/FrameworkCompareModal.vue'
 import { useSkillsData } from '@/composables/useSkillsData'
-
-interface SkillData {
-  id?: string
-  name: string
-  icon?: string
-  color?: string
-  level?: number
-  link?: string
-  children?: SkillData[]
-}
+import type { SkillNode } from '@/data/types'
 
 const props = defineProps<{
   category: string
 }>()
 
 const { loading, loadSkillTreeData } = useSkillsData()
-const skillTreeData = ref<SkillData[]>([])
+const skillTreeData = ref<SkillNode[]>([])
 
 onMounted(async () => {
   skillTreeData.value = await loadSkillTreeData()
 })
 
 const drawerVisible = ref(false)
-const selectedSkill = ref<SkillData | null>(null)
+const modalVisible = ref(false)
+const selectedSkill = ref<SkillNode | null>(null)
+
+const isFrameworkCompare = computed(() => {
+  return selectedSkill.value?.id === 'fe-comparison'
+})
 
 const displayData = computed(() => {
   if (!skillTreeData.value.length) return []
   if (props.category === 'all') {
     return skillTreeData.value
   }
-  return skillTreeData.value.filter((c: SkillData) => c.id === props.category)
+  return skillTreeData.value.filter((c: SkillNode) => c.id === props.category)
 })
 
-const handleSkillClick = (skill: SkillData) => {
+const handleSkillClick = (skill: SkillNode) => {
   selectedSkill.value = skill
-  drawerVisible.value = true
+  if (skill.id === 'fe-comparison') {
+    modalVisible.value = true
+  } else if ((skill as any).items?.length) {
+    modalVisible.value = true
+  } else {
+    drawerVisible.value = true
+  }
 }
 </script>
 
@@ -198,5 +208,44 @@ const handleSkillClick = (skill: SkillData) => {
 
 .skill-item.single {
   @apply w-full flex-row p-4;
+}
+
+.skill-item.glass-card {
+  @apply p-4;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.skill-item.glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.clickable-group {
+  @apply cursor-pointer transition-all duration-300;
+  border: 1px solid transparent;
+}
+
+.clickable-group:hover {
+  @apply bg-white/5 -translate-y-0.5;
+  border-color: rgba(245, 158, 11, 0.3);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.1);
+}
+
+.group-compare-hint {
+  @apply flex items-center justify-center gap-2 py-3 mt-2 rounded-lg;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px dashed rgba(245, 158, 11, 0.2);
+}
+
+.hint-text {
+  @apply text-[12px] text-amber-400/80 font-medium;
+}
+
+.hint-arrow {
+  @apply text-amber-400/60 text-sm transition-transform duration-300;
+}
+
+.clickable-group:hover .hint-arrow {
+  @apply translate-x-1;
 }
 </style>
