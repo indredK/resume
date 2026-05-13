@@ -69,3 +69,18 @@ export interface Principle {
   title: string
   desc: string
 }
+
+export interface SkillNode {
+  id: string
+  name: string
+  icon?: string
+  color?: string
+  children?: SkillNode[]
+  level?: number
+  officialLink?: string
+  repo?: string
+  version?: string
+  reason?: string
+  advantages?: string[]
+  disadvantages?: string[]
+}

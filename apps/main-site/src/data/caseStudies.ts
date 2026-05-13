@@ -310,11 +310,132 @@ export const companies: Company[] = [
         period: '2023.02 - 2025.11',
         icon: '📡',
         description: '工业级路由器设备管理后台，负责常规功能迭代开发与维护，基于 jQuery 技术栈，并尝试在项目中混合 React 技术进行页面开发。',
-        tags: ['jQuery', 'React', '混合开发'],
+        tags: ['jQuery', 'React', '混合开发', 'WebSocket', 'VPN'],
         metrics: [
           { value: '50+', label: '功能迭代数量', detail: '持续迭代开发路由器配置、监控、日志等核心功能模块' },
           { value: 'jQuery+React', label: '技术栈融合', detail: '在 jQuery 项目中通过路由机制成功集成 React 页面开发' },
           { value: '100%', label: '功能稳定性', detail: '保证生产环境功能稳定运行，及时响应客户需求' }
+        ],
+        modules: [
+          {
+            title: '设备状态监控',
+            icon: '📊',
+            business: '实时展示路由器整体运行状态、网络连接状态及关键性能指标，包括 CPU/内存使用率、温度、流量统计等。',
+            tech: ['React', 'WebSocket', 'ECharts', '实时数据'],
+            futurePlans: [
+              '引入 Web Worker 将数据解析与 UI 渲染分离，进一步提升高频更新场景的响应速度',
+              '探索 WebGL 加速 ECharts 渲染，应对多隧道同屏监控的极端场景'
+            ],
+            approach: [
+              {
+                title: 'WebSocket 实时状态推送',
+                detail: '通过 WebSocket 建立长连接，实时接收设备状态变化，实现零轮询的实时监控。',
+                requirement: '工业路由器需要 7×24 小时监控，状态变化需要实时反馈到管理界面。',
+                implementation: '1. 建立 WebSocket 长连接，服务端推送设备状态变化；2. 实现心跳检测和断线自动重连；3. 使用 requestAnimationFrame 控制 UI 更新频率，避免频繁渲染；4. 增量更新只变化的数据，而非全量刷新。',
+                tech: ['WebSocket', 'requestAnimationFrame', '增量更新'],
+                selectionReason: 'WebSocket 相比 HTTP 轮询延迟更低、资源消耗更少，适合持续状态监控场景。',
+                alternatives: [
+                  { name: 'HTTP 短轮询', pros: '实现简单', cons: '延迟高，资源消耗大', selected: false },
+                  { name: 'Server-Sent Events', pros: '实现简单，单向推送', cons: '不支持双向通信', selected: false },
+                  { name: 'WebSocket 长连接', pros: '实时性强，支持双向', cons: '需要处理断线重连', selected: true }
+                ],
+                challenges: [
+                  { problem: '网络波动导致连接中断', solution: '实现指数退避重连策略，配合心跳检测' },
+                  { problem: '高频状态更新导致 UI 卡顿', solution: '请求合并 + requestAnimationFrame 节流渲染' }
+                ]
+              },
+              {
+                title: 'VPN 隧道状态可视化',
+                detail: '展示 WireGuard、IPsec、OpenVPN 三种 VPN 协议的连接状态、隧道信息、流量统计及连接质量评估。',
+                requirement: 'VPN 是工业路由器核心功能，需要直观展示各隧道状态和流量情况。',
+                implementation: '1. 设计隧道状态卡片布局，展示连接状态、流量、延迟等信息；2. 使用 ECharts 绘制流量趋势图；3. 实现隧道切换操作和状态刷新；4. 展示对等点数量和连接质量评分。',
+                tech: ['React', 'ECharts', 'VPN 协议'],
+                selectionReason: 'ECharts 支持丰富的图表类型，能清晰展示流量趋势和状态变化。',
+                alternatives: [
+                  { name: '纯 CSS 进度条', pros: '实现简单', cons: '信息量有限', selected: false },
+                  { name: '第三方图表库', pros: '功能丰富', cons: '增加包体积', selected: false },
+                  { name: 'ECharts', pros: '功能全面，性能好', cons: '需要按需引入', selected: true }
+                ],
+                challenges: [
+                  { problem: 'VPN 状态更新频繁', solution: '设置合理刷新间隔，合并短时间内更新' },
+                  { problem: '隧道数量多时布局混乱', solution: '响应式网格布局，支持折叠展开' }
+                ]
+              }
+            ]
+          },
+          {
+            title: '链路备份管理',
+            icon: '🔗',
+            business: '链路备份功能状态显示，包括主备链路切换状态、切换历史记录及链路健康度评估。',
+            tech: ['React', '状态机', '链路检测'],
+            futurePlans: [
+              '支持更多链路类型（WiFi、LoRa 等），构建多链路冗余备份体系',
+              '引入机器学习预测链路故障，实现预防性切换'
+            ],
+            approach: [
+              {
+                title: '主备链路切换机制',
+                detail: '实现双链路冗余备份，支持手动切换和自动切换，展示切换历史和链路健康度。',
+                requirement: '工业环境要求高可靠性，主链路故障时需自动切换到备用链路。',
+                implementation: '1. 设计链路状态机：主链路 active、备用链路 standby、切换中 switching；2. 实时监测链路延迟和丢包率，低于阈值时触发告警；3. 记录切换历史，包含时间、原因、结果；4. 计算链路健康度得分。',
+                tech: ['状态机', '链路检测', '健康度算法'],
+                selectionReason: '状态机模式能清晰表达链路切换的各状态和转换关系。',
+                alternatives: [
+                  { name: '简单标志位', pros: '实现简单', cons: '状态逻辑混乱', selected: false },
+                  { name: '状态机模式', pros: '逻辑清晰，易维护', cons: '需要设计状态转换图', selected: true }
+                ],
+                challenges: [
+                  { problem: '切换时机判断困难', solution: '设置多级阈值，综合考虑延迟、丢包、抖动等因素' },
+                  { problem: '频繁切换导致震荡', solution: '设置切换间隔保护和连续检测确认' }
+                ]
+              }
+            ]
+          },
+          {
+            title: '配置管理',
+            icon: '⚙️',
+            business: '实现路由器配置文件的下载、上传、验证及版本控制与回滚机制。',
+            tech: ['React', '文件处理', '版本控制'],
+            futurePlans: [
+              '支持配置模板功能，预设常用配置组合快速部署',
+              '实现配置的 CI/CD 流水线，支持配置变更审批流程'
+            ],
+            approach: [
+              {
+                title: '配置文件下载/上传',
+                detail: '支持导出当前系统配置为 JSON 文件，上传新配置并验证有效性。',
+                requirement: '路由器配置需要可备份、可恢复、可批量部署。',
+                implementation: '1. 实现配置文件导出功能，生成带时间戳的 JSON 文件；2. 拖拽上传或点击选择文件；3. 上传前验证 JSON Schema 格式；4. 配置预览和差异对比。',
+                tech: ['File API', 'JSON Schema', '拖拽上传'],
+                selectionReason: 'File API 提供标准的文件操作接口，JSON Schema 可验证配置有效性。',
+                alternatives: [
+                  { name: '仅手动编辑', pros: '灵活性高', cons: '容易出错', selected: false },
+                  { name: '文件导入导出', pros: '便于备份和迁移', cons: '需要处理格式兼容', selected: true }
+                ],
+                challenges: [
+                  { problem: '大文件上传失败', solution: '分片上传 + 断点续传机制' },
+                  { problem: '配置格式错误', solution: '上传前 JSON Schema 预校验' }
+                ]
+              },
+              {
+                title: '版本控制与回滚',
+                detail: '记录配置修改历史，支持回滚到任意历史版本。',
+                requirement: '配置变更需要可追溯、可撤销，出现问题时能快速恢复。',
+                implementation: '1. 每次配置变更生成新版本记录；2. 版本列表展示时间、作者、变更描述；3. 支持查看历史版本详情；4. 一键回滚到指定版本。',
+                tech: ['版本管理', 'Diff 对比', '回滚机制'],
+                selectionReason: '版本化管理确保配置变更可追溯，简化问题排查和恢复。',
+                alternatives: [
+                  { name: '仅保留最新配置', pros: '存储简单', cons: '无法回溯', selected: false },
+                  { name: 'Git 式版本控制', pros: '功能完整', cons: '实现复杂', selected: false },
+                  { name: '简版版本列表', pros: '平衡功能与实现', cons: '功能相对简单', selected: true }
+                ],
+                challenges: [
+                  { problem: '版本数量过多', solution: '限制保留数量，自动清理旧版本' },
+                  { problem: '回滚后配置不兼容', solution: '回滚前检查版本兼容性提示' }
+                ]
+              }
+            ]
+          }
         ],
         approach: [
           { title: 'jQuery 常规开发', detail: '基于现有 jQuery 架构进行功能迭代，熟练使用 jQuery 进行 DOM 操作、事件处理和 AJAX 请求。' },
@@ -334,22 +455,353 @@ export const companies: Company[] = [
         period: '2023.02 - 2025.11',
         icon: '🔌',
         description: '工业网关设备管理后台，负责常规功能迭代开发与维护，基于 jQuery 技术栈，并探索在传统项目中引入现代前端技术。',
-        tags: ['jQuery', 'React', '技术探索'],
+        tags: ['jQuery', 'React', '技术探索', 'MQTT', '协议转换'],
         metrics: [
           { value: '40+', label: '功能模块开发', detail: '开发网关配置、协议管理、数据采集等核心功能模块' },
           { value: '混合架构', label: '技术栈创新', detail: '在 jQuery 基础上尝试集成 React，探索混合开发模式' },
           { value: '稳定运行', label: '生产环境表现', detail: '确保系统在工业环境下稳定可靠运行' }
         ],
+        modules: [
+          {
+            title: '数据处理模块',
+            icon: '🔄',
+            business: '实现多种工业协议与标准协议间的数据格式转换，提供数据转换规则配置界面，展示转换成功率和关键指标。',
+            tech: ['React', 'MQTT', 'Modbus', 'OPC UA', '数据可视化'],
+            futurePlans: [
+              '引入 WebAssembly 加速协议解析性能',
+              '支持更多工业协议（Profinet、EtherCAT 等）'
+            ],
+            approach: [
+              {
+                title: '多协议转换引擎',
+                detail: '支持 Modbus RTU↔TCP、OPC UA→MQTT、HTTP/JSON 等多种协议转换。',
+                requirement: '工业现场设备使用各种私有协议，需要统一转换为标准 IoT 协议上云。',
+                implementation: '1. 设计协议转换映射表，定义源格式和目标格式的对应关系；2. 实现转换中间层，屏蔽底层协议差异；3. 支持自定义转换函数处理特殊数据格式；4. 统计转换成功率、错误类型等指标。',
+                tech: ['协议转换', 'Modbus', 'OPC UA', 'MQTT'],
+                selectionReason: '模块化转换引擎便于添加新协议支持，统计指标便于问题排查。',
+                alternatives: [
+                  { name: '硬编码转换逻辑', pros: '性能最优', cons: '扩展性差', selected: false },
+                  { name: '规则引擎驱动', pros: '灵活可配置', cons: '性能略有损耗', selected: false },
+                  { name: '映射表 + 自定义函数', pros: '平衡灵活性与性能', cons: '需要设计好接口', selected: true }
+                ],
+                challenges: [
+                  { problem: '不同协议数据格式差异大', solution: '设计统一的中间数据模型' },
+                  { problem: '转换性能影响数据吞吐', solution: '批量转换 + 异步处理' }
+                ]
+              },
+              {
+                title: '数据映射规则配置',
+                detail: '可视化配置数据映射关系，支持自定义数据转换函数和过滤规则。',
+                requirement: '用户需要灵活配置数据映射，将设备数据映射到云平台的统一数据模型。',
+                implementation: '1. 设计映射规则 DSL，支持字段映射、类型转换、计算公式；2. 可视化规则编辑器，降低配置门槛；3. 规则预览和模拟运行；4. 规则版本管理和导出复用。',
+                tech: ['DSL', '可视化编辑器', '规则引擎'],
+                selectionReason: '可视化配置提升用户体验，DSL 提供灵活的表达能力。',
+                alternatives: [
+                  { name: '纯代码配置', pros: '灵活性高', cons: '门槛高', selected: false },
+                  { name: '可视化拖拽', pros: '用户体验好', cons: '实现复杂', selected: false },
+                  { name: 'DSL + 可视化', pros: '平衡灵活性与易用性', cons: '需要设计 DSL 语法', selected: true }
+                ],
+                challenges: [
+                  { problem: '复杂映射关系表达困难', solution: '提供函数库和预设模板' },
+                  { problem: '规则冲突难以发现', solution: '运行前静态分析和模拟测试' }
+                ]
+              }
+            ]
+          },
+          {
+            title: '文件管理模块',
+            icon: '📁',
+            business: '固件下载、日志管理、断点续传等文件处理功能。',
+            tech: ['React', '分片下载', '断点续传', '文件处理'],
+            futurePlans: [
+              '支持固件对比功能，版本间差异可视化',
+              '实现远程日志实时流式查看'
+            ],
+            approach: [
+              {
+                title: '固件版本管理',
+                detail: '支持工业网关固件的查询、选择与下载安装。',
+                requirement: '网关固件需要支持远程升级，管理员需要查看版本历史和兼容性信息。',
+                implementation: '1. 固件版本列表展示版本号、日期、大小、兼容性；2. 支持选择指定版本下载；3. 固件完整性校验（MD5/SHA256）；4. 下载进度和安装状态展示。',
+                tech: ['固件管理', '版本控制', '完整性校验'],
+                selectionReason: '固件升级是网关的核心运维功能，需要可靠性和进度可视化。',
+                alternatives: [
+                  { name: '手动下载固件', pros: '简单', cons: '效率低', selected: false },
+                  { name: '远程 OTA 升级', pros: '自动化程度高', cons: '需要网络稳定', selected: true }
+                ],
+                challenges: [
+                  { problem: '下载过程中网络中断', solution: '断点续传机制，支持暂停和恢复' },
+                  { problem: '固件版本兼容性问题', solution: '升级前检查硬件型号和兼容性信息' }
+                ]
+              },
+              {
+                title: '日志管理',
+                detail: '提供系统日志、操作日志、错误日志的分类查看与下载。',
+                requirement: '设备运行日志是问题排查的重要依据，需要支持分类查看和导出。',
+                implementation: '1. 日志分类：系统日志、操作日志、错误日志；2. 日志级别筛选：DEBUG、INFO、WARN、ERROR；3. 时间范围筛选和关键词搜索；4. 日志文件打包下载。',
+                tech: ['日志管理', '分页加载', '关键词搜索'],
+                selectionReason: '分类管理便于快速定位问题，分页和搜索提升查看效率。',
+                alternatives: [
+                  { name: '实时日志流', pros: '实时性高', cons: '占用带宽', selected: false },
+                  { name: '分页日志列表', pros: '按需加载', cons: '实时性一般', selected: true }
+                ],
+                challenges: [
+                  { problem: '日志量过大导致加载慢', solution: '分页加载 + 懒加载' },
+                  { problem: '关键词搜索性能差', solution: '服务端索引 + 前端缓存' }
+                ]
+              },
+              {
+                title: '断点续传机制',
+                detail: '实现大文件下载的断点续传，支持暂停、恢复及进度显示。',
+                requirement: '工业网关固件文件较大（数十 MB），需要支持断点续传确保下载可靠性。',
+                implementation: '1. 分片下载：将文件分成多个 chunk 并发下载；2. 记录已下载位置，暂停后保存进度；3. 恢复时从断点继续下载；4. 进度条实时展示下载进度和速度。',
+                tech: ['分片下载', '断点续传', '并发控制'],
+                selectionReason: '分片并发下载提升速度，断点续传确保大文件下载可靠性。',
+                alternatives: [
+                  { name: '单线程下载', pros: '实现简单', cons: '速度慢，不支持断点', selected: false },
+                  { name: '分片 + 断点续传', pros: '速度快，可靠性高', cons: '实现复杂', selected: true }
+                ],
+                challenges: [
+                  { problem: '分片下载管理复杂', solution: '使用下载管理器统一调度' },
+                  { problem: '服务器不支持范围请求', solution: '检测服务器能力，降级到单线程' }
+                ]
+              }
+            ]
+          },
+          {
+            title: '通信机制模块',
+            icon: '📡',
+            business: '数据轮询模式和数据订阅模式的配置与管理，支持两种模式的切换和性能对比。',
+            tech: ['React', 'MQTT', '轮询', '订阅', '性能对比'],
+            futurePlans: [
+              '智能模式自动切换，根据网络状况自动选择最优模式',
+              '支持更多消息协议（CoAP、LWM2M 等）'
+            ],
+            approach: [
+              {
+                title: '轮询模式配置',
+                detail: '配置数据轮询频率、超时时间及重试策略。',
+                requirement: '轮询模式适合简单查询场景，需要可配置轮询间隔和重试逻辑。',
+                implementation: '1. 轮询频率配置：100ms - 60s 可选；2. 超时时间设置；3. 重试次数和间隔配置；4. 轮询设备列表和状态展示。',
+                tech: ['轮询机制', '超时控制', '重试策略'],
+                selectionReason: '可配置参数满足不同场景需求，状态展示便于监控。',
+                alternatives: [
+                  { name: '固定间隔轮询', pros: '简单', cons: '不灵活', selected: false },
+                  { name: '自适应轮询', pros: '智能', cons: '实现复杂', selected: false },
+                  { name: '可配置轮询', pros: '灵活可调', cons: '需要参数优化', selected: true }
+                ],
+                challenges: [
+                  { problem: '轮询间隔设置不当', solution: '提供默认推荐值和场景预设' },
+                  { problem: '设备响应慢导致超时', solution: '合理的超时和重试配置' }
+                ]
+              },
+              {
+                title: '订阅模式管理',
+                detail: '配置 MQTT 订阅主题、消息过滤规则及 QoS 级别。',
+                requirement: '订阅模式适合实时监控场景，需要配置订阅规则和消息过滤。',
+                implementation: '1. 订阅主题配置（支持通配符）；2. 消息过滤规则；3. QoS 级别选择（0/1/2）；4. 消息计数和流量统计。',
+                tech: ['MQTT', '订阅模式', '消息过滤', 'QoS'],
+                selectionReason: 'MQTT 是 IoT 标准的轻量级协议，订阅模式实时性好。',
+                alternatives: [
+                  { name: 'HTTP 轮询', pros: '简单', cons: '实时性差', selected: false },
+                  { name: 'WebSocket', pros: '实时双向', cons: '不适合大规模设备', selected: false },
+                  { name: 'MQTT 订阅', pros: '轻量级，实时性好', cons: '需要 MQTT Broker', selected: true }
+                ],
+                challenges: [
+                  { problem: '订阅主题过多影响性能', solution: '限制单个连接的主题数量' },
+                  { problem: '消息过滤增加延迟', solution: '客户端预过滤，减少无效消息' }
+                ]
+              },
+              {
+                title: '模式性能对比',
+                detail: '提供轮询模式和订阅模式的功能对比和性能指标展示。',
+                requirement: '用户需要根据场景选择合适的通信模式，需要直观的功能和性能对比。',
+                implementation: '1. 响应延迟对比：轮询 50-100ms vs 订阅 10-30ms；2. 网络开销对比；3. 适用场景说明；4. 一键切换当前模式。',
+                tech: ['性能对比', '可视化', '模式切换'],
+                selectionReason: '可视化对比帮助用户做出选择，一键切换提升体验。',
+                alternatives: [
+                  { name: '纯文字说明', pros: '信息完整', cons: '不直观', selected: false },
+                  { name: '图表对比', pros: '直观', cons: '需要实现图表', selected: true }
+                ],
+                challenges: [
+                  { problem: '性能数据不准确', solution: '实际测试采集数据，定期更新' },
+                  { problem: '用户难以理解技术差异', solution: '提供场景化推荐和简化说明' }
+                ]
+              }
+            ]
+          }
+        ],
         approach: [
           { title: 'jQuery 迭代开发', detail: '基于 jQuery 进行日常功能开发和维护，处理设备配置、状态监控等业务逻辑。' },
           { title: '路由机制设计', detail: '设计前端路由系统，支持在 jQuery 项目中按路由加载不同技术栈的页面。' },
-          { title: 'React 页面集成', detail: '通过容器组件方式将 React 页面嵌入到 jQuery 应用中，实现局部现代化改造。' },
+          { title: 'React 混合集成', detail: '通过路由机制在 jQuery 项目中嵌入 React 页面，使用 ReactDOM.render 动态挂载组件，实现新旧技术栈共存。' },
           { title: '兼容性保障', detail: '确保新旧技术栈之间的兼容性，避免样式冲突和全局变量污染。' }
         ],
         futurePlans: [
           '总结混合开发经验，形成可复用的技术方案',
           '推动团队技术栈升级，逐步向现代前端框架迁移',
           '建立前端工程化体系，提升开发效率和代码质量'
+        ]
+      },
+      {
+        title: '传感器蓝牙配置 App',
+        role: '独立开发',
+        period: '2024.08 - 2025.01',
+        icon: '📱',
+        description: '基于 Vue3 + UniApp 的跨平台移动应用，用于传感器设备的蓝牙激活与网关接入配置。解决工业传感器在无屏幕场景下的配网难题，用户通过手机蓝牙连接传感器完成激活，并将其接入附近网关实现数据上云。',
+        tags: ['Vue3', 'UniApp', '蓝牙 BLE', 'IoT'],
+        metrics: [
+          { value: '蓝牙', label: '即连即配', detail: '靠近传感器自动发现，一键激活并接入网关，全流程耗时 < 30秒' },
+          { value: '跨平台', label: 'iOS/Android', detail: '一套代码同时打包 iOS 和 Android，节省 50% 的移动端开发成本' },
+          { value: '离线', label: '无网配置', detail: '传感器激活不依赖 WiFi，通过蓝牙完成全部配置' }
+        ],
+        modules: [
+          {
+            title: '蓝牙扫描与连接',
+            icon: '📡',
+            business: '扫描发现附近的星纵传感器设备，展示设备名称、信号强度、剩余电量等信息，建立蓝牙连接进行数据交互。',
+            tech: ['UniApp', '蓝牙 BLE', '状态机'],
+            futurePlans: [
+              '支持多设备同时连接，实现批量激活',
+              '引入 BLE 定位，实现室内资产追踪'
+            ],
+            approach: [
+              {
+                title: '蓝牙扫描与筛选',
+                detail: '利用设备广播名过滤星纵设备，解析广播数据中的传感器型号和电量信息。',
+                requirement: '现场可能有多个传感器同时广播，需要快速准确识别目标设备。',
+                implementation: '1. 调用 uni.startBluetoothDeviceDiscovery 开始扫描；2. 通过广播名过滤 Milesight 设备；3. 解析广播数据中的型号、电量、信号强度；4. 按 RSSI 排序展示设备列表。',
+                tech: ['蓝牙 BLE', '广播数据解析', 'RSSI'],
+                selectionReason: '蓝牙 BLE 是最低功耗的设备发现方式，适合电池供电的传感器。',
+                alternatives: [
+                  { name: 'WiFi 扫描', pros: '距离远', cons: '功耗高，传感器不支持', selected: false },
+                  { name: 'NFC', pros: '触碰即连', cons: '需要贴近，无法批量', selected: false },
+                  { name: '蓝牙 BLE', pros: '功耗低，自动发现', cons: '需要权限申请', selected: true }
+                ],
+                challenges: [
+                  { problem: 'Android 和 iOS 蓝牙 API 差异大', solution: '封装统一接口，根据平台调用对应 API' },
+                  { problem: '后台扫描被系统限制', solution: '引导用户开启定位权限（Android 6.0+）' }
+                ]
+              },
+              {
+                title: '蓝牙连接状态管理',
+                detail: '管理蓝牙连接的生命周期，包含连接中、已连接、配对中、配对失败等状态。',
+                requirement: '蓝牙连接过程可能出现各种异常，需要清晰的状态反馈和错误处理。',
+                implementation: '1. 设计连接状态机：空闲→扫描中→发现设备→连接中→配对中→已连接→错误；2. 每个状态对应不同的 UI 和操作；3. 错误状态提供重试和取消选项；4. 连接超时自动断开保护。',
+                tech: ['状态机', 'Promise', '错误处理'],
+                selectionReason: '状态机模式能清晰管理连接各阶段，状态转换有据可循。',
+                alternatives: [
+                  { name: '简单标志位', pros: '实现简单', cons: '状态逻辑混乱', selected: false },
+                  { name: '状态机模式', pros: '逻辑清晰，易维护', cons: '需要设计状态转换图', selected: true }
+                ],
+                challenges: [
+                  { problem: 'iOS 配对弹窗难以捕获', solution: '引导用户手动确认，状态流转独立处理' },
+                  { problem: '连接被系统中断', solution: '监听蓝牙适配器状态变化，自动尝试重连' }
+                ]
+              }
+            ]
+          },
+          {
+            title: '传感器激活配置',
+            icon: '⚡',
+            business: '通过蓝牙向传感器写入配置，包括目标网关选择、采样间隔、发送周期等参数，完成传感器激活上线。',
+            tech: ['UniApp', '蓝牙 Write', 'JSON Schema'],
+            futurePlans: [
+              '支持配置模板，批量下发相同配置',
+              '增加配置校验，提前发现参数冲突'
+            ],
+            approach: [
+              {
+                title: '网关自动发现',
+                detail: '扫描并展示可接入的网关列表，用户选择目标网关后写入传感器配置。',
+                requirement: '传感器需要知道将数据发送到哪里，需要选择可用的网关作为数据路由。',
+                implementation: '1. 通过 BLE 扫描发现的网关设备；2. 解析网关支持的频段和协议；3. 展示网关信号质量和工作状态；4. 用户选择后写入传感器目标网关配置。',
+                tech: ['网关发现', '频段匹配', '配置写入'],
+                selectionReason: '用户需要了解网关情况才能做出选择，可视化列表便于操作。',
+                alternatives: [
+                  { name: '手动输入网关 ID', pros: '灵活', cons: '易出错，体验差', selected: false },
+                  { name: '自动连接最近网关', pros: '简单', cons: '用户无法控制', selected: false },
+                  { name: '列表选择网关', pros: '可控性好，用户友好', cons: '需要网关广播', selected: true }
+                ],
+                challenges: [
+                  { problem: '附近无网关可用', solution: '提示用户检查网关电源和工作状态' },
+                  { problem: '网关频段与传感器不匹配', solution: '根据型号筛选兼容网关，减少选择困惑' }
+                ]
+              },
+              {
+                title: '配置下发与确认',
+                detail: '将用户配置的参数通过蓝牙写入传感器，等待传感器确认激活成功。',
+                requirement: '传感器配置需要可靠传输，确认激活成功才能算完成配置流程。',
+                implementation: '1. 序列化和校验配置参数；2. 分包通过 BLE Characteristic 写入；3. 传感器回复确认帧；4. 解析确认数据判断激活结果；5. 激活成功后展示设备上线状态。',
+                tech: ['分包写入', '确认机制', 'CRC 校验'],
+                selectionReason: 'BLE 单次传输数据量有限，需要分包；确认机制确保配置可靠落地。',
+                alternatives: [
+                  { name: '单次写入', pros: '简单', cons: '数据量受限', selected: false },
+                  { name: '分包写入 + 确认', pros: '可靠，可追溯', cons: '实现稍复杂', selected: true }
+                ],
+                challenges: [
+                  { problem: '分包传输中断', solution: '记录已发送包索引，断点续传' },
+                  { problem: '传感器无响应', solution: '设置超时时间，超时提示用户重试' }
+                ]
+              }
+            ]
+          },
+          {
+            title: '设备管理与日志',
+            icon: '📋',
+            business: '记录传感器配置历史，提供配置回溯和问题排查能力。',
+            tech: ['Vue3', '本地存储', 'SQLite'],
+            futurePlans: [
+              '同步配置记录到云端，多设备统一管理',
+              '增加配置对比功能，支持配置变更历史'
+            ],
+            approach: [
+              {
+                title: '本地配置记录',
+                detail: '使用 SQLite 本地数据库存储配置历史，包含设备信息、配置参数、激活时间等。',
+                requirement: '用户需要查看历史配置记录，便于问题排查和配置迁移。',
+                implementation: '1. 使用 uni-app 集成 SQLite 插件；2. 设计配置记录表结构；3. 配置完成后写入本地数据库；4. 列表展示历史记录，支持搜索和筛选。',
+                tech: ['SQLite', '数据持久化', '本地存储'],
+                selectionReason: '本地存储不依赖网络，离线可查看；SQLite 适合结构化数据存储。',
+                alternatives: [
+                  { name: 'LocalStorage', pros: '简单', cons: '不适合大量数据', selected: false },
+                  { name: '文件存储', pros: '灵活', cons: '查询不便', selected: false },
+                  { name: 'SQLite', pros: '查询高效，结构清晰', cons: '需要插件', selected: true }
+                ],
+                challenges: [
+                  { problem: '数据库迁移', solution: '版本号管理，支持升级脚本' },
+                  { problem: '数据量增长', solution: '定期清理或归档历史记录' }
+                ]
+              },
+              {
+                title: '配置日志详情',
+                detail: '查看单次配置的全过程日志，包含蓝牙交互的每一步命令和响应。',
+                requirement: '配置失败时需要详细日志便于排查问题。',
+                implementation: '1. 配置过程每一步都记录日志；2. 日志包含时间戳、命令类型、数据内容；3. 成功/失败状态清晰标注；4. 支持导出日志文件用于技术支持。',
+                tech: ['日志系统', '时间戳', '数据可视化'],
+                selectionReason: '详细日志是问题排查的关键，导出功能便于技术支持。',
+                alternatives: [
+                  { name: '简单状态提示', pros: '用户友好', cons: '排查困难', selected: false },
+                  { name: '详细日志', pros: '排查方便', cons: '用户可能困惑', selected: true }
+                ],
+                challenges: [
+                  { problem: '日志数据量大', solution: '限制保留条数，自动压缩旧日志' },
+                  { problem: '用户看不懂日志', solution: '日志增加友好提示，错误码关联解决方案' }
+                ]
+              }
+            ]
+          }
+        ],
+        approach: [
+          { title: '跨端技术选型', detail: '选择 Vue3 + UniApp 方案，一套代码覆盖 iOS 和 Android，同时为未来小程序和 H5 预留扩展能力。' },
+          { title: '蓝牙协议封装', detail: '封装统一的蓝牙操作模块，根据平台（iOS/Android）调用原生 BLE API，屏蔽平台差异。' },
+          { title: '状态驱动 UI', detail: '使用 Vue3 Composition API + 状态机管理蓝牙连接和配置流程，状态变化驱动 UI 更新。' },
+          { title: '离线优先设计', detail: '核心功能不依赖网络，蓝牙配网和本地存储确保在现场无网络环境下也能正常工作。' }
+        ],
+        futurePlans: [
+          '扩展支持 LoRaWAN 设备激活，完善星纵产品线全场景覆盖',
+          '增加设备诊断功能，通过蓝牙读取传感器更多运行状态',
+          '探索 Apple Watch / 安卓手表适配，进一一部降低操作门槛'
         ]
       }
     ]
@@ -388,10 +840,369 @@ export const companies: Company[] = [
           { title: '跨框架生命周期桥接', detail: '深入 single-spa 源码，设计 Svelte（登录）与 React（业务）之间的通信桥，解决样式隔离与全局状态污染问题。' },
           { title: '按钮级 RBAC 权限控制', detail: '构建个人/岗位/应用/用户四层权限体系，使用自定义指令 + HOC 实现精确到按钮级的权限控制。' }
         ],
+        modules: [
+          {
+            title: '微前端架构设计',
+            icon: '🏗️',
+            business: '基于 single-spa 实现微前端架构，整合 Svelte 与 React 跨框架子应用，实现模块独立开发、部署与运行时集成。',
+            tech: ['single-spa', 'Svelte', 'React', '跨框架通信'],
+            futurePlans: [
+              '探索 Module Federation 实现更优的共享依赖管理',
+              '引入微前端沙箱隔离，增强安全性和稳定性'
+            ],
+            approach: [
+              {
+                title: '子应用注册与生命周期管理',
+                detail: '设计子应用注册机制，统一管理各子应用的加载、挂载、卸载生命周期。',
+                requirement: '各子应用独立开发部署，需要统一的生命周期管理确保切换流畅和状态隔离。',
+                implementation: '1. 定义子应用注册规范，包含名称、入口、激活条件；2. 实现 single-spa 的 import-map 跨域加载；3. 设计应用切换时的状态保存与恢复机制；4. 监控子应用加载失败并提供降级方案。',
+                tech: ['single-spa', 'import-map', '生命周期钩子'],
+                selectionReason: 'single-spa 是成熟的微前端框架，支持多框架共存，文档完善。',
+                alternatives: [
+                  { name: 'iframe 隔离', pros: '隔离性强', cons: '通信困难，体验差', selected: false },
+                  { name: 'EMP', pros: 'Webpack 模块共享', cons: '强依赖 Webpack', selected: false },
+                  { name: 'single-spa', pros: '多框架支持，生态成熟', cons: '样式隔离需额外处理', selected: true }
+                ],
+                challenges: [
+                  { problem: '子应用样式冲突', solution: 'CSS Modules + 样式前缀规范' },
+                  { problem: '跨应用状态共享', solution: '设计 SharedState 事件总线' }
+                ]
+              },
+              {
+                title: '跨框架通信机制',
+                detail: '设计 Svelte 与 React 子应用间的通信机制，实现跨框架事件传递和状态同步。',
+                requirement: '登录模块使用 Svelte，业务模块使用 React，需要统一的登录状态共享。',
+                implementation: '1. 基于事件总线实现跨应用通信；2. 设计统一的状态管理协议；3. 实现 Svelte 到 React 的登录状态同步；4. 处理路由跳转和 URL 参数传递。',
+                tech: ['EventBus', '跨框架状态', '路由同步'],
+                selectionReason: '事件总线模式解耦度高，各子应用无需直接依赖。',
+                alternatives: [
+                  { name: 'localStorage 同步', pros: '实现简单', cons: '同步时机难以控制', selected: false },
+                  { name: 'SharedStore', pros: '状态统一', cons: '增加耦合', selected: false },
+                  { name: 'EventBus 事件总线', pros: '解耦彻底', cons: '需要统一事件规范', selected: true }
+                ],
+                challenges: [
+                  { problem: '事件顺序不确定', solution: '设计事件确认机制' },
+                  { problem: '内存泄漏风险', solution: '统一事件监听清理机制' }
+                ]
+              },
+              {
+                title: '统一权限认证',
+                detail: '集成政务级电子签章服务，实现基于 JWT 的统一身份认证与权限验证。',
+                requirement: '政务系统需要强身份认证，支持电子签章和操作审计。',
+                implementation: '1. JWT Token 生成与刷新机制；2. 集成电子签章 SDK；3. 统一权限验证中间件；4. 敏感操作日志记录。',
+                tech: ['JWT', 'OAuth2', '电子签章', 'RBAC'],
+                selectionReason: 'JWT 是标准的无状态认证方案，适合微服务架构。',
+                alternatives: [
+                  { name: 'Session 认证', pros: '服务端可控', cons: '扩展性差', selected: false },
+                  { name: 'JWT', pros: '无状态，扩展性好', cons: 'Token 管理复杂', selected: true }
+                ],
+                challenges: [
+                  { problem: 'Token 过期处理', solution: '静默刷新 + 引导重新登录' },
+                  { problem: '多设备登录', solution: '设备绑定 + 异地登录提醒' }
+                ]
+              }
+            ]
+          },
+          {
+            title: '响应式设计系统',
+            icon: '📱',
+            business: '构建适配多终端的响应式设计系统，确保 PC、平板、手机等设备的一致用户体验。',
+            tech: ['CSS Grid', 'Flexbox', '媒体查询', 'Rem 适配'],
+            futurePlans: [
+              '建立设计令牌系统，实现 Design Token 自动化',
+              '探索 CSS Container Queries 实现更灵活的组件响应式'
+            ],
+            approach: [
+              {
+                title: '栅格布局系统',
+                detail: '设计 12 栅格系统，适配不同屏幕尺寸的响应式布局规范。',
+                requirement: '工程管理后台需要在 PC 大屏和移动端都能良好展示。',
+                implementation: '1. 定义 12 栅格基础单位和间距；2. 实现断点系统（sm/md/lg/xl）；3. 关键组件的响应式适配；4. 验证不同设备下的布局正确性。',
+                tech: ['CSS Grid', '断点系统', '响应式单位'],
+                selectionReason: 'CSS Grid 是现代布局方案，12 栅格是业界通用标准。',
+                alternatives: [
+                  { name: 'Bootstrap 栅格', pros: '成熟稳定', cons: '样式定制受限', selected: false },
+                  { name: '自定义 Grid', pros: '灵活定制', cons: '需要开发时间', selected: true }
+                ],
+                challenges: [
+                  { problem: '表格在移动端显示', solution: '表格横向滚动 + 列隐藏策略' },
+                  { problem: '图表自适应', solution: 'ECharts resize 监听 + 容器宽度检测' }
+                ]
+              },
+              {
+                title: '组件响应式适配',
+                detail: '实现表单、表格、卡片等基础组件的响应式适配。',
+                requirement: '相同数据在不同设备上需要不同的展示方式。',
+                implementation: '1. 表单：PC 多列 → 移动端单列；2. 表格：PC 全列 → 移动端卡片；3. 卡片：PC 网格 → 移动端堆叠；4. 导航：PC 侧边栏 → 移动端抽屉。',
+                tech: ['组件适配', '条件渲染', 'CSS 变换'],
+                selectionReason: '基于断点的条件渲染实现简单可控。',
+                alternatives: [
+                  { name: '纯 CSS 响应式', pros: '维护简单', cons: '无法处理复杂逻辑', selected: false },
+                  { name: '组件级适配', pros: '逻辑清晰', cons: '代码量增加', selected: true }
+                ],
+                challenges: [
+                  { problem: '数据密度差异', solution: '移动端采用详情展开模式' },
+                  { problem: '触控区域大小', solution: '设置最小触控区域 44px' }
+                ]
+              }
+            ]
+          }
+        ],
         futurePlans: [
           '采用 Module Federation 替代 single-spa，实现更灵活的子应用加载与共享依赖管理',
           '引入端到端自动化测试（Playwright），对核心流程建立回归测试用例',
           '将 TypeScript 覆盖率继续推进到 80%+，并引入 strict mode 强化类型安全'
+        ]
+      },
+      {
+        title: '企业管理后台系统',
+        role: '核心开发',
+        period: '2020.12 - 2022.01',
+        icon: '⚙️',
+        description: '面向工程企业的综合管理平台，涵盖工程管理、合同段管理、用户权限管理、图片管理等核心模块，支持工程全生命周期管理和数据可视化决策。',
+        tags: ['React', 'Ant Design', 'ECharts', '阿里云 OSS'],
+        metrics: [
+          { value: '4+', label: '核心业务模块', detail: '工程管理、合同段、用户权限、图片管理等模块完整实现' },
+          { value: '20+', label: '数据统计图表', detail: '涵盖工程进度、质量、安全等多维度数据可视化' },
+          { value: '70%', label: '前端页面占比', detail: '独立承担约 70% 的页面开发工作' }
+        ],
+        modules: [
+          {
+            title: '工程管理模块',
+            icon: '🏗️',
+            business: '实现工程项目全生命周期管理，涵盖项目立项、进度跟踪、质量监控、安全管理等核心功能。',
+            tech: ['React', 'ECharts', '工作流引擎', '状态机'],
+            futurePlans: [
+              '引入 BIM 三维模型与工程进度关联展示',
+              '集成北斗定位实现施工机械实时监控'
+            ],
+            approach: [
+              {
+                title: '项目全生命周期建模',
+                detail: '设计工程项目状态机，覆盖从立项到竣工的全阶段管理。',
+                requirement: '工程项目周期长、阶段多，需要清晰的状态流转和完整的过程记录。',
+                implementation: '1. 设计项目状态机：立项→审批→实施→验收→竣工→归档；2. 每个状态定义可执行的操作和前置条件；3. 状态变更记录完整日志；4. 阶段切换需要审批流程。',
+                tech: ['状态机', '工作流', '审批流'],
+                selectionReason: '状态机模式清晰表达项目阶段流转，工作流引擎支持复杂审批。',
+                alternatives: [
+                  { name: '简单状态字段', pros: '实现简单', cons: '状态逻辑混乱', selected: false },
+                  { name: '状态机 + 工作流', pros: '逻辑清晰，支持审批', cons: '实现复杂', selected: true }
+                ],
+                challenges: [
+                  { problem: '状态转换规则复杂', solution: '可视化状态机设计器' },
+                  { problem: '并行阶段处理', solution: '设计阶段依赖关系图' }
+                ]
+              },
+              {
+                title: '工程进度甘特图',
+                detail: '使用甘特图展示项目进度，支持里程碑标记和进度预警。',
+                requirement: '管理者需要直观了解项目整体进度和各阶段完成情况。',
+                implementation: '1. 使用 ECharts Gantt 组件渲染项目计划；2. 里程碑用菱形标记关键节点；3. 进度滞后用红色预警；4. 支持缩放和拖拽调整计划。',
+                tech: ['ECharts', 'Gantt', '拖拽交互'],
+                selectionReason: 'ECharts Gantt 功能完善，支持交互和定制。',
+                alternatives: [
+                  { name: 'Excel 导出', pros: '用户熟悉', cons: '无法实时更新', selected: false },
+                  { name: '第三方 Gantt 库', pros: '功能完善', cons: '样式定制受限', selected: false },
+                  { name: 'ECharts Gantt', pros: '可定制，集成方便', cons: '大项目渲染性能', selected: true }
+                ],
+                challenges: [
+                  { problem: '大项目甘特图性能', solution: '虚拟滚动，只渲染可见区域' },
+                  { problem: '跨团队任务依赖', solution: '设计任务关联线和关键路径算法' }
+                ]
+              },
+              {
+                title: '质量与安全管理',
+                detail: '实现工程质量和安全检查记录，支持问题跟踪和整改闭环。',
+                requirement: '质量和安全是工程管理核心，需要完整的检查-整改-复查闭环。',
+                implementation: '1. 设计检查表模板，支持自定义检查项；2. 拍照记录检查现场图片；3. 问题分级（严重/一般/建议）和整改期限；4. 整改情况跟踪和复查确认。',
+                tech: ['图片上传', '问题跟踪', '闭环管理'],
+                selectionReason: '拍照留痕符合工程行业习惯，闭环管理确保问题解决。',
+                alternatives: [
+                  { name: '纯文字记录', pros: '简单', cons: '信息不完整', selected: false },
+                  { name: '图片 + 记录', pros: '信息完整', cons: '存储成本增加', selected: true }
+                ],
+                challenges: [
+                  { problem: '检查标准不统一', solution: '提供检查表模板库' },
+                  { problem: '整改拖延', solution: '自动提醒 + 超时预警' }
+                ]
+              }
+            ]
+          },
+          {
+            title: '合同段管理模块',
+            icon: '📋',
+            business: '支持合同段信息录入、编辑、查询、归档，包含合同详情、工程量清单、变更管理等完整功能。',
+            tech: ['React', 'Ant Design', 'Excel', '版本控制'],
+            futurePlans: [
+              '引入智能合同比对，自动识别变更条款',
+              '区块链存证合同文本，防止篡改'
+            ],
+            approach: [
+              {
+                title: '合同文档管理',
+                detail: '实现合同的创建、编辑、审批、归档全流程管理。',
+                requirement: '合同是工程结算依据，需要严格的审批流程和版本控制。',
+                implementation: '1. 合同信息结构化录入（合同号、甲方乙方、金额、工期等）；2. 支持 PDF/Word 合同文本上传；3. 审批流程自定义；4. 合同版本管理和变更记录。',
+                tech: ['文档管理', '工作流', '版本控制'],
+                selectionReason: '结构化数据便于统计，文档存储便于审计。',
+                alternatives: [
+                  { name: '纯纸质合同', pros: '传统习惯', cons: '管理困难', selected: false },
+                  { name: '电子合同系统', pros: '便于管理', cons: '需要电子签章', selected: true }
+                ],
+                challenges: [
+                  { problem: '合同文本搜索', solution: 'OCR 识别 + 全文索引' },
+                  { problem: '大文件预览', solution: '服务端转 PDF 在线预览' }
+                ]
+              },
+              {
+                title: '工程量清单管理',
+                detail: '实现工程量清单的录入、导入、变更和结算功能。',
+                requirement: '工程量清单是造价核算基础，需要支持 Excel 导入和变更管理。',
+                implementation: '1. 支持 Excel 模板导入工程量清单；2. 清单项与定额库关联；3. 变更申请-审批-执行流程；4. 变更后重新计算总价。',
+                tech: ['Excel 解析', '表单联动', '计算引擎'],
+                selectionReason: 'Excel 是工程行业标准交换格式，导入导出必须支持。',
+                alternatives: [
+                  { name: '手动逐项录入', pros: '精确控制', cons: '效率低', selected: false },
+                  { name: 'Excel 导入', pros: '效率高', cons: '格式校验复杂', selected: true }
+                ],
+                challenges: [
+                  { problem: 'Excel 格式不统一', solution: '提供标准模板 + 格式校验' },
+                  { problem: '变更累计计算', solution: '版本差量计算算法' }
+                ]
+              }
+            ]
+          },
+          {
+            title: '图片管理功能',
+            icon: '🖼️',
+            business: '基于阿里云 OSS 实现图片上传、下载、预览、删除等操作，集成压缩、格式转换、水印等处理功能。',
+            tech: ['阿里云 OSS', 'Canvas', '图片压缩', '水印'],
+            futurePlans: [
+              '引入 CDN 加速图片访问',
+              'AI 辅助图片分类和标签自动识别'
+            ],
+            approach: [
+              {
+                title: 'OSS 文件上传',
+                detail: '实现大文件分片上传、进度显示、断点续传。',
+                requirement: '工程现场图片量大（单项目可达 GB 级），需要可靠的上传机制。',
+                implementation: '1. 前端直传 OSS，使用签名 URL 避免密钥暴露；2. 分片上传支持 100MB+ 文件；3. 进度条实时显示上传进度；4. 网络中断后断点续传。',
+                tech: ['OSS SDK', '分片上传', '断点续传'],
+                selectionReason: '阿里云 OSS SDK 封装完善，直传减少服务端压力。',
+                alternatives: [
+                  { name: '服务端转发', pros: '简单', cons: '浪费带宽', selected: false },
+                  { name: '前端直传 OSS', pros: '性能好，安全性高', cons: '需要签名服务', selected: true }
+                ],
+                challenges: [
+                  { problem: '上传失败重试', solution: '自动重试 + 手动续传' },
+                  { problem: '大图加载慢', solution: '缩略图 + 懒加载' }
+                ]
+              },
+              {
+                title: '图片处理服务',
+                detail: '实现图片压缩、格式转换、水印添加等处理功能。',
+                requirement: '原始图片占用空间大，需要压缩和水印处理后存储。',
+                implementation: '1. 使用 Canvas 在前端进行图片压缩；2. 支持 JPEG/PNG/WebP 格式转换；3. 水印合成（文字水印 + 图片水印）；4. 处理完成后上传 OSS。',
+                tech: ['Canvas', '图片压缩', '水印合成'],
+                selectionReason: '前端处理减少服务器压力，用户可即时预览效果。',
+                alternatives: [
+                  { name: '服务端处理', pros: '处理能力强', cons: '增加服务器负载', selected: false },
+                  { name: '前端处理', pros: '即时预览，减少带宽', cons: '移动端性能有限', selected: true }
+                ],
+                challenges: [
+                  { problem: '移动端性能', solution: 'Web Worker 后台处理' },
+                  { problem: '水印被去除', solution: '多重水印 + 不可见水印' }
+                ]
+              },
+              {
+                title: '图片访问控制',
+                detail: '实现基于 Token 的图片访问权限控制和防盗链。',
+                requirement: '工程图片涉及敏感信息，需要限制未授权访问。',
+                implementation: '1. 图片 URL 设置过期时间；2. Referer 防盗链配置；3. 私有 bucket + 签名 URL 访问；4. 图片访问日志记录。',
+                tech: ['OSS 权限', '签名 URL', 'Referer 白名单'],
+                selectionReason: 'OSS 原生支持多种权限控制方案，无需额外开发。',
+                alternatives: [
+                  { name: '公开访问', pros: '简单', cons: '无安全性', selected: false },
+                  { name: '私有 + 签名', pros: '安全可控', cons: '增加复杂度', selected: true }
+                ],
+                challenges: [
+                  { problem: '签名服务压力', solution: '签名 URL 缓存 + 预生成' },
+                  { problem: '外部分享需求', solution: '限时公开链接功能' }
+                ]
+              }
+            ]
+          },
+          {
+            title: '系统通用模块',
+            icon: '🔧',
+            business: '数据可视化、工作流引擎、日志管理、系统设置等企业级通用功能。',
+            tech: ['ECharts', 'Bpmn.js', 'ELK', '加密'],
+            futurePlans: [
+              '引入低代码平台，简化表单和流程配置',
+              '实现智能数据分析，自动生成管理报表'
+            ],
+            approach: [
+              {
+                title: '数据可视化平台',
+                detail: '构建统一的数据可视化平台，支持工程数据统计图表展示和数据导出。',
+                requirement: '管理者需要多维度的数据统计和灵活的报表导出。',
+                implementation: '1. 设计可视化组件库（柱状图、饼图、折线图、地图等）；2. 支持自定义图表配置；3. 数据导出为 Excel/PDF；4. 仪表盘自定义布局。',
+                tech: ['ECharts', '数据导出', '仪表盘'],
+                selectionReason: 'ECharts 图表类型丰富，支持定制和导出。',
+                alternatives: [
+                  { name: '纯表格展示', pros: '数据精确', cons: '不直观', selected: false },
+                  { name: 'ECharts 可视化', pros: '直观美观', cons: '需要设计规范', selected: true }
+                ],
+                challenges: [
+                  { problem: '数据量大时卡顿', solution: '数据采样 + 分页加载' },
+                  { problem: '导出格式不一致', solution: '统一导出服务' }
+                ]
+              },
+              {
+                title: '工作流引擎',
+                detail: '基于 bpmn-js 实现工程审批流程的自定义与管理。',
+                requirement: '工程管理涉及多级审批，需要可视化的流程设计器。',
+                implementation: '1. 使用 bpmn-js 渲染流程图；2. 支持审批节点、网关、事件的配置；3. 流程版本管理和切换；4. 审批历史记录和跟踪。',
+                tech: ['bpmn-js', '流程设计', '审批流'],
+                selectionReason: 'bpmn-js 是 BPMN 2.0 标准实现，业界认可度高。',
+                alternatives: [
+                  { name: '硬编码流程', pros: '实现简单', cons: '不灵活', selected: false },
+                  { name: 'bpmn-js', pros: '标准可视化', cons: '学习成本', selected: true }
+                ],
+                challenges: [
+                  { problem: '复杂条件表达式', solution: '提供可视化条件配置' },
+                  { problem: '流程性能', solution: '流程缓存 + 懒加载' }
+                ]
+              },
+              {
+                title: '日志管理与安全',
+                detail: '实现系统操作日志、异常日志的记录、查询、导出和安全措施。',
+                requirement: '政务系统需要完整的操作审计和安全防护。',
+                implementation: '1. AOP 切面记录所有操作日志；2. 统一异常处理和堆栈记录；3. 日志分词搜索和条件筛选；4. 日志导出为 Excel；5. 数据加密传输和敏感信息脱敏。',
+                tech: ['AOP', 'ELK', 'RSA', 'SQL 注入防护'],
+                selectionReason: 'AOP 解耦日志逻辑，ELK 提供强大的日志检索能力。',
+                alternatives: [
+                  { name: '手动日志', pros: '简单', cons: '遗漏多', selected: false },
+                  { name: 'AOP 自动日志', pros: '完整，可追溯', cons: '需要切面支持', selected: true }
+                ],
+                challenges: [
+                  { problem: '日志量大', solution: '日志分级 + 定期归档' },
+                  { problem: '敏感信息泄露', solution: '脱敏规则 + 权限控制' }
+                ]
+              }
+            ]
+          }
+        ],
+        approach: [
+          { title: '组件化架构设计', detail: '基于 Ant Design Pro 框架，采用区块化开发模式，提升开发效率和代码复用性。' },
+          { title: '权限体系构建', detail: '设计个人/岗位/应用/用户四层权限体系，实现精细化的按钮级权限控制。' },
+          { title: '工程业务建模', detail: '深入理解工程管理业务逻辑，设计贴合行业习惯的数据模型和流程。' },
+          { title: '企业级稳定性', detail: '前后端双重校验、表单防抖、请求重试等机制保障系统稳定运行。' }
+        ],
+        futurePlans: [
+          '引入 BIM 三维可视化，实现工程数据的沉浸式展示',
+          '建设移动端 App，支撑现场巡检和即时审批场景',
+          '探索 AI 辅助决策，智能分析工程数据异常和风险预警'
         ]
       }
     ]

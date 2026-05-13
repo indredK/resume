@@ -342,6 +342,7 @@ import { ref, computed } from 'vue'
 import { companies, principles } from '@/data/caseStudies'
 import type { Company, Module, Approach } from '@/data/types'
 import ApproachDrawer from '@/components/ApproachDrawer.vue'
+import { useScrollReset } from '@/composables/useScrollReset'
 
 interface Category {
   id: string
@@ -382,6 +383,7 @@ const activeProject = ref<number | null>(null)
 const activeModule = ref<number | null>(null)
 const drawerVisible = ref(false)
 const currentApproach = ref<ApproachDetail | null>(null)
+const { scrollToTop } = useScrollReset()
 
 const currentCategory = computed<Category | undefined>(() => categories.find(cat => cat.id === activeCategory.value))
 const currentCompany = computed<Company | null>(() => {
@@ -401,15 +403,18 @@ function selectCategory(categoryId: string): void {
   activeCategory.value = categoryId
   activeProject.value = null
   activeModule.value = null
+  scrollToTop()
 }
 
 function selectProject(pIdx: number): void {
   activeProject.value = pIdx
   activeModule.value = null
+  scrollToTop()
 }
 
 function selectModule(mIdx: number): void {
   activeModule.value = mIdx
+  scrollToTop()
 }
 
 function openApproachDrawer(approach: Approach, step: number, moduleName: string): void {
