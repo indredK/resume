@@ -1,6 +1,6 @@
-import type { SkillNode } from './types'
+import type { SkillNode } from '../types'
 
-export const toolchainSkills: SkillNode = {
+export default {
   id: 'toolchain',
   name: '工具链',
   icon: '🔧',

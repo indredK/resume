@@ -122,44 +122,68 @@
 
                 <!-- 对比数据卡片 -->
                 <div v-else class="comparison-items">
-                  <div
-                    v-for="item in card.items"
-                    :key="item.id"
-                    :id="`item-${item.id}`"
-                    class="comparison-item"
-                    :data-item-id="item.id"
-                  >
-
-                    <div v-if="isBuildToolCard(card)" class="build-tool-detail">
-                      <div class="tool-badge" :style="{ backgroundColor: item.color + '20', borderColor: item.color }">
-                        <span class="tool-color-dot" :style="{ backgroundColor: item.color }"></span>
-                        <span class="tool-label">{{ item.name }}</span>
-                      </div>
-
-                      <div v-if="item.advantages?.length || item.disadvantages?.length" class="skill-pros-cons-grid">
-                        <div v-if="item.advantages?.length" class="skill-col adv-col">
-                          <div class="skill-col-badge adv">
-                            <span class="badge-icon">✅</span>
-                            <span class="badge-name">优势</span>
-                          </div>
-                          <ul class="detail-list">
-                            <li v-for="(adv, idx) in item.advantages" :key="idx" class="adv-item">{{ adv }}</li>
-                          </ul>
-                        </div>
-
-                        <div v-if="item.disadvantages?.length" class="skill-col dis-col">
-                          <div class="skill-col-badge dis">
-                            <span class="badge-icon">⚠️</span>
-                            <span class="badge-name">劣势</span>
-                          </div>
-                          <ul class="detail-list disadvantage-list">
-                            <li v-for="(dis, idx) in item.disadvantages" :key="idx" class="dis-item">{{ dis }}</li>
-                          </ul>
+                  <!-- 构建工具：三栏对比表格 -->
+                  <div v-if="isBuildToolCard(card)" class="build-tool-compare-table" :data-section-id="card.id">
+                    <div class="bt-header-row">
+                      <div class="bt-dimension-col"></div>
+                      <div
+                        v-for="item in card.items"
+                        :key="item.id"
+                        class="bt-tool-col"
+                      >
+                        <div class="bt-tool-badge" :style="{ backgroundColor: item.color + '20', borderColor: item.color }">
+                          <span class="tool-color-dot" :style="{ backgroundColor: item.color }"></span>
+                          <span class="bt-tool-name" :style="{ color: item.color }">{{ item.name }}</span>
+                          <span class="bt-tool-level">Lv.{{ item.level }}</span>
                         </div>
                       </div>
                     </div>
 
-                    <div v-else class="framework-detail">
+                    <div class="bt-row bt-advantages-row">
+                      <div class="bt-dimension-col bt-dim-label adv">
+                        <span class="bt-dim-icon">✅</span>
+                        <span>优势</span>
+                      </div>
+                      <div
+                        v-for="item in card.items"
+                        :key="item.id"
+                        class="bt-tool-col bt-col-adv"
+                        :style="{ borderColor: item.color + '30' }"
+                      >
+                        <ul class="bt-item-list">
+                          <li v-for="(adv, idx) in item.advantages" :key="idx">{{ adv }}</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div class="bt-row bt-disadvantages-row">
+                      <div class="bt-dimension-col bt-dim-label dis">
+                        <span class="bt-dim-icon">⚠️</span>
+                        <span>劣势</span>
+                      </div>
+                      <div
+                        v-for="item in card.items"
+                        :key="item.id"
+                        class="bt-tool-col bt-col-dis"
+                        :style="{ borderColor: item.color + '30' }"
+                      >
+                        <ul class="bt-item-list">
+                          <li v-for="(dis, idx) in item.disadvantages" :key="idx">{{ dis }}</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 框架对比：原有逐项布局 -->
+                  <div v-else class="framework-items-wrap">
+                    <div
+                      v-for="item in card.items"
+                      :key="item.id"
+                      :id="`item-${item.id}`"
+                      class="comparison-item"
+                      :data-item-id="item.id"
+                    >
+                      <div class="framework-detail">
                       <div class="item-title-row">
                         <span class="item-icon">{{ item.icon || '📊' }}</span>
                         <span class="item-name">{{ item.name }}</span>
@@ -206,6 +230,7 @@
                           <li v-for="(dis, idx) in item.disadvantages" :key="idx" class="dis-item">{{ dis }}</li>
                         </ul>
                       </div>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -302,6 +327,8 @@ const tocTitle = computed(() => {
 
 const tocItems = computed<TocItem[]>(() => {
   if (isComparisonMode.value) {
+    const singleCard = comparisonCards.value[0]
+    if (singleCard && isBuildToolCard(singleCard)) return []
     if (comparisonCards.value.length > 1) {
       return comparisonCards.value.map((card) => ({
         id: card.id,
@@ -740,21 +767,146 @@ onUnmounted(() => {
   @apply font-bold text-base;
 }
 
-/* Build tool detail */
-.build-tool-detail {
-  @apply space-y-4;
+/* Build tool comparison table */
+.build-tool-compare-table {
+  @apply overflow-hidden rounded-xl;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
 }
 
-.tool-badge {
-  @apply inline-flex items-center gap-2 px-4 py-2 rounded-full border;
+.bt-header-row {
+  @apply grid gap-0;
+  grid-template-columns: 80px repeat(var(--bt-cols, 3), 1fr);
+}
+
+.bt-row {
+  @apply grid gap-0 border-t border-white/5;
+  grid-template-columns: 80px repeat(var(--bt-cols, 3), 1fr);
+}
+
+.bt-dimension-col {
+  @apply flex items-center gap-1.5 px-3 py-4 text-sm font-semibold text-slate-400;
+  background: rgba(255, 255, 255, 0.03);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.bt-dim-label {
+  @apply justify-center text-xs uppercase tracking-wider;
+}
+
+.bt-dim-label.adv {
+  @apply text-emerald-400;
+}
+
+.bt-dim-label.dis {
+  @apply text-red-400;
+}
+
+.bt-dim-icon {
+  @apply text-base;
+}
+
+.bt-tool-col {
+  @apply px-4 py-3 min-w-0;
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.bt-tool-col:last-child {
+  border-right: none;
+}
+
+.bt-tool-badge {
+  @apply flex items-center gap-2 px-3 py-2.5 rounded-lg border;
 }
 
 .tool-color-dot {
-  @apply w-3 h-3 rounded-full;
+  @apply w-3 h-3 rounded-full flex-shrink-0;
 }
 
-.tool-label {
-  @apply text-white font-bold;
+.bt-tool-name {
+  @apply font-bold text-sm;
+}
+
+.bt-tool-level {
+  @apply text-[11px] text-slate-500 font-mono ml-auto;
+}
+
+.bt-col-adv {
+  background: rgba(52, 211, 153, 0.03);
+}
+
+.bt-col-dis {
+  background: rgba(248, 113, 113, 0.03);
+}
+
+.bt-item-list {
+  @apply space-y-2;
+}
+
+.bt-item-list li {
+  @apply text-[12px] text-slate-300 leading-relaxed;
+  position: relative;
+  padding-left: 14px;
+}
+
+.bt-item-list li::before {
+  content: '';
+  @apply absolute left-0 top-[7px] w-1.5 h-1.5 rounded-full;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.bt-col-adv .bt-item-list li {
+  color: #a7f3d0;
+}
+
+.bt-col-adv .bt-item-list li::before {
+  background: #34d399;
+}
+
+.bt-col-dis .bt-item-list li {
+  color: #fca5a5;
+}
+
+.bt-col-dis .bt-item-list li::before {
+  background: #f87171;
+}
+
+@media (max-width: 639px) {
+  .build-tool-compare-table {
+    --bt-cols: 1;
+  }
+
+  .bt-header-row,
+  .bt-row {
+    grid-template-columns: 80px 1fr;
+  }
+
+  .bt-header-row .bt-dimension-col {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .bt-row .bt-dimension-col {
+    display: none;
+  }
+
+  .bt-row.bt-advantages-row .bt-tool-col {
+    border-top: 2px solid rgba(52, 211, 153, 0.3);
+  }
+
+  .bt-row.bt-disadvantages-row .bt-tool-col {
+    border-top: 2px solid rgba(248, 113, 113, 0.3);
+  }
+
+  .bt-col-adv .bt-item-list li::before {
+    content: '+';
+    @apply rounded-none w-auto h-auto top-[1px];
+  }
+
+  .bt-col-dis .bt-item-list li::before {
+    content: '−';
+    @apply rounded-none w-auto h-auto top-[1px];
+  }
 }
 
 /* Detail sections */

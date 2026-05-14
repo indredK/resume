@@ -1,6 +1,6 @@
-import type { SkillNode } from './types'
+import type { SkillNode } from '../types'
 
-export const devopsSkills: SkillNode = {
+export default {
   id: 'devops',
   name: 'DevOps',
   icon: '🚀',

@@ -1,6 +1,6 @@
-import type { SkillNode } from './types'
+import type { SkillNode } from '../types'
 
-export const frontendSkills: SkillNode = {
+export default {
   id: 'frontend',
   name: '前端技术',
   icon: '⚡',

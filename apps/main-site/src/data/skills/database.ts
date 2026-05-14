@@ -1,6 +1,6 @@
-import type { SkillNode } from './types'
+import type { SkillNode } from '../types'
 
-export const databaseSkills: SkillNode = {
+export default {
   id: 'database',
   name: '数据库',
   icon: '🗄️',

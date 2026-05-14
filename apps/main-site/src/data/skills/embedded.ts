@@ -1,6 +1,6 @@
-import type { SkillNode } from './types'
+import type { SkillNode } from '../types'
 
-export const embeddedSkills: SkillNode = {
+export default {
   id: 'embedded',
   name: '嵌入式',
   icon: '🔌',

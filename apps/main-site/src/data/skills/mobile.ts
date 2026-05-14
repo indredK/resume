@@ -1,6 +1,6 @@
-import type { SkillNode } from './types'
+import type { SkillNode } from '../types'
 
-export const mobileSkills: SkillNode = {
+export default {
   id: 'mobile',
   name: '移动端技术',
   icon: '📱',

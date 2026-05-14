@@ -1,6 +1,6 @@
-import type { SkillNode } from './types'
+import type { SkillNode } from '../types'
 
-export const emergingSkills: SkillNode = {
+export default {
   id: 'emerging',
   name: '新兴技术',
   icon: '✨',

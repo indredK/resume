@@ -1,6 +1,6 @@
-import type { SkillNode } from './types'
+import type { SkillNode } from '../types'
 
-export const desktopSkills: SkillNode = {
+export default {
   id: 'desktop',
   name: '桌面端技术',
   icon: '🖥️',
