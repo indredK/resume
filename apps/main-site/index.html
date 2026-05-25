@@ -48,7 +48,9 @@
         var redirect = sessionStorage.getItem('redirect');
         if (redirect) {
           sessionStorage.removeItem('redirect');
-          history.replaceState(null, null, redirect);
+          if (/^\/resume\//.test(redirect)) {
+            history.replaceState(null, null, redirect);
+          }
         }
       })();
     </script>
