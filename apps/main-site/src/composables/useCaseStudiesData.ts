@@ -1,13 +1,14 @@
 import { ref } from 'vue'
+import type { Company, Principle } from '@/data/types'
 
-const companiesCache = ref(null)
-const principlesCache = ref(null)
+const companiesCache = ref<Company[] | null>(null)
+const principlesCache = ref<Principle[] | null>(null)
 
 export function useCaseStudiesData() {
   const loading = ref(false)
-  const error = ref(null)
+  const error = ref<unknown>(null)
 
-  const loadCompanies = async () => {
+  const loadCompanies = async (): Promise<Company[]> => {
     if (companiesCache.value) return companiesCache.value
 
     loading.value = true
@@ -23,7 +24,7 @@ export function useCaseStudiesData() {
     }
   }
 
-  const loadPrinciples = async () => {
+  const loadPrinciples = async (): Promise<Principle[]> => {
     if (principlesCache.value) return principlesCache.value
 
     loading.value = true
@@ -43,6 +44,6 @@ export function useCaseStudiesData() {
     loading,
     error,
     loadCompanies,
-    loadPrinciples
+    loadPrinciples,
   }
 }

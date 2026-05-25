@@ -1,20 +1,23 @@
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
+import type { SkillNode } from '@/data/types'
 
-const skillDataCache = new Map()
-const categoriesCache = ref(null)
+interface Category {
+  id: string
+  name: string
+  icon: string
+  color: string
+}
+
+const skillDataCache = new Map<string, SkillNode[]>()
+const categoriesCache = ref<Category[] | null>(null)
 
 export function useSkillsData() {
   const loading = ref(false)
-  const error = ref(null)
+  const error = ref<unknown>(null)
 
-  const categories = computed(() => {
+  const loadCategories = async (): Promise<Category[]> => {
     if (categoriesCache.value) return categoriesCache.value
-    return null
-  })
 
-  const loadCategories = async () => {
-    if (categoriesCache.value) return categoriesCache.value
-    
     loading.value = true
     try {
       const module = await import('@/data/index')
@@ -28,10 +31,9 @@ export function useSkillsData() {
     }
   }
 
-  const loadSkillTreeData = async () => {
-    if (skillDataCache.has('skillTreeData')) {
-      return skillDataCache.get('skillTreeData')
-    }
+  const loadSkillTreeData = async (): Promise<SkillNode[]> => {
+    const cached = skillDataCache.get('skillTreeData')
+    if (cached) return cached
 
     loading.value = true
     try {
@@ -50,8 +52,7 @@ export function useSkillsData() {
   return {
     loading,
     error,
-    categories,
     loadCategories,
-    loadSkillTreeData
+    loadSkillTreeData,
   }
 }
