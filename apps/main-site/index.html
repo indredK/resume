@@ -42,6 +42,12 @@
           if (el) el.remove();
         }, 300);
       });
+      setTimeout(function() {
+        var el = document.getElementById('app-loading');
+        if (el && !el.classList.contains('hidden')) {
+          el.innerHTML = '<div style="color:#94a3b8;font-size:14px">加载较慢,请检查网络</div>';
+        }
+      }, 8000);
     </script>
     <script>
       (function() {

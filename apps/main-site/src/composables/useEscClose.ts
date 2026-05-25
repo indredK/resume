@@ -1,6 +1,7 @@
 import { watch, onUnmounted } from 'vue'
 
 type CloseHandler = () => void
+// LIFO 栈:嵌套场景下 ESC 只关闭最上层 handler
 const handlerStack: CloseHandler[] = []
 
 let globalListenerRegistered = false
@@ -12,10 +13,24 @@ function handleGlobalKeydown(e: KeyboardEvent) {
   }
 }
 
-function registerGlobalListener() {
+function ensureGlobalListener() {
   if (!globalListenerRegistered) {
     document.addEventListener('keydown', handleGlobalKeydown)
     globalListenerRegistered = true
+  }
+}
+
+function maybeTeardownGlobalListener() {
+  if (globalListenerRegistered && handlerStack.length === 0) {
+    document.removeEventListener('keydown', handleGlobalKeydown)
+    globalListenerRegistered = false
+  }
+}
+
+function removeHandler(handler: CloseHandler) {
+  const index = handlerStack.lastIndexOf(handler)
+  if (index !== -1) {
+    handlerStack.splice(index, 1)
   }
 }
 
@@ -26,17 +41,13 @@ export function useEscClose(visible: () => boolean, onClose: () => void) {
     visible,
     (isVisible) => {
       if (isVisible) {
-        registerGlobalListener()
+        ensureGlobalListener()
         handlerStack.push(onClose)
         registered = true
-      } else {
-        if (registered) {
-          const index = handlerStack.lastIndexOf(onClose)
-          if (index !== -1) {
-            handlerStack.splice(index, 1)
-          }
-          registered = false
-        }
+      } else if (registered) {
+        removeHandler(onClose)
+        registered = false
+        maybeTeardownGlobalListener()
       }
     },
     { immediate: true },
@@ -44,11 +55,9 @@ export function useEscClose(visible: () => boolean, onClose: () => void) {
 
   onUnmounted(() => {
     if (registered) {
-      const index = handlerStack.lastIndexOf(onClose)
-      if (index !== -1) {
-        handlerStack.splice(index, 1)
-      }
+      removeHandler(onClose)
       registered = false
+      maybeTeardownGlobalListener()
     }
   })
 }
