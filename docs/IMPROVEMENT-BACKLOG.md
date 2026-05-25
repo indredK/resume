@@ -85,7 +85,6 @@ app.config.errorHandler = (err, _vm, info) => {
 ### A7. DX 杂项(各 ~1 分钟)
 
 - `.editorconfig` — 统一缩进 / EOL / charset
-- `.nvmrc` 写 `20` + [`package.json`](../apps/main-site/package.json) 加 `"engines": { "node": ">=20" }`
 - `.vscode/extensions.json` 推荐 `Vue.volar`、`dbaeumer.vscode-eslint`、`bradlc.vscode-tailwindcss`
 
 ---

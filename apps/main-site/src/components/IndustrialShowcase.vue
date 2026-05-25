@@ -137,10 +137,6 @@ const pauseDownload = () => {
   downloadProgress.value.canResume = false
 }
 
-const resumeDownload = () => {
-  downloadProgress.value.canResume = true
-}
-
 onMounted(() => {
   simulateRealTime()
 })

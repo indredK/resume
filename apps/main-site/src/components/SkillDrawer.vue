@@ -164,7 +164,7 @@ const props = defineProps<{
 
 const loading = ref(false)
 const notification = ref<{ message: string; type: 'success' | 'error' | 'info' } | null>(null)
-let notificationTimer: any = null
+let notificationTimer: ReturnType<typeof setTimeout> | null = null
 
 const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
   if (notificationTimer) clearTimeout(notificationTimer)
@@ -217,11 +217,7 @@ const handleChildClick = (child: SkillData) => {
   }
 }
 
-const closeDrawer = () => {
-  emit('close')
-}
-
-const fetchWithTimeout = async (url: string, options: any = {}, timeout = 8000) => {
+const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeout = 8000) => {
   const controller = new AbortController()
   const id = setTimeout(() => controller.abort(), timeout)
   try {
@@ -275,8 +271,8 @@ const refreshVersion = async () => {
         }
       }
       throw new Error('API 响应异常')
-    } catch (error: any) {
-      if (error.name === 'AbortError') {
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
         if (retryCount < maxRetries) {
           retryCount++
           showNotification(`请求超时，正在进行第 ${retryCount} 次重试...`, 'info')

@@ -84,26 +84,6 @@ const navItems = ref([
   { name: '成果', path: '/case-studies' },
   { name: '关于我', path: '/about' }
 ])
-
-const scrollToSection = (hash) => {
-  // 确保在首页进行滚动
-  if (window.location.pathname !== '/') {
-    window.location.href = '/' + hash
-    return
-  }
-  
-  const element = document.querySelector(hash)
-  if (element) {
-    const headerOffset = 80
-    const elementPosition = element.getBoundingClientRect().top
-    const offsetPosition = elementPosition + window.scrollY - headerOffset
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth'
-    })
-  }
-}
 </script>
 
 <style>

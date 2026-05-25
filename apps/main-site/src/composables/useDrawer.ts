@@ -10,7 +10,7 @@ import { lockBodyScroll, unlockBodyScroll } from './useScrollLock'
 export function useDrawer(
   drawerBodyRef: Ref<HTMLElement | null>,
   visible: ComputedRef<boolean>,
-  watchProps: Record<string, any> = {}
+  watchProps: Record<string, unknown> = {}
 ) {
   // 防止滚动冒泡到底层
   const handleWheel = (e: WheelEvent) => {

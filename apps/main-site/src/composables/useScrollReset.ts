@@ -69,7 +69,7 @@ export function useScrollReset() {
  * 快捷滚动重置 Hook
  * 返回一个 scrollReset 函数，每次调用都会平滑滚动到顶部
  */
-export function useScrollResetOnChange(..._deps: any[]) {
+export function useScrollResetOnChange(..._deps: unknown[]) {
   const { scrollToTop } = useScrollReset()
 
   const scrollReset = () => {
