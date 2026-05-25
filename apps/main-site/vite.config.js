@@ -7,23 +7,24 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
-    }
+      '@': path.resolve(__dirname, './src'),
+    },
   },
   build: {
     target: 'esnext',
     minify: 'esbuild',
+    cssCodeSplit: true,
+    sourcemap: false,
     rollupOptions: {
       output: {
         manualChunks: {
-          'vue-vendor': ['vue', 'vue-router', 'pinia'],
-          'vue-flow': ['@vue-flow/core', '@vue-flow/background', '@vue-flow/controls']
-        }
-      }
+          'vue-vendor': ['vue', 'vue-router'],
+        },
+      },
     },
-    chunkSizeWarningLimit: 500
+    chunkSizeWarningLimit: 300,
   },
   optimizeDeps: {
-    include: ['vue', 'vue-router', 'pinia']
-  }
+    include: ['vue', 'vue-router'],
+  },
 })
