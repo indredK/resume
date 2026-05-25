@@ -19,15 +19,15 @@
             擅长复杂权限体系、工业数据可视化与组件化架构设计，具备从 0 到 1 构建系统能力。
           </p>
           <div class="flex flex-wrap justify-center md:justify-start gap-4">
-            <a href="mailto:zys233333@gmail.com" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-slate-400 text-sm hover:bg-white/10 hover:text-white transition-all">
+            <a :href="`mailto:${CONTACT.email}`" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-slate-400 text-sm hover:bg-white/10 hover:text-white transition-all">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
               Email
             </a>
             <span class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-slate-400 text-sm hover:bg-white/10 hover:text-white transition-all">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.28-2.28a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-              135-0159-7242
+              {{ CONTACT.phoneDisplay }}
             </span>
-            <a href="https://github.com/indredK" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-slate-400 text-sm hover:bg-white/10 hover:text-white transition-all">
+            <a :href="CONTACT.github" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-slate-400 text-sm hover:bg-white/10 hover:text-white transition-all">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A3.37 3.37 0 0 0 22.42 4.42 3.37 3.37 0 0 0 21.31.52S19.95.11 16.89 2.12a11.36 11.36 0 0 0-6 0C7.71.11 6.35.52 6.35.52a3.37 3.37 0 0 0-1.11 3.9 3.37 3.37 0 0 0-1.31 2.38c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9.43 16.5V22"></path></svg>
               GitHub
             </a>
@@ -138,6 +138,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { CONTACT } from '@/data/contact'
 
 const statistics = ref([
   { label: 'Experience', value: '5+ Years' },

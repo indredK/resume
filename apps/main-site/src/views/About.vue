@@ -144,37 +144,37 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <a href="tel:13501597242" class="contact-card rounded-xl p-5 bg-slate-800/30 border border-slate-700/30 hover:border-blue-500/30 transition-all flex items-center gap-4 group">
+              <a :href="`tel:${CONTACT.phone}`" class="contact-card rounded-xl p-5 bg-slate-800/30 border border-slate-700/30 hover:border-blue-500/30 transition-all flex items-center gap-4 group">
                 <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                   📱
                 </div>
                 <div>
                   <div class="text-xs text-slate-500 mb-1">电话</div>
-                  <div class="text-sm font-semibold text-white">13501597242</div>
+                  <div class="text-sm font-semibold text-white">{{ CONTACT.phoneDisplay }}</div>
                 </div>
               </a>
 
-              <a href="mailto:zys233333@gmail.com" class="contact-card rounded-xl p-5 bg-slate-800/30 border border-slate-700/30 hover:border-blue-500/30 transition-all flex items-center gap-4 group">
+              <a :href="`mailto:${CONTACT.email}`" class="contact-card rounded-xl p-5 bg-slate-800/30 border border-slate-700/30 hover:border-blue-500/30 transition-all flex items-center gap-4 group">
                 <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                   📧
                 </div>
                 <div>
                   <div class="text-xs text-slate-500 mb-1">邮箱</div>
-                  <div class="text-sm font-semibold text-white">zys233333@gmail.com</div>
+                  <div class="text-sm font-semibold text-white">{{ CONTACT.email }}</div>
                 </div>
               </a>
 
-              <a href="https://github.com/indredK" target="_blank" class="contact-card rounded-xl p-5 bg-slate-800/30 border border-slate-700/30 hover:border-blue-500/30 transition-all flex items-center gap-4 group">
+              <a :href="CONTACT.github" target="_blank" class="contact-card rounded-xl p-5 bg-slate-800/30 border border-slate-700/30 hover:border-blue-500/30 transition-all flex items-center gap-4 group">
                 <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                   💻
                 </div>
                 <div>
                   <div class="text-xs text-slate-500 mb-1">GitHub</div>
-                  <div class="text-sm font-semibold text-white">@indredK</div>
+                  <div class="text-sm font-semibold text-white">{{ CONTACT.githubHandle }}</div>
                 </div>
               </a>
 
-              <a href="https://blog.csdn.net/weixin_42357617" target="_blank" class="contact-card rounded-xl p-5 bg-slate-800/30 border border-slate-700/30 hover:border-blue-500/30 transition-all flex items-center gap-4 group">
+              <a :href="CONTACT.blog" target="_blank" class="contact-card rounded-xl p-5 bg-slate-800/30 border border-slate-700/30 hover:border-blue-500/30 transition-all flex items-center gap-4 group">
                 <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                   ✍️
                 </div>
@@ -194,6 +194,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useCaseStudiesData } from '@/composables/useCaseStudiesData'
+import { CONTACT } from '@/data/contact'
 
 const { loadPrinciples } = useCaseStudiesData()
 const principles = ref<Array<{title: string, icon: string, desc: string}>>([])
