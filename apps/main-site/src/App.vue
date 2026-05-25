@@ -80,7 +80,6 @@ import { ref } from 'vue'
 const navItems = ref([
   { name: '简历', path: '/' },
   { name: '技能树', path: '/skills' },
-  // { name: '项目', path: '/projects' },
   { name: '成果', path: '/case-studies' },
   { name: '关于我', path: '/about' }
 ])
