@@ -65,7 +65,7 @@
                   <div v-if="card.reason" class="p-4 rounded-xl mb-1 bg-[rgba(100,149,237,0.08)] border border-[rgba(100,149,237,0.15)]">
                     <p class="text-[13px] text-slate-300 leading-relaxed">{{ card.reason }}</p>
                     <div class="mt-2 pt-2 flex gap-3 border-t border-white/[0.05]">
-                      <a v-if="card.officialLink" :href="card.officialLink" target="_blank" class="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 transition-colors">
+                      <a v-if="card.officialLink" :href="card.officialLink" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 transition-colors">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5">
                           <circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line>
                           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>

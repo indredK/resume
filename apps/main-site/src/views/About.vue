@@ -164,7 +164,7 @@
                 </div>
               </a>
 
-              <a :href="CONTACT.github" target="_blank" class="contact-card rounded-xl p-5 bg-slate-800/30 border border-slate-700/30 hover:border-blue-500/30 transition-all flex items-center gap-4 group">
+              <a :href="CONTACT.github" target="_blank" rel="noopener noreferrer" class="contact-card rounded-xl p-5 bg-slate-800/30 border border-slate-700/30 hover:border-blue-500/30 transition-all flex items-center gap-4 group">
                 <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                   💻
                 </div>
@@ -174,7 +174,7 @@
                 </div>
               </a>
 
-              <a :href="CONTACT.blog" target="_blank" class="contact-card rounded-xl p-5 bg-slate-800/30 border border-slate-700/30 hover:border-blue-500/30 transition-all flex items-center gap-4 group">
+              <a :href="CONTACT.blog" target="_blank" rel="noopener noreferrer" class="contact-card rounded-xl p-5 bg-slate-800/30 border border-slate-700/30 hover:border-blue-500/30 transition-all flex items-center gap-4 group">
                 <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                   ✍️
                 </div>
