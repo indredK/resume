@@ -227,3 +227,39 @@ resume/
 10. 拆分 `FrameworkCompareModal` 成 4 个小组件 + 单独的 composable
 11. 引入 Vitest 给 composables 写最小单测(尤其是 `useScrollLock` 的锁计数)
 12. 决定 monorepo 落地还是收回 `apps/` 层
+
+---
+
+## 九、本批次提交进度(2026-05-25)
+
+### ✅ 已落地
+
+| 优先级 | 改动 | 提交 |
+|--------|------|------|
+| P0 | ESLint 配置 + lint.yml 去掉 `continue-on-error` + build 加入 vue-tsc | `chore(P0): wire up real lint + type-check pipeline` |
+| P0 | TypeScript 渐进式 strict + `main.ts` + `router/index.ts` + `shims-vue.d.ts` | `chore(P0): enable progressive TypeScript strict mode` |
+| P2 | 移除 `@vue-flow/*` 与 `pinia` 未用依赖 | `chore(P2): remove unused dependencies` |
+| P2 | `vite.config.js` 收紧 chunk 告警阈值 | `chore(P2): tighten vite build config` |
+| P3 | README / ARCHITECTURE 区分已实现 vs Roadmap | `docs(P3): split implemented vs roadmap` |
+
+### ⏸️ P1 待单独立项
+
+P1 抽屉/模态统一基座 **未在本批次动代码**,原因:
+
+- 触面广:横跨 [`BaseDrawer.vue`](apps/main-site/src/components/BaseDrawer.vue)、
+  [`SkillDrawer.vue`](apps/main-site/src/components/SkillDrawer.vue)、
+  [`ApproachDrawer.vue`](apps/main-site/src/components/ApproachDrawer.vue)、
+  [`FrameworkCompareModal.vue`](apps/main-site/src/components/FrameworkCompareModal.vue)、
+  [`ComparisonDetailModal.vue`](apps/main-site/src/components/ComparisonDetailModal.vue)
+- 无任何单测/E2E 兜底,改完只能靠人工回归
+- 涉及 `useScrollLock` 三个调用点的重排,改错会让 body 永久禁滚
+
+**建议拆解后逐项做(每项一个 PR):**
+
+1. 给 `BaseDrawer` 补默认 slot + 透传 props,先确保它能承接现有两个使用方的能力差
+2. `FrameworkCompareModal` 模板部分迁到 `BaseDrawer`,Teleport / Escape / 滚动锁全部由 BaseDrawer 接管
+3. `ComparisonDetailModal` 同 (2)
+4. `useScrollLock` 的两个直调点删掉,统一通过 `useDrawer` 进入
+5. 引入 Vitest,先对 `useScrollLock` 写计数单测,作为后续重构的安全网
+
+完成 (1) - (5) 后,P1 的"上帝组件 + 多份基座"问题就基本收敛。
