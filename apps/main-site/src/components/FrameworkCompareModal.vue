@@ -248,6 +248,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, nextTick, onUnmounted } from 'vue'
 import type { SkillNode, ComparisonItem } from '../data/types'
+import { isGroupNode, isComparisonNode, isLeafContent } from '../data/types'
 import { useEscClose } from '@/composables/useEscClose'
 import { useDrawer } from '@/composables/useDrawer'
 import { useFocusTrap } from '@/composables/useFocusTrap'
@@ -282,11 +283,11 @@ function collectLeaves(node: SkillNode): SkillNode[] {
     for (const child of node.children) {
       if (child.children?.length) {
         leaves.push(...collectLeaves(child))
-      } else if (child.reason || child.advantages?.length || child.disadvantages?.length) {
+      } else if (isLeafContent(child)) {
         leaves.push(child)
       }
     }
-  } else if (node.reason || node.advantages?.length || node.disadvantages?.length) {
+  } else if (isLeafContent(node)) {
     leaves.push(node)
   }
   return leaves
@@ -294,16 +295,16 @@ function collectLeaves(node: SkillNode): SkillNode[] {
 
 const comparisonCards = computed(() => {
   if (!props.skill) return []
-  if (props.skill.children?.length && props.skill.children[0]?.items?.length) {
+  if (props.skill.children?.length && isComparisonNode(props.skill.children[0])) {
     return props.skill.children
   }
-  if (props.skill.items?.length) {
+  if (isComparisonNode(props.skill)) {
     return [props.skill]
   }
-  if (props.skill.children?.length) {
+  if (isGroupNode(props.skill)) {
     return collectLeaves(props.skill)
   }
-  if (props.skill.reason || props.skill.advantages?.length || props.skill.disadvantages?.length) {
+  if (isLeafContent(props.skill)) {
     return [props.skill]
   }
   return []
@@ -312,7 +313,7 @@ const comparisonCards = computed(() => {
 const isSingleCard = computed(() => comparisonCards.value.length === 1)
 
 const isComparisonMode = computed(() => {
-  return !!(props.skill.items?.length || (props.skill.children?.length && props.skill.children[0]?.items?.length))
+  return isComparisonNode(props.skill) || !!(props.skill.children?.length && isComparisonNode(props.skill.children[0]))
 })
 
 const subtitle = computed(() => {
@@ -396,7 +397,7 @@ const isBuildToolCard = (card: SkillNode) => {
 }
 
 const isSkillDetailCard = (card: SkillNode) => {
-  return !card.items?.length && (card.reason || card.advantages?.length || card.disadvantages?.length)
+  return !isComparisonNode(card) && isLeafContent(card)
 }
 
 const handleCardSelect = (skill: SkillNode) => {

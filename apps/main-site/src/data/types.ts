@@ -120,3 +120,20 @@ export interface SkillNode {
   cardColor?: string
   items?: ComparisonItem[]
 }
+
+export type GroupNode = SkillNode & { children: SkillNode[] }
+export type ComparisonNode = SkillNode & { items: ComparisonItem[] }
+export type LeafNode = SkillNode & {
+  reason?: string
+  advantages?: string[]
+  disadvantages?: string[]
+}
+
+export const isGroupNode = (n: SkillNode): n is GroupNode =>
+  Array.isArray(n.children) && n.children.length > 0 && !n.items?.length
+
+export const isComparisonNode = (n: SkillNode): n is ComparisonNode =>
+  Array.isArray(n.items) && n.items.length > 0
+
+export const isLeafContent = (n: SkillNode): n is LeafNode =>
+  !!(n.reason || n.advantages?.length || n.disadvantages?.length)
