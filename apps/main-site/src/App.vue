@@ -75,15 +75,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { CONTACT } from '@/data/contact'
 
-const navItems = ref([
+const navItems = [
   { name: '简历', path: '/' },
   { name: '技能树', path: '/skills' },
   { name: '成果', path: '/case-studies' },
   { name: '关于我', path: '/about' }
-])
+]
 </script>
 
 <style>
