@@ -19,15 +19,15 @@
             擅长复杂权限体系、工业数据可视化与组件化架构设计，具备从 0 到 1 构建系统能力。
           </p>
           <div class="flex flex-wrap justify-center md:justify-start gap-4">
-            <a href="mailto:zys233333@gmail.com" class="contact-pill">
+            <a href="mailto:zys233333@gmail.com" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-slate-400 text-sm hover:bg-white/10 hover:text-white transition-all">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
               Email
             </a>
-            <span class="contact-pill">
+            <span class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-slate-400 text-sm hover:bg-white/10 hover:text-white transition-all">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.28-2.28a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
               135-0159-7242
             </span>
-            <a href="https://github.com/indredK" target="_blank" class="contact-pill">
+            <a href="https://github.com/indredK" target="_blank" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-slate-400 text-sm hover:bg-white/10 hover:text-white transition-all">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A3.37 3.37 0 0 0 22.42 4.42 3.37 3.37 0 0 0 21.31.52S19.95.11 16.89 2.12a11.36 11.36 0 0 0-6 0C7.71.11 6.35.52 6.35.52a3.37 3.37 0 0 0-1.11 3.9 3.37 3.37 0 0 0-1.31 2.38c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9.43 16.5V22"></path></svg>
               GitHub
             </a>
@@ -47,21 +47,21 @@
         <!-- Main Column: Experience -->
         <div class="lg:col-span-2 space-y-12">
           <section>
-            <h2 class="section-title">工作经历</h2>
+            <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3 after:content-[''] after:h-px after:flex-1 after:bg-linear-to-r after:from-white/10 after:to-transparent">工作经历</h2>
             <div class="space-y-8">
-              <div v-for="exp in experiences" :key="exp.company" class="experience-item">
+              <div v-for="exp in experiences" :key="exp.company" class="relative pl-6 border-l border-white/5 before:content-[''] before:absolute before:left-[-4.5px] before:top-2 before:w-2 before:h-2 before:rounded-full before:bg-blue-500 before:shadow-[0_0_10px_rgba(59,130,246,0.5)]">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
                   <div>
                     <h4 class="text-xl font-bold text-white">{{ exp.company }}</h4>
                     <p class="text-blue-400 text-sm font-bold">{{ exp.position }} | {{ exp.period }}</p>
                   </div>
                   <div class="flex flex-wrap gap-2">
-                    <span v-for="tech in exp.techStack.slice(0, 4)" :key="tech" class="tech-tag">{{ tech }}</span>
+                    <span v-for="tech in exp.techStack.slice(0, 4)" :key="tech" class="px-2 py-0.5 rounded bg-white/5 text-[10px] text-slate-500 border border-white/5">{{ tech }}</span>
                   </div>
                 </div>
                 <p class="text-slate-400 text-sm leading-relaxed mb-4 italic">{{ exp.summary }}</p>
                 <ul class="space-y-2">
-                  <li v-for="(bullet, i) in exp.details" :key="i" class="resume-bullet">
+                  <li v-for="(bullet, i) in exp.details" :key="i" class="flex items-start gap-2 text-xs text-slate-500 leading-relaxed before:content-['•'] before:text-blue-500 before:font-bold">
                     {{ bullet }}
                   </li>
                 </ul>
@@ -70,16 +70,16 @@
           </section>
 
           <section>
-            <h2 class="section-title">核心项目经历</h2>
+            <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3 after:content-[''] after:h-px after:flex-1 after:bg-linear-to-r after:from-white/10 after:to-transparent">核心项目经历</h2>
             <div class="grid grid-cols-1 gap-6">
-              <div v-for="project in projects.slice(0, 3)" :key="project.title" class="project-resume-card glass-panel p-6 rounded-2xl">
+              <div v-for="project in projects.slice(0, 3)" :key="project.title" class="glass-panel p-6 rounded-2xl border-white/5 hover:border-blue-500/20 transition-all">
                 <div class="flex items-center gap-3 mb-4">
                   <span class="text-2xl">{{ project.icon }}</span>
                   <h3 class="text-lg font-bold text-white">{{ project.title }}</h3>
                   <span class="text-[10px] text-slate-500 ml-auto font-mono uppercase">{{ project.duration }}</span>
                 </div>
                 <ul class="space-y-2">
-                  <li v-for="(hl, i) in project.highlights" :key="i" class="resume-bullet text-xs">
+                  <li v-for="(hl, i) in project.highlights" :key="i" class="flex items-start gap-2 text-xs text-slate-500 leading-relaxed before:content-['•'] before:text-blue-500 before:font-bold">
                     {{ hl }}
                   </li>
                 </ul>
@@ -91,7 +91,7 @@
         <!-- Sidebar: Skills Summary & Education -->
         <div class="space-y-12">
           <section>
-            <h2 class="section-title">专业技能</h2>
+            <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3 after:content-[''] after:h-px after:flex-1 after:bg-linear-to-r after:from-white/10 after:to-transparent">专业技能</h2>
             <div class="glass-panel p-6 rounded-3xl space-y-6">
               <div v-for="skillGroup in skillSummary" :key="skillGroup.title">
                 <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2">
@@ -111,7 +111,7 @@
           </section>
 
           <section>
-            <h2 class="section-title">教育背景</h2>
+            <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3 after:content-[''] after:h-px after:flex-1 after:bg-linear-to-r after:from-white/10 after:to-transparent">教育背景</h2>
             <div class="glass-panel p-6 rounded-3xl">
               <div class="mb-4">
                 <h4 class="text-lg font-bold text-white">深圳大学</h4>
@@ -119,13 +119,13 @@
                 <p class="text-slate-500 text-xs mt-1">2016 - 2020</p>
               </div>
               <div class="flex gap-2">
-                <span class="tech-tag">CET-4</span>
+                <span class="px-2 py-0.5 rounded bg-white/5 text-[10px] text-slate-500 border border-white/5">CET-4</span>
               </div>
             </div>
           </section>
 
           <section>
-            <h2 class="section-title">自我评价</h2>
+            <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3 after:content-[''] after:h-px after:flex-1 after:bg-linear-to-r after:from-white/10 after:to-transparent">自我评价</h2>
             <div class="glass-panel p-6 rounded-3xl text-xs text-slate-400 leading-relaxed">
               精通 Vue3 与 React 双框架，具备从 0 到 1 构建复杂系统的完整能力。5年企业级后台系统与物联网平台开发经验，主导过多个大型项目的前端架构设计。擅长复杂权限体系、工业数据可视化、微前端架构设计与组件化开发。注重工程化实践与代码质量，具备优秀的技术领导力和跨团队协作能力。
             </div>
@@ -218,44 +218,5 @@ const experiences = ref([
 <style scoped>
 .resume-header {
   background: radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
-}
-
-.section-title {
-  @apply text-2xl font-bold text-white mb-8 flex items-center gap-3;
-}
-
-.section-title::after {
-  content: '';
-  @apply h-px flex-1 bg-gradient-to-r from-white/10 to-transparent;
-}
-
-.experience-item {
-  @apply relative pl-6 border-l border-white/5;
-}
-
-.experience-item::before {
-  content: '';
-  @apply absolute left-[-4.5px] top-2 w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)];
-}
-
-.resume-bullet {
-  @apply flex items-start gap-2 text-xs text-slate-500 leading-relaxed;
-}
-
-.resume-bullet::before {
-  content: '•';
-  @apply text-blue-500 font-bold;
-}
-
-.tech-tag {
-  @apply px-2 py-0.5 rounded bg-white/5 text-[10px] text-slate-500 border border-white/5;
-}
-
-.contact-pill {
-  @apply flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-slate-400 text-sm hover:bg-white/10 hover:text-white transition-all;
-}
-
-.project-resume-card {
-  @apply border-white/5 hover:border-blue-500/20 transition-all;
 }
 </style>

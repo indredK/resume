@@ -14,7 +14,7 @@
             <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
               <span class="text-white font-bold text-sm">P</span>
             </div>
-            <span class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
+            <span class="text-lg font-bold bg-clip-text text-transparent bg-linear-to-r from-white to-slate-400">
               Portfolio Hub
             </span>
           </router-link>
@@ -24,7 +24,7 @@
               v-for="item in navItems"
               :key="item.name"
               :to="item.path"
-              class="nav-link cursor-pointer"
+              class="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium text-slate-400 transition-all duration-300 hover:text-slate-100 hover:bg-white/5 [&.router-link-active]:text-blue-400 [&.router-link-active]:bg-blue-500/10 [&.router-link-active]:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
             >
               {{ item.name }}
             </router-link>
@@ -87,32 +87,25 @@ const navItems = ref([
 </script>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* Tailwind v4 兼容: 用 @layer base 包住全局 reset,避免覆盖 utility classes (px-*, py-*, m-* 等).
+   v4 把所有 utility 放在 @layer utilities,而 layer 内 CSS 优先级低于 unlayered CSS,
+   因此 unlayered 的 * { padding: 0 } 会反向胜过 px-4 py-2 — 必须显式放入 base layer. */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-html, body, #app {
-  min-height: 100%;
-  width: 100%;
-  background: #020617;
-}
+  html, body, #app {
+    min-height: 100%;
+    width: 100%;
+    background: #020617;
+  }
 
-html {
-  scrollbar-gutter: stable;
-}
-
-.nav-link {
-  @apply px-4 py-2 rounded-lg text-sm font-medium text-slate-400 transition-all duration-300;
-}
-
-.nav-link:hover {
-  @apply text-slate-100 bg-white/5;
-}
-
-.nav-link.router-link-active {
-  @apply text-blue-400 bg-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.1)];
+  html {
+    scrollbar-gutter: stable;
+  }
 }
 
 /* 页面切换动画 */

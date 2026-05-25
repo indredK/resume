@@ -148,7 +148,7 @@ onUnmounted(() => {
 
 <template>
   <section class="industrial-showcase py-20 relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-b from-slate-900/50 via-orange-950/20 to-slate-900/50"></div>
+    <div class="absolute inset-0 bg-linear-to-b from-slate-900/50 via-orange-950/20 to-slate-900/50"></div>
     <div class="container mx-auto px-6 relative z-10">
       <div class="text-center mb-16">
         <span class="text-orange-400 text-sm font-bold tracking-widest uppercase mb-4 block">Industrial IoT</span>
@@ -547,7 +547,7 @@ onUnmounted(() => {
                 </div>
               </div>
               <div class="w-full bg-slate-700 rounded-full h-3">
-                <div class="bg-gradient-to-r from-orange-500 to-amber-400 h-3 rounded-full transition-all duration-300" :style="{ width: downloadProgress.progress + '%' }"></div>
+                <div class="bg-linear-to-r from-orange-500 to-amber-400 h-3 rounded-full transition-all duration-300" :style="{ width: downloadProgress.progress + '%' }"></div>
               </div>
             </div>
             <div v-else class="text-center py-8">

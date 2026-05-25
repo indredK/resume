@@ -2,7 +2,7 @@
   <div class="about-page animate-fade-in" style="padding-top: 61px;">
     <!-- Hero Section -->
     <section class="hero-section py-20 relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-b from-purple-500/5 via-transparent to-transparent"></div>
+      <div class="absolute inset-0 bg-linear-to-b from-purple-500/5 via-transparent to-transparent"></div>
       <div class="container mx-auto px-6 relative z-10 text-center">
         <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-bold mb-8 tracking-wider uppercase shadow-lg shadow-purple-500/10">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4">
@@ -12,7 +12,7 @@
           关于我
         </div>
         <h1 class="text-4xl md:text-5xl font-black tracking-tighter text-white mb-6 leading-tight">
-          Zhong <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400">INTJ</span>
+          Zhong <span class="bg-clip-text text-transparent bg-linear-to-r from-purple-400 via-pink-400 to-blue-400">INTJ</span>
         </h1>
         <p class="text-base md:text-lg text-slate-400 max-w-3xl mx-auto leading-relaxed font-light">
           建筑师型人格 · 理性思考者 · 追求卓越的工程师
@@ -25,7 +25,7 @@
       <div class="max-w-5xl mx-auto space-y-8">
 <!-- INTJ Personality -->
         <div class="glass-panel rounded-3xl p-8 md:p-10 relative overflow-hidden">
-          <div class="absolute inset-0 opacity-10 bg-gradient-to-br from-purple-600/20 via-transparent to-transparent"></div>
+          <div class="absolute inset-0 opacity-10 bg-linear-to-br from-purple-600/20 via-transparent to-transparent"></div>
           <div class="relative z-10">
             <div class="flex items-center gap-4 mb-6">
               <div class="w-16 h-16 rounded-2xl bg-purple-500/10 flex items-center justify-center text-3xl shadow-xl">
@@ -95,7 +95,7 @@
 
         <!-- Methodology -->
         <div class="glass-panel rounded-3xl p-8 md:p-10 relative overflow-hidden">
-          <div class="absolute inset-0 opacity-10 bg-gradient-to-br from-emerald-600/20 via-transparent to-transparent"></div>
+          <div class="absolute inset-0 opacity-10 bg-linear-to-br from-emerald-600/20 via-transparent to-transparent"></div>
           <div class="relative z-10">
             <div class="flex items-center gap-4 mb-6">
               <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-3xl shadow-xl">
@@ -131,7 +131,7 @@
 
         <!-- Contact & Links -->
         <div class="glass-panel rounded-3xl p-8 md:p-10 relative overflow-hidden">
-          <div class="absolute inset-0 opacity-10 bg-gradient-to-br from-blue-600/20 via-transparent to-transparent"></div>
+          <div class="absolute inset-0 opacity-10 bg-linear-to-br from-blue-600/20 via-transparent to-transparent"></div>
           <div class="relative z-10">
             <div class="flex items-center gap-4 mb-6">
               <div class="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center text-3xl shadow-xl">

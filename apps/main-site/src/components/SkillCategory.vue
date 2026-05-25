@@ -10,7 +10,7 @@
       <div
         v-for="skill in category.skills"
         :key="skill.name"
-        class="skill-item group"
+        class="group transition-transform hover:translate-x-2"
       >
         <div class="flex justify-between items-center mb-1">
           <span
@@ -59,9 +59,3 @@ const openLink = (url: string): void => {
   }
 }
 </script>
-
-<style scoped>
-.skill-item:hover {
-  @apply transform translate-x-2 transition-transform;
-}
-</style>

@@ -7,7 +7,7 @@
           <button
             v-for="category in categories"
             :key="category.id"
-            class="category-tab relative flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-xs whitespace-nowrap transition-all flex-shrink-0"
+            class="category-tab relative flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-xs whitespace-nowrap transition-all shrink-0"
             :class="[
               activeCategory === category.id 
                 ? `active-tab text-white` 
@@ -16,7 +16,7 @@
             @click="selectCategory(category.id)"
           >
             <!-- Active Background Gradient -->
-            <div v-if="activeCategory === category.id" class="absolute inset-0 rounded-full opacity-100 transition-opacity" :class="`bg-gradient-to-r ${category.color === 'emerald' ? 'from-emerald-500 to-green-500' : category.color === 'blue' ? 'from-blue-500 to-cyan-500' : 'from-purple-500 to-pink-500'}`"></div>
+            <div v-if="activeCategory === category.id" class="absolute inset-0 rounded-full opacity-100 transition-opacity" :class="`bg-linear-to-r ${category.color === 'emerald' ? 'from-emerald-500 to-green-500' : category.color === 'blue' ? 'from-blue-500 to-cyan-500' : 'from-purple-500 to-pink-500'}`"></div>
             
             <!-- Content -->
             <span class="relative z-10 text-base">{{ category.icon }}</span>
@@ -48,7 +48,7 @@
                   <div class="text-sm font-bold text-white truncate mb-0.5">{{ project.title }}</div>
                   <div class="text-[11px] text-slate-600">{{ project.role }} · {{ project.period }}</div>
                 </div>
-                <svg v-if="activeProject === pIdx" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4 flex-shrink-0" :class="'text-' + currentCompany.color + '-400'">
+                <svg v-if="activeProject === pIdx" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4 shrink-0" :class="'text-' + currentCompany.color + '-400'">
                   <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
               </div>
@@ -63,7 +63,7 @@
             <div v-if="activeProject === null" :key="'company-' + activeCategory" class="detail-content">
               <!-- Company Header -->
               <div class="detail-header glass-panel rounded-3xl p-8 md:p-10 mb-8 relative overflow-hidden">
-                <div class="absolute inset-0 opacity-20" :class="'bg-gradient-to-br from-' + currentCompany.color + '-600/10 via-transparent to-transparent'"></div>
+                <div class="absolute inset-0 opacity-20" :class="'bg-linear-to-br from-' + currentCompany.color + '-600/10 via-transparent to-transparent'"></div>
                 <div class="relative z-10">
                   <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
                     <div class="flex items-center gap-5">
@@ -117,7 +117,7 @@
                         <h4 class="text-lg font-bold text-white mb-1 group-hover:text-" :class="currentCompany.color + '-400'">{{ project.title }}</h4>
                         <p class="text-xs text-slate-500">{{ project.role }} · {{ project.period }}</p>
                       </div>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 flex-shrink-0 text-slate-600 group-hover:text-" :class="currentCompany.color + '-400'">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 shrink-0 text-slate-600 group-hover:text-" :class="currentCompany.color + '-400'">
                         <polyline points="9 18 15 12 9 6"></polyline>
                       </svg>
                     </div>
@@ -136,7 +136,7 @@
             <div v-else :key="activeCategory + '-' + activeProject" class="detail-content">
               <!-- Project Header -->
               <div class="detail-header glass-panel rounded-3xl p-8 md:p-10 mb-8 relative overflow-hidden">
-                <div class="absolute inset-0 opacity-20" :class="'bg-gradient-to-br from-' + currentCompany.color + '-600/10 via-transparent to-transparent'"></div>
+                <div class="absolute inset-0 opacity-20" :class="'bg-linear-to-br from-' + currentCompany.color + '-600/10 via-transparent to-transparent'"></div>
                 <div class="relative z-10">
                   <div class="flex flex-col md:grid md:grid-cols-[7fr_3fr] md:items-start gap-4 mb-6">
                     <div class="flex items-center gap-5 min-w-0">
@@ -179,7 +179,7 @@
                   <button
                     v-for="(module, mIdx) in currentProject.modules"
                     :key="module.title"
-                    class="module-tab relative flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all flex-shrink-0"
+                    class="module-tab relative flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all shrink-0"
                     :class="[
                       activeModule === mIdx
                         ? 'bg-' + currentCompany.color + '-500/20 text-' + currentCompany.color + '-400 border border-' + currentCompany.color + '-500/30'
@@ -232,7 +232,7 @@
                       class="approach-step rounded-xl p-5 flex gap-4 cursor-pointer transition-all hover:bg-white/5 hover:-translate-y-0.5"
                       @click="openApproachDrawer(step, i + 1, currentModule.title)"
                     >
-                      <div class="step-number w-9 h-9 rounded-lg flex-shrink-0 flex items-center justify-center text-sm font-black" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">
+                      <div class="step-number w-9 h-9 rounded-lg shrink-0 flex items-center justify-center text-sm font-black" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">
                         {{ i + 1 }}
                       </div>
                       <div class="flex-1">
@@ -255,7 +255,7 @@
                   <div class="future-plans rounded-2xl p-6" :class="'bg-' + currentCompany.color + '-500/5 border border-' + currentCompany.color + '-500/10'">
                     <ul class="space-y-4">
                       <li v-for="(plan, i) in currentModule.futurePlans" :key="i" class="flex items-start gap-3 text-sm text-slate-400 leading-relaxed">
-                        <span class="mt-0.5 w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center text-xs font-bold" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">→</span>
+                        <span class="mt-0.5 w-6 h-6 rounded-md shrink-0 flex items-center justify-center text-xs font-bold" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">→</span>
                         {{ plan }}
                       </li>
                     </ul>
@@ -293,7 +293,7 @@
                       class="approach-step rounded-xl p-5 flex gap-4 cursor-pointer transition-all hover:bg-white/5 hover:-translate-y-0.5"
                       @click="openApproachDrawer(step, i + 1, currentProject.title)"
                     >
-                      <div class="step-number w-9 h-9 rounded-lg flex-shrink-0 flex items-center justify-center text-sm font-black" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">
+                      <div class="step-number w-9 h-9 rounded-lg shrink-0 flex items-center justify-center text-sm font-black" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">
                         {{ i + 1 }}
                       </div>
                       <div class="flex-1">
@@ -316,7 +316,7 @@
                   <div class="future-plans rounded-2xl p-6" :class="'bg-' + currentCompany.color + '-500/5 border border-' + currentCompany.color + '-500/10'">
                     <ul class="space-y-4">
                       <li v-for="(plan, i) in currentProject.futurePlans" :key="i" class="flex items-start gap-3 text-sm text-slate-400 leading-relaxed">
-                        <span class="mt-0.5 w-6 h-6 rounded-md flex-shrink-0 flex items-center justify-center text-xs font-bold" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">→</span>
+                        <span class="mt-0.5 w-6 h-6 rounded-md shrink-0 flex items-center justify-center text-xs font-bold" :class="'bg-' + currentCompany.color + '-500/10 text-' + currentCompany.color + '-400'">→</span>
                         {{ plan }}
                       </li>
                     </ul>

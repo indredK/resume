@@ -1,8 +1,16 @@
 <template>
   <Teleport to="body">
     <Transition name="drawer">
-      <div v-if="visible" class="drawer-overlay" :class="{ 'is-nested': isNested }" @click.self="$emit('close')">
-        <div class="drawer-content glass-panel" :class="{ 'is-nested': isNested }">
+      <div
+        v-if="visible"
+        class="drawer-overlay fixed inset-0 flex justify-end backdrop-blur-sm"
+        :class="isNested ? 'z-[1100] bg-black/40 is-nested' : 'z-[1000] bg-black/60'"
+        @click.self="$emit('close')"
+      >
+        <div
+          class="drawer-content glass-panel w-full h-full shadow-2xl flex flex-col border-l border-white/5"
+          :class="isNested ? 'max-w-md -translate-x-[30px] scale-95 is-nested' : 'max-w-lg'"
+        >
           <slot></slot>
         </div>
       </div>
@@ -26,24 +34,6 @@ useEscClose(() => props.visible, () => emit('close'))
 </script>
 
 <style scoped>
-.drawer-overlay {
-  @apply fixed inset-0 z-[1000] bg-black/60 backdrop-blur-sm flex justify-end;
-}
-
-.drawer-overlay.is-nested {
-  @apply z-[1100] bg-black/40;
-}
-
-.drawer-content {
-  @apply w-full max-w-lg h-full shadow-2xl flex flex-col;
-  border-left: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.drawer-content.is-nested {
-  @apply max-w-md;
-  transform: translateX(-30px) scale(0.95);
-}
-
 /* 统一的抽屉过渡动画 */
 .drawer-enter-active, .drawer-leave-active {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);

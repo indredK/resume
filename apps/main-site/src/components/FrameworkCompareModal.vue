@@ -1,17 +1,17 @@
 <template>
   <Teleport to="body">
     <Transition name="modal">
-      <div v-if="visible" class="modal-overlay" @click.self="$emit('close')">
-        <div class="modal-content glass-panel">
-          <div class="modal-header">
-            <div class="header-title">
-              <span class="modal-icon">{{ skill.icon || '⚖️' }}</span>
+      <div v-if="visible" class="fixed inset-0 z-[2000] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" @click.self="$emit('close')">
+        <div class="modal-content glass-panel w-full max-w-5xl max-h-[90vh] flex flex-col rounded-2xl shadow-2xl border border-white/10">
+          <div class="flex items-center justify-between p-6 border-b border-white/10 shrink-0">
+            <div class="flex items-center gap-4">
+              <span class="text-4xl">{{ skill.icon || '⚖️' }}</span>
               <div>
-                <h2>{{ skill.name }}</h2>
-                <p class="subtitle">{{ subtitle }}</p>
+                <h2 class="text-2xl font-bold text-white">{{ skill.name }}</h2>
+                <p class="text-sm text-slate-400 mt-1">{{ subtitle }}</p>
               </div>
             </div>
-            <button class="close-btn" @click="$emit('close')">
+            <button class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors" @click="$emit('close')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -19,50 +19,53 @@
             </button>
           </div>
 
-          <div class="modal-body-wrapper">
-            <aside v-if="tocItems.length > 1" class="modal-toc">
-              <div class="toc-title">{{ tocTitle }}</div>
-              <nav class="toc-nav">
+          <div class="flex flex-1 min-h-0">
+            <aside v-if="tocItems.length > 1" class="w-12 sm:w-40 md:w-52 lg:w-56 shrink-0 flex flex-col py-5 px-1 sm:pl-3 sm:pr-2 md:pl-4 md:pr-3 border-r border-white/[0.08]">
+              <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-3 px-1 sm:px-2 text-center sm:text-left hidden sm:block">{{ tocTitle }}</div>
+              <nav class="flex flex-col gap-1 overflow-y-auto flex-1">
                 <template v-for="item in tocItems" :key="item.id">
-                  <div v-if="item.type === 'group'" class="toc-group-header">
-                    <span class="toc-item-icon">{{ item.icon }}</span>
-                    <span class="toc-item-name">{{ item.name }}</span>
+                  <div v-if="item.type === 'group'" class="flex items-center gap-2 px-2 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider mt-3 first:mt-0 border-b border-white/[0.06]">
+                    <span class="text-base shrink-0 w-5 text-center">{{ item.icon }}</span>
+                    <span class="truncate hidden sm:inline">{{ item.name }}</span>
                   </div>
                   <button
                     v-else
-                    class="toc-item"
-                    :class="{ active: activeTocId === item.id, 'toc-subitem': item.type === 'subitem' }"
+                    class="w-full text-left flex items-center gap-2.5 px-2 sm:px-3 py-2.5 rounded-lg text-sm transition-all duration-200 text-slate-400 hover:text-white hover:bg-white/5 justify-center sm:justify-start border-none bg-transparent cursor-pointer leading-[1.4]"
+                    :class="{
+                      '!text-white !font-medium !bg-white/[0.08] shadow-[inset_3px_0_0_rgba(255,255,255,0.5)]': activeTocId === item.id,
+                      'pl-6 text-[11px]': item.type === 'subitem',
+                    }"
                     @click="scrollToTocItem(item)"
                   >
-                    <span class="toc-item-icon">{{ item.icon }}</span>
-                    <span class="toc-item-name">{{ item.name }}</span>
+                    <span class="text-base shrink-0 w-5 text-center">{{ item.icon }}</span>
+                    <span class="truncate hidden sm:inline">{{ item.name }}</span>
                   </button>
                 </template>
               </nav>
             </aside>
 
-            <div ref="modalBodyRef" class="modal-body custom-scrollbar">
+            <div ref="modalBodyRef" class="custom-scrollbar flex-1 overflow-y-auto p-4 lg:p-6">
               <div
                 v-for="card in comparisonCards"
                 :id="`section-${card.id}`"
                 :key="card.id"
-                class="comparison-section"
+                class="mb-8 last:mb-0 scroll-mt-4"
                 :data-section-id="card.id"
               >
-                <div class="card-header" :style="{ borderLeftColor: card.cardColor }">
-                  <span class="card-icon">{{ card.icon }}</span>
-                  <div class="card-title-area">
-                    <h3 class="card-title">{{ card.name }}</h3>
-                    <p v-if="card.description" class="card-desc">{{ card.description }}</p>
+                <div class="flex items-start gap-3 mb-5 pb-3 border-l-[3px] border-solid pl-4" :style="{ borderLeftColor: card.cardColor }">
+                  <span class="text-2xl shrink-0">{{ card.icon }}</span>
+                  <div class="flex-1">
+                    <h3 class="text-lg font-bold text-white">{{ card.name }}</h3>
+                    <p v-if="card.description" class="text-xs text-slate-400 mt-1">{{ card.description }}</p>
                   </div>
                 </div>
 
                 <!-- 技能详情卡片（无对比数据，直接展示 reason/advantages/disadvantages） -->
-                <div v-if="isSkillDetailCard(card)" class="skill-detail-card">
-                  <div v-if="card.reason" class="reason-box">
-                    <p class="reason-text">{{ card.reason }}</p>
-                    <div class="reason-meta">
-                      <a v-if="card.officialLink" :href="card.officialLink" target="_blank" class="inline-link">
+                <div v-if="isSkillDetailCard(card)" class="space-y-4">
+                  <div v-if="card.reason" class="p-4 rounded-xl mb-1 bg-[rgba(100,149,237,0.08)] border border-[rgba(100,149,237,0.15)]">
+                    <p class="text-[13px] text-slate-300 leading-relaxed">{{ card.reason }}</p>
+                    <div class="mt-2 pt-2 flex gap-3 border-t border-white/[0.05]">
+                      <a v-if="card.officialLink" :href="card.officialLink" target="_blank" class="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 transition-colors">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5">
                           <circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line>
                           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -72,102 +75,102 @@
                     </div>
                   </div>
 
-                  <div v-if="card.advantages?.length || card.disadvantages?.length" class="skill-pros-cons-grid">
-                    <div v-if="card.advantages?.length" class="skill-col adv-col">
-                      <div class="skill-col-badge adv">
-                        <span class="badge-icon">✅</span>
-                        <span class="badge-name">优势</span>
+                  <div v-if="card.advantages?.length || card.disadvantages?.length" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div v-if="card.advantages?.length" class="rounded-lg p-4 bg-emerald-400/5 border border-emerald-400/20">
+                      <div class="flex items-center gap-2 mb-3 pb-2 border-b border-white/[0.08] text-emerald-400">
+                        <span class="text-xl">✅</span>
+                        <span class="font-bold text-base">优势</span>
                       </div>
-                      <ul class="detail-list">
-                        <li v-for="(adv, idx) in card.advantages" :key="idx" class="adv-item">{{ adv }}</li>
+                      <ul class="space-y-1.5">
+                        <li v-for="(adv, idx) in card.advantages" :key="idx" class="text-[13px] text-slate-300 leading-relaxed pl-4 relative before:content-['•'] before:absolute before:left-0 before:text-emerald-500 before:font-bold">{{ adv }}</li>
                       </ul>
                     </div>
 
-                    <div v-if="card.disadvantages?.length" class="skill-col dis-col">
-                      <div class="skill-col-badge dis">
-                        <span class="badge-icon">⚠️</span>
-                        <span class="badge-name">劣势</span>
+                    <div v-if="card.disadvantages?.length" class="rounded-lg p-4 bg-red-400/5 border border-red-400/20">
+                      <div class="flex items-center gap-2 mb-3 pb-2 border-b border-white/[0.08] text-red-400">
+                        <span class="text-xl">⚠️</span>
+                        <span class="font-bold text-base">劣势</span>
                       </div>
-                      <ul class="detail-list disadvantage-list">
-                        <li v-for="(dis, idx) in card.disadvantages" :key="idx" class="dis-item">{{ dis }}</li>
+                      <ul class="space-y-1.5">
+                        <li v-for="(dis, idx) in card.disadvantages" :key="idx" class="text-[13px] text-slate-300 leading-relaxed pl-4 relative before:content-['−'] before:absolute before:left-0 before:text-red-400 before:font-bold">{{ dis }}</li>
                       </ul>
                     </div>
                   </div>
 
-                  <div v-if="card.children?.length" class="detail-section">
-                    <h4 class="section-title common">
-                      <span class="section-title-icon">📦</span>
+                  <div v-if="card.children?.length" class="mt-4">
+                    <h4 class="text-sm font-bold mb-2.5 flex items-center gap-1.5 text-amber-400">
+                      <span class="text-base">📦</span>
                       子技术
                     </h4>
-                    <div class="eco-list">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <div
                         v-for="child in card.children"
                         :key="child.id"
-                        class="eco-item glass-card"
+                        class="glass-card group flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border border-white/[0.06] hover:bg-white/[0.06] hover:border-white/[0.12]"
                         @click="handleCardSelect(child)"
                       >
-                        <span class="eco-icon">{{ child.icon || '📁' }}</span>
-                        <div class="eco-info">
-                          <span class="eco-name">{{ child.name }}</span>
-                          <div class="eco-meta">
-                            <span v-if="child.version" class="eco-ver">{{ child.version }}</span>
-                            <span v-if="child.level" class="eco-level">Lv.{{ child.level }}</span>
+                        <span class="text-xl shrink-0">{{ child.icon || '📁' }}</span>
+                        <div class="flex-1 min-w-0">
+                          <span class="block text-sm font-medium text-white truncate">{{ child.name }}</span>
+                          <div class="flex gap-2 mt-0.5">
+                            <span v-if="child.version" class="text-[11px] text-slate-500">{{ child.version }}</span>
+                            <span v-if="child.level" class="text-[11px] text-emerald-500 font-mono">Lv.{{ child.level }}</span>
                           </div>
                         </div>
-                        <span class="eco-arrow">↗</span>
+                        <span class="text-slate-500 text-lg shrink-0 transition-transform duration-200 group-hover:text-white group-hover:translate-x-0.5">↗</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <!-- 对比数据卡片 -->
-                <div v-else class="comparison-items">
+                <div v-else class="flex flex-col gap-6">
                   <!-- 构建工具：三栏对比表格 -->
-                  <div v-if="isBuildToolCard(card)" class="build-tool-compare-table" :data-section-id="card.id">
+                  <div v-if="isBuildToolCard(card)" class="build-tool-compare-table overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02]" :data-section-id="card.id">
                     <div class="bt-header-row">
-                      <div class="bt-dimension-col"></div>
+                      <div class="bt-dimension-col flex items-center gap-1.5 px-3 py-4 text-sm font-semibold text-slate-400 bg-white/[0.03] border-r border-white/[0.06]"></div>
                       <div
                         v-for="item in card.items"
                         :key="item.id"
-                        class="bt-tool-col"
+                        class="bt-tool-col px-4 py-3 min-w-0 border-r border-white/[0.04] last:border-r-0"
                       >
-                        <div class="bt-tool-badge" :style="{ backgroundColor: item.color + '20', borderColor: item.color }">
-                          <span class="tool-color-dot" :style="{ backgroundColor: item.color }"></span>
-                          <span class="bt-tool-name" :style="{ color: item.color }">{{ item.name }}</span>
-                          <span class="bt-tool-level">Lv.{{ item.level }}</span>
+                        <div class="flex items-center gap-2 px-3 py-2.5 rounded-lg border" :style="{ backgroundColor: item.color + '20', borderColor: item.color }">
+                          <span class="w-3 h-3 rounded-full shrink-0" :style="{ backgroundColor: item.color }"></span>
+                          <span class="font-bold text-sm" :style="{ color: item.color }">{{ item.name }}</span>
+                          <span class="text-[11px] text-slate-500 font-mono ml-auto">Lv.{{ item.level }}</span>
                         </div>
                       </div>
                     </div>
 
                     <div class="bt-row bt-advantages-row">
-                      <div class="bt-dimension-col bt-dim-label adv">
-                        <span class="bt-dim-icon">✅</span>
+                      <div class="bt-dimension-col flex items-center justify-center gap-1.5 px-3 py-4 text-xs font-semibold uppercase tracking-wider text-emerald-400 bg-white/[0.03] border-r border-white/[0.06]">
+                        <span class="text-base">✅</span>
                         <span>优势</span>
                       </div>
                       <div
                         v-for="item in card.items"
                         :key="item.id"
-                        class="bt-tool-col bt-col-adv"
+                        class="bt-tool-col bt-col-adv px-4 py-3 min-w-0 border-r border-white/[0.04] last:border-r-0 bg-emerald-400/[0.03]"
                         :style="{ borderColor: item.color + '30' }"
                       >
-                        <ul class="bt-item-list">
+                        <ul class="bt-item-list space-y-2">
                           <li v-for="(adv, idx) in item.advantages" :key="idx">{{ adv }}</li>
                         </ul>
                       </div>
                     </div>
 
                     <div class="bt-row bt-disadvantages-row">
-                      <div class="bt-dimension-col bt-dim-label dis">
-                        <span class="bt-dim-icon">⚠️</span>
+                      <div class="bt-dimension-col flex items-center justify-center gap-1.5 px-3 py-4 text-xs font-semibold uppercase tracking-wider text-red-400 bg-white/[0.03] border-r border-white/[0.06]">
+                        <span class="text-base">⚠️</span>
                         <span>劣势</span>
                       </div>
                       <div
                         v-for="item in card.items"
                         :key="item.id"
-                        class="bt-tool-col bt-col-dis"
+                        class="bt-tool-col bt-col-dis px-4 py-3 min-w-0 border-r border-white/[0.04] last:border-r-0 bg-red-400/[0.03]"
                         :style="{ borderColor: item.color + '30' }"
                       >
-                        <ul class="bt-item-list">
+                        <ul class="bt-item-list space-y-2">
                           <li v-for="(dis, idx) in item.disadvantages" :key="idx">{{ dis }}</li>
                         </ul>
                       </div>
@@ -175,62 +178,60 @@
                   </div>
 
                   <!-- 框架对比：原有逐项布局 -->
-                  <div v-else class="framework-items-wrap">
+                  <div v-else>
                     <div
                       v-for="item in card.items"
                       :id="`item-${item.id}`"
                       :key="item.id"
-                      class="comparison-item"
+                      class="rounded-xl p-5 scroll-mt-4 bg-white/[0.03] border border-white/[0.06]"
                       :data-item-id="item.id"
                     >
-                      <div class="framework-detail">
-                      <div class="item-title-row">
-                        <span class="item-icon">{{ item.icon || '📊' }}</span>
-                        <span class="item-name">{{ item.name }}</span>
+                      <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-white/[0.06]">
+                        <span class="text-xl">{{ item.icon || '📊' }}</span>
+                        <span class="text-base font-bold text-white">{{ item.name }}</span>
                       </div>
 
-                      <div class="framework-compare-grid">
-                        <div v-if="item.vueItems?.length" class="framework-col vue-col">
-                          <div class="framework-badge vue">
-                            <span class="badge-icon">💚</span>
-                            <span class="badge-name">Vue</span>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div v-if="item.vueItems?.length" class="rounded-lg p-4 bg-[#42b883]/5 border border-[#42b883]/20">
+                          <div class="flex items-center gap-2 mb-3 pb-2 border-b border-white/[0.08] text-[#42b883]">
+                            <span class="text-xl">💚</span>
+                            <span class="font-bold text-base">Vue</span>
                           </div>
-                          <ul class="detail-list">
-                            <li v-for="(vueItem, idx) in item.vueItems" :key="idx" class="vue-item">{{ vueItem }}</li>
+                          <ul class="space-y-1.5">
+                            <li v-for="(vueItem, idx) in item.vueItems" :key="idx" class="text-[13px] text-slate-300 leading-relaxed pl-4 relative before:content-['•'] before:absolute before:left-0 before:text-emerald-500 before:font-bold">{{ vueItem }}</li>
                           </ul>
                         </div>
 
-                        <div v-if="item.reactItems?.length" class="framework-col react-col">
-                          <div class="framework-badge react">
-                            <span class="badge-icon">⚛️</span>
-                            <span class="badge-name">React</span>
+                        <div v-if="item.reactItems?.length" class="rounded-lg p-4 bg-[#61dafb]/5 border border-[#61dafb]/20">
+                          <div class="flex items-center gap-2 mb-3 pb-2 border-b border-white/[0.08] text-[#61dafb]">
+                            <span class="text-xl">⚛️</span>
+                            <span class="font-bold text-base">React</span>
                           </div>
-                          <ul class="detail-list">
-                            <li v-for="(reactItem, idx) in item.reactItems" :key="idx" class="react-item">{{ reactItem }}</li>
+                          <ul class="space-y-1.5">
+                            <li v-for="(reactItem, idx) in item.reactItems" :key="idx" class="text-[13px] text-slate-300 leading-relaxed pl-4 relative before:content-['•'] before:absolute before:left-0 before:text-emerald-500 before:font-bold">{{ reactItem }}</li>
                           </ul>
                         </div>
                       </div>
 
-                      <div v-if="item.commonItems?.length" class="detail-section">
-                        <h4 class="section-title common">
-                          <span class="section-title-icon">🔗</span>
+                      <div v-if="item.commonItems?.length" class="mt-4">
+                        <h4 class="text-sm font-bold mb-2.5 flex items-center gap-1.5 text-amber-400">
+                          <span class="text-base">🔗</span>
                           共同优势
                         </h4>
-                        <ul class="detail-list common-list">
-                          <li v-for="(common, idx) in item.commonItems" :key="idx" class="common-item">{{ common }}</li>
+                        <ul class="space-y-1.5">
+                          <li v-for="(common, idx) in item.commonItems" :key="idx" class="text-[13px] text-slate-300 leading-relaxed pl-4 relative before:content-['◈'] before:absolute before:left-0 before:text-xs before:text-amber-500 before:font-bold">{{ common }}</li>
                         </ul>
                       </div>
 
-                      <div v-if="item.disadvantages?.length" class="detail-section">
-                        <h4 class="section-title disadvantage-title">
-                          <span class="section-title-icon">⚠️</span>
+                      <div v-if="item.disadvantages?.length" class="mt-4">
+                        <h4 class="text-sm font-bold mb-2.5 flex items-center gap-1.5 text-red-400">
+                          <span class="text-base">⚠️</span>
                           各自劣势
                         </h4>
-                        <ul class="detail-list disadvantage-list">
-                          <li v-for="(dis, idx) in item.disadvantages" :key="idx" class="dis-item">{{ dis }}</li>
+                        <ul class="space-y-1.5">
+                          <li v-for="(dis, idx) in item.disadvantages" :key="idx" class="text-[13px] text-slate-300 leading-relaxed pl-4 relative before:content-['−'] before:absolute before:left-0 before:text-red-400 before:font-bold">{{ dis }}</li>
                         </ul>
                       </div>
-                    </div>
                     </div>
                   </div>
                 </div>
@@ -502,21 +503,15 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.modal-overlay {
-  @apply fixed inset-0 z-[2000] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4;
-}
-
-.modal-content {
-  @apply w-full max-w-5xl max-h-[90vh] flex flex-col rounded-2xl shadow-2xl;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
+/* Modal transitions */
 .modal-enter-active {
   transition: opacity 0.3s ease;
 }
 
 .modal-enter-active .modal-content {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.3s ease;
 }
 
 .modal-leave-active {
@@ -524,7 +519,9 @@ onUnmounted(() => {
 }
 
 .modal-leave-active .modal-content {
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.6, 1), opacity 0.25s ease;
+  transition:
+    transform 0.25s cubic-bezier(0.4, 0, 0.6, 1),
+    opacity 0.25s ease;
 }
 
 .modal-enter-from {
@@ -545,313 +542,35 @@ onUnmounted(() => {
   transform: scale(0.95) translateY(10px);
 }
 
-.modal-header {
-  @apply flex items-center justify-between p-6 border-b border-white/10;
-  flex-shrink: 0;
-}
-
-.header-title {
-  @apply flex items-center gap-4;
-}
-
-.modal-icon {
-  @apply text-4xl;
-}
-
-.header-title h2 {
-  @apply text-2xl font-bold text-white;
-}
-
-.subtitle {
-  @apply text-sm text-slate-400 mt-1;
-}
-
-.close-btn {
-  @apply p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors;
-}
-
-.modal-body-wrapper {
-  @apply flex flex-1 min-h-0;
-}
-
-.modal-toc {
-  @apply w-12 sm:w-40 md:w-52 lg:w-56 flex-shrink-0 flex flex-col;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 20px 4px 20px 4px;
-}
-
-@media (min-width: 640px) {
-  .modal-toc {
-    padding: 20px 8px 20px 12px;
-  }
-}
-
-@media (min-width: 768px) {
-  .modal-toc {
-    padding: 20px 12px 20px 16px;
-  }
-}
-
-.toc-title {
-  @apply text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-3 px-1 sm:px-2;
-  @apply text-center sm:text-left;
-  @apply hidden sm:block;
-}
-
-.toc-nav {
-  @apply flex flex-col gap-1 overflow-y-auto flex-1;
-}
-
-.toc-item {
-  @apply w-full text-left flex items-center gap-2.5 px-2 sm:px-3 py-2.5 rounded-lg text-sm transition-all duration-200;
-  @apply text-slate-400 hover:text-white hover:bg-white/5 justify-center sm:justify-start;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-family: inherit;
-  line-height: 1.4;
-}
-
-.toc-item.active {
-  @apply text-white font-medium;
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: inset 3px 0 0 rgba(255, 255, 255, 0.5);
-}
-
-.toc-group-header {
-  @apply flex items-center gap-2 px-2 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider mt-3 first:mt-0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.toc-subitem {
-  @apply pl-6;
-  font-size: 11px;
-}
-
-.toc-item-icon {
-  @apply text-base flex-shrink-0;
-  width: 20px;
-  text-align: center;
-}
-
-.toc-item-name {
-  @apply truncate hidden sm:inline;
-}
-
-.modal-body {
-  @apply flex-1 overflow-y-auto p-4 lg:p-6;
-}
-
-.comparison-section {
-  @apply mb-8 scroll-mt-4;
-}
-
-.comparison-section:last-child {
-  @apply mb-0;
-}
-
-.card-header {
-  @apply flex items-start gap-3 mb-5 pb-3;
-  border-left: 3px solid;
-  padding-left: 16px;
-}
-
-.card-icon {
-  @apply text-2xl flex-shrink-0;
-}
-
-.card-title-area {
-  @apply flex-1;
-}
-
-.card-title {
-  @apply text-lg font-bold text-white;
-}
-
-.card-desc {
-  @apply text-xs text-slate-400 mt-1;
-}
-
-.comparison-items {
-  @apply flex flex-col gap-6;
-}
-
-.comparison-item {
-  @apply rounded-xl p-5 scroll-mt-4;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-/* Framework comparison */
-.item-title-row {
-  @apply flex items-center gap-2.5 mb-4 pb-3;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.item-icon {
-  @apply text-xl;
-}
-
-.item-name {
-  @apply text-base font-bold text-white;
-}
-
-.framework-compare-grid {
-  @apply grid grid-cols-1 sm:grid-cols-2 gap-4;
-}
-
-.framework-col {
-  @apply rounded-lg p-4;
-}
-
-.vue-col {
-  background: rgba(66, 184, 131, 0.05);
-  border: 1px solid rgba(66, 184, 131, 0.2);
-}
-
-.react-col {
-  background: rgba(97, 218, 251, 0.05);
-  border: 1px solid rgba(97, 218, 251, 0.2);
-}
-
-/* Skill detail pros/cons grid - 统一样式 */
-.skill-pros-cons-grid {
-  @apply grid grid-cols-1 sm:grid-cols-2 gap-4;
-}
-
-.skill-col {
-  @apply rounded-lg p-4;
-}
-
-.adv-col {
-  background: rgba(52, 211, 153, 0.05);
-  border: 1px solid rgba(52, 211, 153, 0.2);
-}
-
-.dis-col {
-  background: rgba(248, 113, 113, 0.05);
-  border: 1px solid rgba(248, 113, 113, 0.2);
-}
-
-.skill-col-badge {
-  @apply flex items-center gap-2 mb-3 pb-2;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.skill-col-badge.adv {
-  @apply text-emerald-400;
-}
-
-.skill-col-badge.dis {
-  @apply text-red-400;
-}
-
-.framework-badge {
-  @apply flex items-center gap-2 mb-3 pb-2;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.framework-badge.vue {
-  @apply text-[#42b883];
-}
-
-.framework-badge.react {
-  @apply text-[#61dafb];
-}
-
-.badge-icon {
-  @apply text-xl;
-}
-
-.badge-name {
-  @apply font-bold text-base;
-}
-
-/* Build tool comparison table */
-.build-tool-compare-table {
-  @apply overflow-hidden rounded-xl;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.bt-header-row {
-  @apply grid gap-0;
+/* Build tool compare table - uses CSS Grid with dynamic var(--bt-cols) and @media overrides */
+.bt-header-row,
+.bt-row {
+  display: grid;
+  gap: 0;
   grid-template-columns: 80px repeat(var(--bt-cols, 3), 1fr);
 }
 
 .bt-row {
-  @apply grid gap-0 border-t border-white/5;
-  grid-template-columns: 80px repeat(var(--bt-cols, 3), 1fr);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.bt-dimension-col {
-  @apply flex items-center gap-1.5 px-3 py-4 text-sm font-semibold text-slate-400;
-  background: rgba(255, 255, 255, 0.03);
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.bt-dim-label {
-  @apply justify-center text-xs uppercase tracking-wider;
-}
-
-.bt-dim-label.adv {
-  @apply text-emerald-400;
-}
-
-.bt-dim-label.dis {
-  @apply text-red-400;
-}
-
-.bt-dim-icon {
-  @apply text-base;
-}
-
-.bt-tool-col {
-  @apply px-4 py-3 min-w-0;
-  border-right: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.bt-tool-col:last-child {
-  border-right: none;
-}
-
-.bt-tool-badge {
-  @apply flex items-center gap-2 px-3 py-2.5 rounded-lg border;
-}
-
-.tool-color-dot {
-  @apply w-3 h-3 rounded-full flex-shrink-0;
-}
-
-.bt-tool-name {
-  @apply font-bold text-sm;
-}
-
-.bt-tool-level {
-  @apply text-[11px] text-slate-500 font-mono ml-auto;
-}
-
-.bt-col-adv {
-  background: rgba(52, 211, 153, 0.03);
-}
-
-.bt-col-dis {
-  background: rgba(248, 113, 113, 0.03);
-}
-
-.bt-item-list {
-  @apply space-y-2;
-}
-
+/* Build tool item list - cascading color from .bt-col-adv / .bt-col-dis parent */
 .bt-item-list li {
-  @apply text-[12px] text-slate-300 leading-relaxed;
+  font-size: 12px;
+  color: rgb(203 213 225);
+  line-height: 1.625;
   position: relative;
   padding-left: 14px;
 }
 
 .bt-item-list li::before {
   content: '';
-  @apply absolute left-0 top-[7px] w-1.5 h-1.5 rounded-full;
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
   background: currentColor;
   opacity: 0.5;
 }
@@ -900,136 +619,18 @@ onUnmounted(() => {
 
   .bt-col-adv .bt-item-list li::before {
     content: '+';
-    @apply rounded-none w-auto h-auto top-[1px];
+    border-radius: 0;
+    width: auto;
+    height: auto;
+    top: 1px;
   }
 
   .bt-col-dis .bt-item-list li::before {
     content: '−';
-    @apply rounded-none w-auto h-auto top-[1px];
+    border-radius: 0;
+    width: auto;
+    height: auto;
+    top: 1px;
   }
-}
-
-/* Detail sections */
-.detail-section {
-  @apply mt-4;
-}
-
-.section-title {
-  @apply text-sm font-bold mb-2.5 flex items-center gap-1.5;
-}
-
-.section-title.advantage {
-  @apply text-emerald-400;
-}
-
-.section-title.disadvantage-title {
-  @apply text-red-400;
-}
-
-.section-title.common {
-  @apply text-amber-400;
-}
-
-.section-title-icon {
-  @apply text-base;
-}
-
-.detail-list {
-  @apply space-y-1.5;
-}
-
-.detail-list li {
-  @apply text-[13px] text-slate-300 leading-relaxed pl-4 relative;
-}
-
-.detail-list li::before {
-  content: '\2022';
-  @apply absolute left-0 text-emerald-500 font-bold;
-}
-
-.detail-list.disadvantage-list li::before {
-  content: '\2212';
-  @apply text-red-400;
-}
-
-.detail-list.common-list li::before {
-  content: '\25C8';
-  @apply text-amber-500 text-xs;
-}
-
-/* Skill detail card */
-.skill-detail-card {
-  @apply space-y-4;
-}
-
-.skill-detail-card .reason-box {
-  @apply p-4 rounded-xl mb-1;
-  background: rgba(100, 149, 237, 0.08);
-  border: 1px solid rgba(100, 149, 237, 0.15);
-}
-
-.reason-text {
-  @apply text-[13px] text-slate-300 leading-relaxed;
-}
-
-.reason-meta {
-  @apply mt-2 pt-2 flex gap-3;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.inline-link {
-  @apply inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 transition-colors;
-}
-
-.eco-list {
-  @apply grid grid-cols-1 sm:grid-cols-2 gap-2;
-}
-
-.eco-item {
-  @apply flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.eco-item:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-.eco-icon {
-  @apply text-xl flex-shrink-0;
-}
-
-.eco-info {
-  @apply flex-1 min-w-0;
-}
-
-.eco-name {
-  @apply block text-sm font-medium text-white truncate;
-}
-
-.eco-meta {
-  @apply flex gap-2 mt-0.5;
-}
-
-.eco-ver {
-  @apply text-[11px] text-slate-500;
-}
-
-.eco-level {
-  @apply text-[11px] text-emerald-500 font-mono;
-}
-
-.eco-arrow {
-  @apply text-slate-500 text-lg flex-shrink-0 transition-transform duration-200;
-}
-
-.eco-item:hover .eco-arrow {
-  @apply text-white;
-  transform: translateX(2px);
-}
-
-/* Override section-title.common for 子技术 heading */
-.section-title.common {
-  @apply text-amber-400;
 }
 </style>
