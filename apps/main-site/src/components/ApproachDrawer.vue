@@ -136,7 +136,7 @@ const props = defineProps<{
   approachData: ApproachDetail
 }>()
 
-const emit = defineEmits<{
+defineEmits<{
   close: []
 }>()
 

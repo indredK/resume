@@ -29,6 +29,8 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
     'no-unused-vars': 'off',
+    // TypeScript handles undefined references; disable to avoid false positives on DOM types like RequestInit
+    'no-undef': 'off',
   },
   ignorePatterns: ['dist/', 'node_modules/', '*.config.js', '*.config.ts'],
 }

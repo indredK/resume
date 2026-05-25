@@ -44,8 +44,8 @@
             <div ref="modalBodyRef" class="modal-body custom-scrollbar">
               <div
                 v-for="card in comparisonCards"
-                :key="card.id"
                 :id="`section-${card.id}`"
+                :key="card.id"
                 class="comparison-section"
                 :data-section-id="card.id"
               >
@@ -178,8 +178,8 @@
                   <div v-else class="framework-items-wrap">
                     <div
                       v-for="item in card.items"
-                      :key="item.id"
                       :id="`item-${item.id}`"
+                      :key="item.id"
                       class="comparison-item"
                       :data-item-id="item.id"
                     >
@@ -190,7 +190,7 @@
                       </div>
 
                       <div class="framework-compare-grid">
-                        <div class="framework-col vue-col" v-if="item.vueItems?.length">
+                        <div v-if="item.vueItems?.length" class="framework-col vue-col">
                           <div class="framework-badge vue">
                             <span class="badge-icon">💚</span>
                             <span class="badge-name">Vue</span>
@@ -200,7 +200,7 @@
                           </ul>
                         </div>
 
-                        <div class="framework-col react-col" v-if="item.reactItems?.length">
+                        <div v-if="item.reactItems?.length" class="framework-col react-col">
                           <div class="framework-badge react">
                             <span class="badge-icon">⚛️</span>
                             <span class="badge-name">React</span>
@@ -211,7 +211,7 @@
                         </div>
                       </div>
 
-                      <div class="detail-section" v-if="item.commonItems?.length">
+                      <div v-if="item.commonItems?.length" class="detail-section">
                         <h4 class="section-title common">
                           <span class="section-title-icon">🔗</span>
                           共同优势
@@ -221,7 +221,7 @@
                         </ul>
                       </div>
 
-                      <div class="detail-section" v-if="item.disadvantages?.length">
+                      <div v-if="item.disadvantages?.length" class="detail-section">
                         <h4 class="section-title disadvantage-title">
                           <span class="section-title-icon">⚠️</span>
                           各自劣势

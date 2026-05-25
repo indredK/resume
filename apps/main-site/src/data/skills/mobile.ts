@@ -1,5 +1,3 @@
-import type { SkillNode } from '../types'
-
 export default {
   id: 'mobile',
   name: '移动端技术',

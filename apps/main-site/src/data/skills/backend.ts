@@ -1,5 +1,3 @@
-import type { SkillNode } from '../types'
-
 export default {
   id: 'backend',
   name: '后端技术',

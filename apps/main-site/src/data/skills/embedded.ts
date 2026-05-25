@@ -1,5 +1,3 @@
-import type { SkillNode } from '../types'
-
 export default {
   id: 'embedded',
   name: '嵌入式',

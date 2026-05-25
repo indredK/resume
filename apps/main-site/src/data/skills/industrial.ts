@@ -1,5 +1,3 @@
-import type { SkillNode } from '../types'
-
 export default {
   id: 'industrial',
   name: '工业控制',

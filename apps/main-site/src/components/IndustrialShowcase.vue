@@ -158,14 +158,14 @@ onUnmounted(() => {
 
       <div class="flex gap-4 mb-8 justify-center">
         <button
-          @click="activeTab = 'router'"
           :class="['px-6 py-3 rounded-xl font-bold transition-all duration-300', activeTab === 'router' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30' : 'bg-slate-800 text-slate-400 hover:bg-slate-700']"
+          @click="activeTab = 'router'"
         >
           工业路由器
         </button>
         <button
-          @click="activeTab = 'gateway'"
           :class="['px-6 py-3 rounded-xl font-bold transition-all duration-300', activeTab === 'gateway' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30' : 'bg-slate-800 text-slate-400 hover:bg-slate-700']"
+          @click="activeTab = 'gateway'"
         >
           工业网关
         </button>
@@ -177,8 +177,8 @@ onUnmounted(() => {
           <button
             v-for="mod in routerModules"
             :key="mod.id"
-            @click="activeModule = mod.id"
             :class="['px-5 py-2.5 rounded-lg font-medium transition-all flex items-center gap-2', activeModule === mod.id ? 'bg-orange-500/20 text-orange-400 border border-orange-500/40' : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:border-slate-600']"
+            @click="activeModule = mod.id"
           >
             <span>{{ mod.icon }}</span>
             <span>{{ mod.name }}</span>
@@ -389,8 +389,8 @@ onUnmounted(() => {
           <button
             v-for="mod in gatewayModules"
             :key="mod.id"
-            @click="activeModule = mod.id"
             :class="['px-5 py-2.5 rounded-lg font-medium transition-all flex items-center gap-2', activeModule === mod.id ? 'bg-orange-500/20 text-orange-400 border border-orange-500/40' : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:border-slate-600']"
+            @click="activeModule = mod.id"
           >
             <span>{{ mod.icon }}</span>
             <span>{{ mod.name }}</span>
@@ -538,10 +538,10 @@ onUnmounted(() => {
                   <div class="text-slate-400 text-sm">{{ downloadProgress.speed }} · {{ Math.round(downloadProgress.progress) }}%</div>
                 </div>
                 <div class="flex gap-2">
-                  <button @click="pauseDownload" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-bold transition-colors">
+                  <button class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-bold transition-colors" @click="pauseDownload">
                     暂停
                   </button>
-                  <button @click="downloadProgress.active = false" class="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm font-bold transition-colors">
+                  <button class="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm font-bold transition-colors" @click="downloadProgress.active = false">
                     取消
                   </button>
                 </div>
@@ -551,7 +551,7 @@ onUnmounted(() => {
               </div>
             </div>
             <div v-else class="text-center py-8">
-              <button @click="startDownload" class="px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-colors">
+              <button class="px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-colors" @click="startDownload">
                 开始下载测试
               </button>
               <div v-if="downloadProgress.progress >= 100" class="mt-3 text-emerald-400 text-sm">下载完成！</div>

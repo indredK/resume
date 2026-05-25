@@ -20,7 +20,7 @@
         <div class="skill-info-main">
           <h2 class="skill-name">
             {{ skill.name || '未命名' }}
-            <span v-if="skill.version" class="skill-version">{{ skill.version }}</span>
+            <span v-if="displayVersion" class="skill-version">{{ displayVersion }}</span>
           </h2>
           <p v-if="skill.children?.length" class="skill-count">
             {{ skill.children.length }} Sub-technologies
@@ -31,8 +31,8 @@
             v-if="skill.repo"
             class="action-btn refresh"
             :class="{ 'is-loading': loading }"
-            @click="refreshVersion"
             title="获取最新版本"
+            @click="refreshVersion"
           >
             <svg class="refresh-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M23 4v6h-6"></path>
@@ -166,6 +166,11 @@ const loading = ref(false)
 const notification = ref<{ message: string; type: 'success' | 'error' | 'info' } | null>(null)
 let notificationTimer: ReturnType<typeof setTimeout> | null = null
 
+// 本地保存刷新后的版本/日期，避免直接修改父组件 prop (vue/no-mutating-props)
+const localVersion = ref<string | undefined>(undefined)
+const localReleaseDate = ref<string | undefined>(undefined)
+const displayVersion = computed(() => localVersion.value ?? props.skill.version)
+
 const showNotification = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
   if (notificationTimer) clearTimeout(notificationTimer)
   notification.value = { message, type }
@@ -249,8 +254,8 @@ const refreshVersion = async () => {
 
       if (response.ok) {
         const data = await response.json()
-        props.skill.version = data.tag_name
-        props.skill.releaseDate = new Date(data.published_at).toLocaleDateString('zh-CN')
+        localVersion.value = data.tag_name
+        localReleaseDate.value = new Date(data.published_at).toLocaleDateString('zh-CN')
         showNotification('版本更新成功', 'success')
         return true
       } else {
@@ -259,11 +264,11 @@ const refreshVersion = async () => {
         if (tagResponse.ok) {
           const tags = await tagResponse.json()
           if (tags.length > 0) {
-            props.skill.version = tags[0].name
+            localVersion.value = tags[0].name
             const commitResponse = await fetchWithTimeout(tags[0].commit.url)
             if (commitResponse.ok) {
               const commitData = await commitResponse.json()
-              props.skill.releaseDate = new Date(commitData.commit.committer.date).toLocaleDateString('zh-CN')
+              localReleaseDate.value = new Date(commitData.commit.committer.date).toLocaleDateString('zh-CN')
               showNotification('版本更新成功 (Tag)', 'success')
               return true
             }

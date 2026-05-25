@@ -4,7 +4,7 @@
       <div class="animate-spin w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full"></div>
     </div>
     <template v-else>
-      <div class="category-section animate-fade-in" v-for="(cat, index) in displayData" :key="cat.id" :style="{ animationDelay: `${index * 0.1}s` }">
+      <div v-for="(cat, index) in displayData" :key="cat.id" class="category-section animate-fade-in" :style="{ animationDelay: `${index * 0.1}s` }">
         <div class="category-header" :style="{ '--cat-color': cat.color }">
           <div class="header-content glass-panel">
             <span class="cat-icon">{{ cat.icon }}</span>
@@ -20,7 +20,7 @@
                 :key="sub.id"
                 class="skill-group glass-card"
               >
-                <div class="group-header" v-if="sub.name">
+                <div v-if="sub.name" class="group-header">
                   <span class="group-icon">{{ sub.icon || '📁' }}</span>
                   <span class="group-name">{{ sub.name }}</span>
                 </div>

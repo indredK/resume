@@ -1,4 +1,4 @@
-import { nextTick, type Ref } from 'vue'
+import { nextTick } from 'vue'
 
 /**
  * 页面滚动位置管理 Composable

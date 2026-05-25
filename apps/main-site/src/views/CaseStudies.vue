@@ -7,13 +7,13 @@
           <button
             v-for="category in categories"
             :key="category.id"
-            @click="selectCategory(category.id)"
             class="category-tab relative flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-xs whitespace-nowrap transition-all flex-shrink-0"
             :class="[
               activeCategory === category.id 
                 ? `active-tab text-white` 
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
             ]"
+            @click="selectCategory(category.id)"
           >
             <!-- Active Background Gradient -->
             <div v-if="activeCategory === category.id" class="absolute inset-0 rounded-full opacity-100 transition-opacity" :class="`bg-gradient-to-r ${category.color === 'emerald' ? 'from-emerald-500 to-green-500' : category.color === 'blue' ? 'from-blue-500 to-cyan-500' : 'from-purple-500 to-pink-500'}`"></div>
@@ -30,7 +30,7 @@
     <section class="container mx-auto px-6 pt-8 pb-32">
       <div class="main-layout">
         <!-- LEFT: Project Navigation -->
-        <aside class="left-panel" v-if="currentCompany">
+        <aside v-if="currentCompany" class="left-panel">
           <div class="project-nav-block">
             <!-- Project List -->
             <div class="project-nav-list space-y-2">
@@ -57,7 +57,7 @@
         </aside>
 
         <!-- RIGHT: Content Display -->
-        <main class="right-panel" v-if="currentCompany">
+        <main v-if="currentCompany" class="right-panel">
           <transition name="detail-fade" mode="out-in">
             <!-- Company Overview (when no project selected) -->
             <div v-if="activeProject === null" :key="'company-' + activeCategory" class="detail-content">
@@ -179,13 +179,13 @@
                   <button
                     v-for="(module, mIdx) in currentProject.modules"
                     :key="module.title"
-                    @click="selectModule(mIdx)"
                     class="module-tab relative flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all flex-shrink-0"
                     :class="[
                       activeModule === mIdx
                         ? 'bg-' + currentCompany.color + '-500/20 text-' + currentCompany.color + '-400 border border-' + currentCompany.color + '-500/30'
                         : 'bg-slate-800/50 text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-transparent'
                     ]"
+                    @click="selectModule(mIdx)"
                   >
                     <span>{{ module.icon }}</span>
                     <span>{{ module.title }}</span>

@@ -1,4 +1,4 @@
-import { ref, watch, onUnmounted, nextTick, type Ref, type ComputedRef } from 'vue'
+import { watch, onUnmounted, nextTick, type Ref, type ComputedRef } from 'vue'
 import { lockBodyScroll, unlockBodyScroll } from './useScrollLock'
 
 /**

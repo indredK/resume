@@ -23,8 +23,7 @@
     <!-- Main Content -->
     <section class="container mx-auto px-6 pb-32">
       <div class="max-w-5xl mx-auto space-y-8">
-        
-        <!-- INTJ Personality -->
+<!-- INTJ Personality -->
         <div class="glass-panel rounded-3xl p-8 md:p-10 relative overflow-hidden">
           <div class="absolute inset-0 opacity-10 bg-gradient-to-br from-purple-600/20 via-transparent to-transparent"></div>
           <div class="relative z-10">
@@ -187,8 +186,7 @@
             </div>
           </div>
         </div>
-
-      </div>
+</div>
     </section>
   </div>
 </template>
