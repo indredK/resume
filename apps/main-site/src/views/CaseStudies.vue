@@ -338,7 +338,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import type { Company, Module, Approach, ApproachDetail } from '@/data/types'
+import type { Company, Module, Project, Approach, ApproachDetail } from '@/data/types'
 import ApproachDrawer from '@/components/ApproachDrawer.vue'
 import { useScrollReset } from '@/composables/useScrollReset'
 import { useCaseStudiesData } from '@/composables/useCaseStudiesData'
@@ -439,9 +439,9 @@ const currentTheme = computed<CompanyTheme | null>(() => {
   const cat = currentCategory.value
   return cat ? COMPANY_THEME[cat.color] : null
 })
-const currentProject = computed(() => {
+const currentProject = computed<Project | null>(() => {
   if (activeProject.value === null || !currentCompany.value) return null
-  return currentCompany.value.projects[activeProject.value]
+  return currentCompany.value.projects[activeProject.value] ?? null
 })
 const currentModule = computed<Module | null>(() => {
   if (activeModule.value === null || !currentProject.value || !currentProject.value.modules) return null

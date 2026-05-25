@@ -57,6 +57,7 @@
     </template>
 
     <FrameworkCompareModal
+      v-if="selectedSkill"
       :visible="modalVisible"
       :skill="selectedSkill"
       @close="modalVisible = false"
