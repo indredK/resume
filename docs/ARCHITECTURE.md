@@ -1,10 +1,15 @@
 # Portfolio Hub 架构文档
 
+> ⚠️ **状态说明**:本文档将"已实现"和"Roadmap"明确分开。
+> 当前 MVP 仅含 `apps/main-site/` 一个 Vue 3 应用,其它子仓库尚未创建。
+> 架构问题与改进计划请参见 [ARCHITECTURE-ISSUES.md](./ARCHITECTURE-ISSUES.md)。
+
 ## 概述
 
-Portfolio Hub 是一个展示个人技术能力的多技术栈项目集合。主仓库作为聚合中心，链接到各个独立技术栈的演示项目。
+Portfolio Hub 计划成为一个展示个人技术能力的多技术栈项目集合,以主仓库作为
+聚合中心、链接到各个独立技术栈的演示项目。目前处于 MVP 阶段。
 
-## 整体架构
+## 当前架构(已实现)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -16,11 +21,13 @@ Portfolio Hub 是一个展示个人技术能力的多技术栈项目集合。主
 │   │  (跳转外站)   │  │ (VSCode风格)  │  │   (跳转到各仓库)  │  │
 │   └──────────────┘  └──────────────┘  └──────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
-              │
-              │ 独立仓库
-              ▼
+```
+
+## Roadmap 架构(规划中)
+
+```
 ┌──────────────────────────────────────────────────────────────┐
-│              kindred-resume-hub 组织下的独立仓库               │
+│           kindred-resume-hub 组织下的独立仓库(规划)            │
 │                                                               │
 │  ┌─────────────────┐  ┌─────────────────┐  ┌───────────────┐ │
 │  │  vue-portfolio  │  │ react-portfolio │  │qiankun-main   │ │
@@ -42,18 +49,27 @@ Portfolio Hub 是一个展示个人技术能力的多技术栈项目集合。主
 |-----------|------|
 | `apps/main-site/` | 主聚合站点 (Vue3 + Vite + TailwindCSS) |
 | `.github/workflows/` | CI/CD 配置文件 |
-| `docs/` | 架构文档 |
+| `docs/ARCHITECTURE.md` | 架构文档(本文件) |
+| `docs/ARCHITECTURE-ISSUES.md` | 架构问题分析与改进路线 |
+
+> 注:目前根目录无 `package.json` / workspace 配置,`apps/` 仅是为未来
+> monorepo 预留的目录结构,并未生效。
 
 ### 主站点技术栈
 
 - **框架**: Vue 3 (Composition API)
 - **构建工具**: Vite 5
 - **路由**: Vue Router 4
-- **状态管理**: Pinia
 - **样式**: TailwindCSS
+- **类型**: TypeScript(渐进式 strict)
+- **Lint**: ESLint + vue-eslint-parser + @typescript-eslint
 - **部署**: GitHub Pages
 
-## 各子仓库说明
+> 历史版本曾使用 Pinia 做状态管理,目前主站点未引入任何 store,Pinia 依赖已移除。
+
+## Roadmap 子仓库说明(尚未实现)
+
+下列仓库目前**均不存在**,为未来计划:
 
 | 仓库名 | 技术栈 | 用途 |
 |--------|--------|------|
@@ -83,12 +99,14 @@ Push → GitHub Actions → Build → Deploy to GitHub Pages
 
 ### 工作流
 
-1. **Build**: 安装依赖 → 运行构建
-2. **Deploy**: 上传构建产物 → 部署到 GitHub Pages
+1. **Lint & Type Check**: `npm run lint` + `npm run type-check`(PR 必须通过)
+2. **Build**: 安装依赖 → `vue-tsc --noEmit` → `vite build`
+3. **Deploy**: 上传构建产物 → 部署到 GitHub Pages
 
 ## 技能树设计
 
-技能树采用 VSCode 侧边栏风格，分为以下分类：
+技能树采用 VSCode 侧边栏风格,**当前为静态展示**(无跳转到外部演示项目),
+未来子仓库就绪后再启用跳转。
 
 ### 前端技术
 - Vue 3 / React 18
@@ -113,23 +131,36 @@ Push → GitHub Actions → Build → Deploy to GitHub Pages
 - GitHub Actions
 - AWS / GCP
 
-## 页面结构
+## 页面结构(已实现)
 
 ```
-/                   - 首页，展示技术栈概览
+/                   - 首页,展示技术栈概览
 /skills             - 技能树页面
 /projects           - 项目展示页面
+/case-studies       - 工作成果案例
 /about              - 关于页面
 ```
 
-## 扩展计划
+## Roadmap
 
-1. 添加更多技术栈的独立演示项目
-2. 实现更丰富的技能树交互
-3. 添加暗色/亮色主题切换
-4. 添加国际化支持
+| 项目 | 状态 |
+|------|------|
+| 添加更多技术栈的独立演示项目 | 📋 计划中 |
+| 实现更丰富的技能树交互(跳转演示) | 📋 计划中 |
+| 暗色/亮色主题切换 | 📋 计划中 |
+| 国际化支持 | 📋 计划中 |
+| 数据层去硬编码(JSON / Markdown) | 📋 [详见 ISSUES](./ARCHITECTURE-ISSUES.md) |
+| 抽屉 / 模态组件统一基座 | 📋 [详见 ISSUES](./ARCHITECTURE-ISSUES.md) |
 
 ## 更新日志
+
+### v1.1.0 (2026-05-25)
+- 接入 ESLint + 真正的 type-check CI 门禁
+- 启用 TypeScript 渐进式 strict
+- 入口 `main.js` → `main.ts`, `router/index.js` → `router/index.ts`
+- 移除未使用依赖 `@vue-flow/*` 与 `pinia`
+- vite 配置收紧 `chunkSizeWarningLimit`
+- 新增 `ARCHITECTURE-ISSUES.md` 与文档"已实现 vs Roadmap"区分
 
 ### v1.0.0 (2026-05-11)
 - 初始化项目结构
