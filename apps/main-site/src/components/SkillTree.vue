@@ -26,10 +26,11 @@
                 </div>
 
                 <div class="flex flex-col gap-1.5">
-                  <div
+                  <button
                     v-for="skill in (sub.children || [sub])"
                     :key="skill.id || skill.name"
-                    class="glass-card group flex items-center gap-2.5 p-2.5 rounded-lg cursor-pointer transition-all duration-300 bg-white/[0.02] border border-white/[0.08] hover:bg-white/5 hover:-translate-y-0.5 hover:border-white/[0.15] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
+                    type="button"
+                    class="glass-card group w-full text-left flex items-center gap-2.5 p-2.5 rounded-lg cursor-pointer transition-all duration-300 bg-white/[0.02] border border-white/[0.08] hover:bg-white/5 hover:-translate-y-0.5 hover:border-white/[0.15] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
                     :style="{ '--skill-color': skill.color || cat.color }"
                     @click="handleSkillClick(skill)"
                   >
@@ -37,19 +38,20 @@
                     <span class="text-sm">{{ skill.icon || '📄' }}</span>
                     <span class="flex-1 text-[13px] text-slate-400 font-medium transition-colors duration-300 group-hover:text-slate-100">{{ skill.name }}</span>
                     <span class="text-slate-600 opacity-0 transition-all duration-300 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0">→</span>
-                  </div>
+                  </button>
                 </div>
               </div>
             </template>
             <template v-else>
-              <div
-                class="glass-card group w-full flex flex-row items-center gap-2.5 p-4 rounded-lg cursor-pointer transition-all duration-300 bg-white/[0.02] border border-white/[0.08] hover:bg-white/5 hover:-translate-y-0.5 hover:border-white/[0.15] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
+              <button
+                type="button"
+                class="glass-card group w-full text-left flex flex-row items-center gap-2.5 p-4 rounded-lg cursor-pointer transition-all duration-300 bg-white/[0.02] border border-white/[0.08] hover:bg-white/5 hover:-translate-y-0.5 hover:border-white/[0.15] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
                 :style="{ '--skill-color': cat.color }"
                 @click="handleSkillClick(cat)"
               >
                 <span class="text-sm">{{ cat.icon || '📄' }}</span>
                 <span class="flex-1 text-[13px] text-slate-400 font-medium transition-colors duration-300 group-hover:text-slate-100">{{ cat.name }}</span>
-              </div>
+              </button>
             </template>
           </div>
         </div>

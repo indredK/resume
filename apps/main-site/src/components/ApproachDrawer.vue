@@ -8,7 +8,7 @@
           <p class="text-xs text-slate-500 uppercase tracking-wider">{{ approachData.moduleName }}</p>
         </div>
       </div>
-      <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 border border-white/5 text-slate-400 transition-all duration-300 hover:bg-white/10 hover:text-white" @click="$emit('close')">
+      <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 border border-white/5 text-slate-400 transition-all duration-300 hover:bg-white/10 hover:text-white" aria-label="关闭" @click="$emit('close')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>

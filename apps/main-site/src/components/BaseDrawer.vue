@@ -8,8 +8,12 @@
         @click.self="$emit('close')"
       >
         <div
+          ref="drawerContentRef"
           class="drawer-content glass-panel w-full h-full shadow-2xl flex flex-col border-l border-white/5"
           :class="isNested ? 'max-w-md -translate-x-[30px] scale-95 is-nested' : 'max-w-lg'"
+          tabindex="-1"
+          role="dialog"
+          aria-modal="true"
         >
           <slot></slot>
         </div>
@@ -19,7 +23,9 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import { useEscClose } from '@/composables/useEscClose'
+import { useFocusTrap } from '@/composables/useFocusTrap'
 
 const props = defineProps<{
   visible: boolean
@@ -30,7 +36,10 @@ const emit = defineEmits<{
   close: []
 }>()
 
+const drawerContentRef = ref<HTMLElement | null>(null)
+
 useEscClose(() => props.visible, () => emit('close'))
+useFocusTrap(drawerContentRef, computed(() => props.visible))
 </script>
 
 <style scoped>

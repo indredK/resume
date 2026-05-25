@@ -34,10 +34,11 @@
           <div class="project-nav-block">
             <!-- Project List -->
             <div class="project-nav-list space-y-2">
-              <div
+              <button
                 v-for="(project, pIdx) in currentCompany.projects"
                 :key="project.title"
-                class="project-nav-item rounded-xl px-4 py-3.5 cursor-pointer flex items-center gap-3"
+                type="button"
+                class="project-nav-item w-full text-left rounded-xl px-4 py-3.5 cursor-pointer flex items-center gap-3"
                 :class="[activeProject === pIdx ? `active-project ${currentTheme.borderActive}` : '']"
                 @click="selectProject(pIdx)"
               >
@@ -49,7 +50,7 @@
                 <svg v-if="activeProject === pIdx" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4 shrink-0" :class="currentTheme.text">
                   <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
-              </div>
+              </button>
             </div>
           </div>
         </aside>
@@ -103,10 +104,11 @@
                   项目列表
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div
+                  <button
                     v-for="(project, pIdx) in currentCompany.projects"
                     :key="project.title"
-                    class="project-overview-card rounded-2xl p-6 cursor-pointer group"
+                    type="button"
+                    class="project-overview-card w-full text-left rounded-2xl p-6 cursor-pointer group"
                     @click="selectProject(pIdx)"
                   >
                     <div class="flex items-start gap-4 mb-4">
@@ -125,7 +127,7 @@
                         {{ tag }}
                       </span>
                     </div>
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
@@ -177,6 +179,7 @@
                   <button
                     v-for="(module, mIdx) in currentProject.modules"
                     :key="module.title"
+                    type="button"
                     class="module-tab relative flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all shrink-0"
                     :class="[
                       activeModule === mIdx
@@ -224,10 +227,11 @@
                     实现思路
                   </h3>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div
+                    <button
                       v-for="(step, i) in currentModule.approach"
                       :key="i"
-                      class="approach-step rounded-xl p-5 flex gap-4 cursor-pointer transition-all hover:bg-white/5 hover:-translate-y-0.5"
+                      type="button"
+                      class="approach-step w-full text-left rounded-xl p-5 flex gap-4 cursor-pointer transition-all hover:bg-white/5 hover:-translate-y-0.5"
                       @click="openApproachDrawer(step, i + 1, currentModule.title)"
                     >
                       <div class="step-number w-9 h-9 rounded-lg shrink-0 flex items-center justify-center text-sm font-black" :class="currentTheme.stepNumber">
@@ -240,7 +244,7 @@
                         </h4>
                         <p class="text-xs text-slate-500 leading-relaxed">{{ step.detail }}</p>
                       </div>
-                    </div>
+                    </button>
                   </div>
                 </div>
 
@@ -285,10 +289,11 @@
                     我是如何做到的
                   </h3>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div
+                    <button
                       v-for="(step, i) in currentProject.approach"
                       :key="i"
-                      class="approach-step rounded-xl p-5 flex gap-4 cursor-pointer transition-all hover:bg-white/5 hover:-translate-y-0.5"
+                      type="button"
+                      class="approach-step w-full text-left rounded-xl p-5 flex gap-4 cursor-pointer transition-all hover:bg-white/5 hover:-translate-y-0.5"
                       @click="openApproachDrawer(step, i + 1, currentProject.title)"
                     >
                       <div class="step-number w-9 h-9 rounded-lg shrink-0 flex items-center justify-center text-sm font-black" :class="currentTheme.stepNumber">
@@ -301,7 +306,7 @@
                         </h4>
                         <p class="text-xs text-slate-500 leading-relaxed">{{ step.detail }}</p>
                       </div>
-                    </div>
+                    </button>
                   </div>
                 </div>
 

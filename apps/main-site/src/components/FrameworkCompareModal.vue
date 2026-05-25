@@ -2,7 +2,7 @@
   <Teleport to="body">
     <Transition name="modal">
       <div v-if="visible" class="fixed inset-0 z-[2000] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" @click.self="$emit('close')">
-        <div class="modal-content glass-panel w-full max-w-5xl max-h-[90vh] flex flex-col rounded-2xl shadow-2xl border border-white/10">
+        <div ref="modalContentRef" class="modal-content glass-panel w-full max-w-5xl max-h-[90vh] flex flex-col rounded-2xl shadow-2xl border border-white/10" tabindex="-1" role="dialog" aria-modal="true">
           <div class="flex items-center justify-between p-6 border-b border-white/10 shrink-0">
             <div class="flex items-center gap-4">
               <span class="text-4xl">{{ skill.icon || '⚖️' }}</span>
@@ -11,7 +11,7 @@
                 <p class="text-sm text-slate-400 mt-1">{{ subtitle }}</p>
               </div>
             </div>
-            <button class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors" @click="$emit('close')">
+            <button class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors" aria-label="关闭" @click="$emit('close')">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -103,10 +103,11 @@
                       子技术
                     </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div
+                      <button
                         v-for="child in card.children"
                         :key="child.id"
-                        class="glass-card group flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border border-white/[0.06] hover:bg-white/[0.06] hover:border-white/[0.12]"
+                        type="button"
+                        class="glass-card group w-full text-left flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border border-white/[0.06] hover:bg-white/[0.06] hover:border-white/[0.12]"
                         @click="handleCardSelect(child)"
                       >
                         <span class="text-xl shrink-0">{{ child.icon || '📁' }}</span>
@@ -118,7 +119,7 @@
                           </div>
                         </div>
                         <span class="text-slate-500 text-lg shrink-0 transition-transform duration-200 group-hover:text-white group-hover:translate-x-0.5">↗</span>
-                      </div>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -249,6 +250,7 @@ import { ref, computed, watch, nextTick, onUnmounted } from 'vue'
 import type { SkillNode, ComparisonItem } from '../data/types'
 import { useEscClose } from '@/composables/useEscClose'
 import { useDrawer } from '@/composables/useDrawer'
+import { useFocusTrap } from '@/composables/useFocusTrap'
 
 interface TocItem {
   id: string
@@ -270,6 +272,7 @@ const emit = defineEmits<{
 useEscClose(() => props.visible, () => emit('close'))
 
 const modalBodyRef = ref<HTMLElement | null>(null)
+const modalContentRef = ref<HTMLElement | null>(null)
 const activeTocId = ref<string | null>(null)
 let tocObserver: IntersectionObserver | null = null
 
@@ -450,6 +453,7 @@ const cleanupScrollSpy = () => {
 
 // 滚动锁 + wheel 防穿透 + 卸载清理 全部委托 useDrawer
 useDrawer(modalBodyRef, computed(() => props.visible))
+useFocusTrap(modalContentRef, computed(() => props.visible))
 
 watch(
   () => props.visible,
