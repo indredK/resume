@@ -248,7 +248,7 @@
 import { ref, computed, watch, nextTick, onUnmounted } from 'vue'
 import type { SkillNode, ComparisonItem } from '../data/types'
 import { useEscClose } from '@/composables/useEscClose'
-import { lockBodyScroll, unlockBodyScroll } from '@/composables/useScrollLock'
+import { useDrawer } from '@/composables/useDrawer'
 
 interface TocItem {
   id: string
@@ -448,38 +448,16 @@ const cleanupScrollSpy = () => {
   activeTocId.value = null
 }
 
-const handleWheel = (e: WheelEvent) => {
-  const el = modalBodyRef.value
-  if (!el) return
-
-  const { scrollTop, scrollHeight, clientHeight } = el
-  const isScrollingDown = e.deltaY > 0
-  const isScrollingUp = e.deltaY < 0
-
-  if (isScrollingDown && scrollTop + clientHeight >= scrollHeight - 1) {
-    e.preventDefault()
-    el.scrollTop = scrollHeight - clientHeight
-  } else if (isScrollingUp && scrollTop <= 0) {
-    e.preventDefault()
-    el.scrollTop = 0
-  }
-}
+// 滚动锁 + wheel 防穿透 + 卸载清理 全部委托 useDrawer
+useDrawer(modalBodyRef, computed(() => props.visible))
 
 watch(
   () => props.visible,
   (isVisible) => {
     if (isVisible) {
-      lockBodyScroll()
-      if (modalBodyRef.value) {
-        modalBodyRef.value.addEventListener('wheel', handleWheel, { passive: false })
-      }
       nextTick(() => setupScrollSpy())
     } else {
-      unlockBodyScroll()
       cleanupScrollSpy()
-      if (modalBodyRef.value) {
-        modalBodyRef.value.removeEventListener('wheel', handleWheel)
-      }
     }
   },
 )
@@ -494,11 +472,7 @@ watch(
 )
 
 onUnmounted(() => {
-  unlockBodyScroll()
   cleanupScrollSpy()
-  if (modalBodyRef.value) {
-    modalBodyRef.value.removeEventListener('wheel', handleWheel)
-  }
 })
 </script>
 
