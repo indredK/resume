@@ -106,30 +106,7 @@
 import { ref, computed } from 'vue'
 import BaseDrawer from './BaseDrawer.vue'
 import { useDrawer } from '@/composables/useDrawer'
-
-interface Challenge {
-  problem: string
-  solution: string
-}
-
-interface AlternativeOption {
-  name: string
-  pros: string
-  cons: string
-  selected?: boolean
-}
-
-interface ApproachDetail {
-  step: number
-  title: string
-  moduleName: string
-  requirement: string
-  implementation: string
-  tech: string[]
-  selectionReason: string
-  alternatives: AlternativeOption[]
-  challenges: Challenge[]
-}
+import type { ApproachDetail } from '@/data/types'
 
 const props = defineProps<{
   visible: boolean

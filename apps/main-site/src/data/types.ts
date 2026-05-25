@@ -23,6 +23,26 @@ export interface Approach {
   }[]
 }
 
+export interface ApproachDetail {
+  step: number
+  title: string
+  moduleName: string
+  requirement: string
+  implementation: string
+  tech: string[]
+  selectionReason: string
+  alternatives: {
+    name: string
+    pros: string
+    cons: string
+    selected?: boolean
+  }[]
+  challenges: {
+    problem: string
+    solution: string
+  }[]
+}
+
 export interface Module {
   title: string
   icon: string
