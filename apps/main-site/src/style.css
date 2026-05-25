@@ -99,6 +99,22 @@ body {
   min-height: calc(100vh - 73px);
 }
 
+/* 交互元素统一手势:
+   - <button>(除 disabled)、<a href>、<label[for]>、role=button、[data-clickable]
+   - Firefox 等浏览器 <button> 默认 cursor 是 default,这里统一矫正 */
+button:not(:disabled),
+a[href],
+label[for],
+[role='button'],
+[data-clickable] {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
 /* 隐藏滚动条但保持滚动功能 */
 .scrollbar-hide {
   -ms-overflow-style: none;
