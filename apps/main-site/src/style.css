@@ -159,51 +159,11 @@ html[data-theme="mag"]    .loading-spinner { border-color: rgba(27, 20, 16, 0.12
 html[data-theme="indust"] .loading-spinner { border-color: rgba(232, 232, 232, 0.12); border-top-color: #FF6B1A; }
 
 /* ============================================================
- * Legacy utility classes — KEPT during PR 1-4 transition.
- * Existing views still reference .glass-panel / .glass-card /
- * .gradient-border. Will be removed in PR2-5 as each view migrates
- * to semantic tokens.
- * ============================================================ */
-.glass-panel {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glass-card {
-  background: rgba(30, 41, 59, 0.4);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-card:hover {
-  background: rgba(30, 41, 59, 0.6);
-  border-color: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
-}
-
-.gradient-border {
-  position: relative;
-  border: 1px solid transparent;
-  background-clip: padding-box;
-}
-
-.gradient-border::after {
-  content: '';
-  position: absolute;
-  top: -1px;
-  bottom: -1px;
-  left: -1px;
-  right: -1px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
-  z-index: -1;
-  border-radius: inherit;
-}
-
-/* ============================================================
  * Custom scrollbar — theme-aware via color-mix
+ * Default (Swiss): thin pill thumb in ink color
+ * Brutal: square thumb, full ink, no track
+ * Mag: pill thumb in jewel accent
+ * Indust: thin neon accent thumb with subtle glow
  * ============================================================ */
 ::-webkit-scrollbar {
   width: 6px;
@@ -218,6 +178,51 @@ html[data-theme="indust"] .loading-spinner { border-color: rgba(232, 232, 232, 0
 }
 ::-webkit-scrollbar-thumb:hover {
   background: color-mix(in srgb, var(--ink) 42%, transparent);
+}
+
+/* Brutal — square thumb, hard color, hover shifts to accent */
+:root[data-theme="brutal"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+:root[data-theme="brutal"] ::-webkit-scrollbar-thumb {
+  background: var(--ink);
+  border-radius: 0;
+}
+:root[data-theme="brutal"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Mag — warm jewel thumb */
+:root[data-theme="mag"] ::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+:root[data-theme="mag"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Indust — neon accent thumb with shadow */
+:root[data-theme="indust"] ::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--accent) 40%, transparent);
+  box-shadow: 0 0 4px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+:root[data-theme="indust"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--ink) 22%, transparent) transparent;
+}
+:root[data-theme="brutal"] * {
+  scrollbar-color: var(--ink) transparent;
+}
+:root[data-theme="mag"] * {
+  scrollbar-color: color-mix(in srgb, var(--accent) 35%, transparent) transparent;
+}
+:root[data-theme="indust"] * {
+  scrollbar-color: color-mix(in srgb, var(--accent) 40%, transparent) transparent;
 }
 
 /* ============================================================

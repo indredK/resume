@@ -1,242 +1,258 @@
 <template>
   <Teleport to="body">
     <Transition name="modal">
-      <div v-if="visible" class="fixed inset-0 z-[2000] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" @click.self="$emit('close')">
-        <div ref="modalContentRef" class="modal-content glass-panel w-full max-w-5xl max-h-[90vh] flex flex-col rounded-2xl shadow-2xl border border-white/10" tabindex="-1" role="dialog" aria-modal="true">
-          <div class="flex items-center justify-between p-6 border-b border-white/10 shrink-0">
-            <div class="flex items-center gap-4">
-              <span class="text-4xl">{{ skill.icon || '⚖️' }}</span>
-              <div>
-                <h2 class="text-2xl font-bold text-white">{{ skill.name }}</h2>
-                <p class="text-sm text-slate-400 mt-1">{{ subtitle }}</p>
+      <div v-if="visible" class="modal-overlay" @click.self="$emit('close')">
+        <div
+          ref="modalContentRef"
+          class="modal-content"
+          tabindex="-1"
+          role="dialog"
+          aria-modal="true"
+        >
+          <!-- ============================================================
+           * Header
+           * ============================================================ -->
+          <header class="modal-head">
+            <div class="head-left">
+              <span class="head-glyph" aria-hidden="true">{{ skill.icon || '◇' }}</span>
+              <div class="head-titles">
+                <h2 class="head-title font-display">{{ skill.name }}</h2>
+                <p class="head-sub font-mono">{{ subtitle }}</p>
               </div>
             </div>
-            <button class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors" aria-label="关闭" @click="$emit('close')">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
+            <button class="close-btn" aria-label="关闭" @click="$emit('close')">
+              <span aria-hidden="true">×</span>
             </button>
-          </div>
+          </header>
 
-          <div class="flex flex-1 min-h-0">
-            <aside v-if="tocItems.length > 1" class="w-12 sm:w-40 md:w-52 lg:w-56 shrink-0 flex flex-col py-5 px-1 sm:pl-3 sm:pr-2 md:pl-4 md:pr-3 border-r border-white/[0.08]">
-              <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-3 px-1 sm:px-2 text-center sm:text-left hidden sm:block">{{ tocTitle }}</div>
-              <nav class="flex flex-col gap-1 overflow-y-auto flex-1">
+          <div class="modal-body-wrap">
+            <!-- ============================================================
+             * Side TOC
+             * ============================================================ -->
+            <aside v-if="tocItems.length > 1" class="modal-toc">
+              <div class="toc-label font-mono">{{ tocTitle }}</div>
+              <nav class="toc-nav scrollbar-hide">
                 <template v-for="item in tocItems" :key="item.id">
-                  <div v-if="item.type === 'group'" class="flex items-center gap-2 px-2 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider mt-3 first:mt-0 border-b border-white/[0.06]">
-                    <span class="text-base shrink-0 w-5 text-center">{{ item.icon }}</span>
-                    <span class="truncate hidden sm:inline">{{ item.name }}</span>
+                  <div v-if="item.type === 'group'" class="toc-group font-mono">
+                    <span class="toc-group-icon" aria-hidden="true">{{ item.icon }}</span>
+                    <span class="toc-group-name">{{ item.name }}</span>
                   </div>
                   <button
                     v-else
-                    class="w-full text-left flex items-center gap-2.5 px-2 sm:px-3 py-2.5 rounded-lg text-sm transition-all duration-200 text-slate-400 hover:text-white hover:bg-white/5 justify-center sm:justify-start border-none bg-transparent cursor-pointer leading-[1.4]"
+                    type="button"
+                    class="toc-item"
                     :class="{
-                      '!text-white !font-medium !bg-white/[0.08] shadow-[inset_3px_0_0_rgba(255,255,255,0.5)]': activeTocId === item.id,
-                      'pl-6 text-[11px]': item.type === 'subitem',
+                      'is-active': activeTocId === item.id,
+                      'is-subitem': item.type === 'subitem',
                     }"
                     @click="scrollToTocItem(item)"
                   >
-                    <span class="text-base shrink-0 w-5 text-center">{{ item.icon }}</span>
-                    <span class="truncate hidden sm:inline">{{ item.name }}</span>
+                    <span class="toc-item-icon" aria-hidden="true">{{ item.icon }}</span>
+                    <span class="toc-item-name">{{ item.name }}</span>
                   </button>
                 </template>
               </nav>
             </aside>
 
-            <div ref="modalBodyRef" class="custom-scrollbar flex-1 overflow-y-auto p-4 lg:p-6">
-              <div
+            <!-- ============================================================
+             * Scrollable content
+             * ============================================================ -->
+            <div ref="modalBodyRef" class="modal-body">
+              <article
                 v-for="card in comparisonCards"
                 :id="`section-${card.id}`"
                 :key="card.id"
-                class="mb-8 last:mb-0 scroll-mt-4"
+                class="card-block"
                 :data-section-id="card.id"
               >
-                <div class="flex items-start gap-3 mb-5 pb-3 border-l-[3px] border-solid pl-4" :style="{ borderLeftColor: card.cardColor }">
-                  <span class="text-2xl shrink-0">{{ card.icon }}</span>
-                  <div class="flex-1">
-                    <h3 class="text-lg font-bold text-white">{{ card.name }}</h3>
-                    <p v-if="card.description" class="text-xs text-slate-400 mt-1">{{ card.description }}</p>
+                <header class="card-head" :style="card.cardColor ? { '--card-color': card.cardColor } : {}">
+                  <span class="card-glyph" aria-hidden="true">{{ card.icon || '◆' }}</span>
+                  <div class="card-titles">
+                    <h3 class="card-title font-display">{{ card.name }}</h3>
+                    <p v-if="card.description" class="card-desc">{{ card.description }}</p>
                   </div>
-                </div>
+                </header>
 
-                <!-- 技能详情卡片（无对比数据，直接展示 reason/advantages/disadvantages） -->
-                <div v-if="isSkillDetailCard(card)" class="space-y-4">
-                  <div v-if="card.reason" class="p-4 rounded-xl mb-1 bg-[rgba(100,149,237,0.08)] border border-[rgba(100,149,237,0.15)]">
-                    <p class="text-[13px] text-slate-300 leading-relaxed">{{ card.reason }}</p>
-                    <div class="mt-2 pt-2 flex gap-3 border-t border-white/[0.05]">
-                      <a v-if="card.officialLink" :href="card.officialLink" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 transition-colors">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5">
-                          <circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line>
-                          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                        </svg>
+                <!-- Skill detail (no comparison data) -->
+                <div v-if="isSkillDetailCard(card)" class="detail-stack">
+                  <div v-if="card.reason" class="reason-panel">
+                    <p class="reason-text">{{ card.reason }}</p>
+                    <div v-if="card.officialLink" class="reason-links">
+                      <a :href="card.officialLink" target="_blank" rel="noopener noreferrer" class="reason-link font-mono">
+                        <span class="link-glyph" aria-hidden="true">↗</span>
                         官网
                       </a>
                     </div>
                   </div>
 
-                  <div v-if="card.advantages?.length || card.disadvantages?.length" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div v-if="card.advantages?.length" class="rounded-lg p-4 bg-emerald-400/5 border border-emerald-400/20">
-                      <div class="flex items-center gap-2 mb-3 pb-2 border-b border-white/[0.08] text-emerald-400">
-                        <span class="text-xl">✅</span>
-                        <span class="font-bold text-base">优势</span>
-                      </div>
-                      <ul class="space-y-1.5">
-                        <li v-for="(adv, idx) in card.advantages" :key="idx" class="text-[13px] text-slate-300 leading-relaxed pl-4 relative before:content-['•'] before:absolute before:left-0 before:text-emerald-500 before:font-bold">{{ adv }}</li>
+                  <div v-if="card.advantages?.length || card.disadvantages?.length" class="pro-con-grid">
+                    <div v-if="card.advantages?.length" class="pro-con-panel pro-panel">
+                      <header class="pc-head font-mono">
+                        <span class="pc-icon" aria-hidden="true">+</span>
+                        <span>优势</span>
+                      </header>
+                      <ul class="pc-list">
+                        <li v-for="(adv, idx) in card.advantages" :key="idx" class="pc-item">{{ adv }}</li>
                       </ul>
                     </div>
 
-                    <div v-if="card.disadvantages?.length" class="rounded-lg p-4 bg-red-400/5 border border-red-400/20">
-                      <div class="flex items-center gap-2 mb-3 pb-2 border-b border-white/[0.08] text-red-400">
-                        <span class="text-xl">⚠️</span>
-                        <span class="font-bold text-base">劣势</span>
-                      </div>
-                      <ul class="space-y-1.5">
-                        <li v-for="(dis, idx) in card.disadvantages" :key="idx" class="text-[13px] text-slate-300 leading-relaxed pl-4 relative before:content-['−'] before:absolute before:left-0 before:text-red-400 before:font-bold">{{ dis }}</li>
+                    <div v-if="card.disadvantages?.length" class="pro-con-panel con-panel">
+                      <header class="pc-head font-mono">
+                        <span class="pc-icon" aria-hidden="true">−</span>
+                        <span>劣势</span>
+                      </header>
+                      <ul class="pc-list">
+                        <li v-for="(dis, idx) in card.disadvantages" :key="idx" class="pc-item">{{ dis }}</li>
                       </ul>
                     </div>
                   </div>
 
-                  <div v-if="card.children?.length" class="mt-4">
-                    <h4 class="text-sm font-bold mb-2.5 flex items-center gap-1.5 text-amber-400">
-                      <span class="text-base">📦</span>
+                  <div v-if="card.children?.length" class="children-block">
+                    <h4 class="children-title font-mono">
+                      <span aria-hidden="true">▸</span>
                       子技术
                     </h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div class="children-grid">
                       <button
                         v-for="child in card.children"
                         :key="child.id"
                         type="button"
-                        class="glass-card group w-full text-left flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 border border-white/[0.06] hover:bg-white/[0.06] hover:border-white/[0.12]"
+                        class="child-card"
                         @click="handleCardSelect(child)"
                       >
-                        <span class="text-xl shrink-0">{{ child.icon || '📁' }}</span>
-                        <div class="flex-1 min-w-0">
-                          <span class="block text-sm font-medium text-white truncate">{{ child.name }}</span>
-                          <div class="flex gap-2 mt-0.5">
-                            <span v-if="child.version" class="text-[11px] text-slate-500">{{ child.version }}</span>
-                            <span v-if="child.level" class="text-[11px] text-emerald-500 font-mono">Lv.{{ child.level }}</span>
+                        <span class="child-glyph" aria-hidden="true">{{ child.icon || '◇' }}</span>
+                        <div class="child-meta">
+                          <span class="child-name">{{ child.name }}</span>
+                          <div class="child-tags">
+                            <span v-if="child.version" class="child-version font-mono">{{ child.version }}</span>
+                            <span v-if="child.level" class="child-level font-mono">Lv.{{ child.level }}</span>
                           </div>
                         </div>
-                        <span class="text-slate-500 text-lg shrink-0 transition-transform duration-200 group-hover:text-white group-hover:translate-x-0.5">↗</span>
+                        <span class="child-arrow" aria-hidden="true">→</span>
                       </button>
                     </div>
                   </div>
                 </div>
 
-                <!-- 对比数据卡片 -->
-                <div v-else class="flex flex-col gap-6">
-                  <!-- 构建工具：三栏对比表格 -->
-                  <div v-if="isBuildToolCard(card)" class="build-tool-compare-table overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02]" :data-section-id="card.id">
+                <!-- Comparison cards -->
+                <div v-else class="compare-stack">
+                  <!-- Build tool 3-col table -->
+                  <div
+                    v-if="isBuildToolCard(card)"
+                    class="bt-table"
+                    :data-section-id="card.id"
+                    :style="{ '--bt-cols': card.items?.length || 3 }"
+                  >
                     <div class="bt-header-row">
-                      <div class="bt-dimension-col flex items-center gap-1.5 px-3 py-4 text-sm font-semibold text-slate-400 bg-white/[0.03] border-r border-white/[0.06]"></div>
+                      <div class="bt-dimension-col"></div>
                       <div
                         v-for="item in card.items"
                         :key="item.id"
-                        class="bt-tool-col px-4 py-3 min-w-0 border-r border-white/[0.04] last:border-r-0"
+                        class="bt-tool-col bt-tool-header"
+                        :style="{ '--tool-color': item.color }"
                       >
-                        <div class="flex items-center gap-2 px-3 py-2.5 rounded-lg border" :style="{ backgroundColor: item.color + '20', borderColor: item.color }">
-                          <span class="w-3 h-3 rounded-full shrink-0" :style="{ backgroundColor: item.color }"></span>
-                          <span class="font-bold text-sm" :style="{ color: item.color }">{{ item.name }}</span>
-                          <span class="text-[11px] text-slate-500 font-mono ml-auto">Lv.{{ item.level }}</span>
+                        <div class="bt-tool-card">
+                          <span class="bt-dot" aria-hidden="true"></span>
+                          <span class="bt-name font-mono">{{ item.name }}</span>
+                          <span class="bt-level font-mono">Lv.{{ item.level }}</span>
                         </div>
                       </div>
                     </div>
 
                     <div class="bt-row bt-advantages-row">
-                      <div class="bt-dimension-col flex items-center justify-center gap-1.5 px-3 py-4 text-xs font-semibold uppercase tracking-wider text-emerald-400 bg-white/[0.03] border-r border-white/[0.06]">
-                        <span class="text-base">✅</span>
+                      <div class="bt-dimension-col bt-dim-pro font-mono">
+                        <span class="bt-dim-icon" aria-hidden="true">+</span>
                         <span>优势</span>
                       </div>
                       <div
                         v-for="item in card.items"
                         :key="item.id"
-                        class="bt-tool-col bt-col-adv px-4 py-3 min-w-0 border-r border-white/[0.04] last:border-r-0 bg-emerald-400/[0.03]"
-                        :style="{ borderColor: item.color + '30' }"
+                        class="bt-tool-col bt-col-adv"
+                        :style="{ '--tool-color': item.color }"
                       >
-                        <ul class="bt-item-list space-y-2">
+                        <ul class="bt-item-list">
                           <li v-for="(adv, idx) in item.advantages" :key="idx">{{ adv }}</li>
                         </ul>
                       </div>
                     </div>
 
                     <div class="bt-row bt-disadvantages-row">
-                      <div class="bt-dimension-col flex items-center justify-center gap-1.5 px-3 py-4 text-xs font-semibold uppercase tracking-wider text-red-400 bg-white/[0.03] border-r border-white/[0.06]">
-                        <span class="text-base">⚠️</span>
+                      <div class="bt-dimension-col bt-dim-con font-mono">
+                        <span class="bt-dim-icon" aria-hidden="true">−</span>
                         <span>劣势</span>
                       </div>
                       <div
                         v-for="item in card.items"
                         :key="item.id"
-                        class="bt-tool-col bt-col-dis px-4 py-3 min-w-0 border-r border-white/[0.04] last:border-r-0 bg-red-400/[0.03]"
-                        :style="{ borderColor: item.color + '30' }"
+                        class="bt-tool-col bt-col-dis"
+                        :style="{ '--tool-color': item.color }"
                       >
-                        <ul class="bt-item-list space-y-2">
+                        <ul class="bt-item-list">
                           <li v-for="(dis, idx) in item.disadvantages" :key="idx">{{ dis }}</li>
                         </ul>
                       </div>
                     </div>
                   </div>
 
-                  <!-- 框架对比：原有逐项布局 -->
-                  <div v-else>
-                    <div
+                  <!-- Framework comparison (per-item layout) -->
+                  <div v-else class="cmp-items">
+                    <article
                       v-for="item in card.items"
                       :id="`item-${item.id}`"
                       :key="item.id"
-                      class="rounded-xl p-5 scroll-mt-4 bg-white/[0.03] border border-white/[0.06]"
+                      class="cmp-item"
                       :data-item-id="item.id"
                     >
-                      <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-white/[0.06]">
-                        <span class="text-xl">{{ item.icon || '📊' }}</span>
-                        <span class="text-base font-bold text-white">{{ item.name }}</span>
-                      </div>
+                      <header class="cmp-item-head">
+                        <span class="cmp-item-glyph" aria-hidden="true">{{ item.icon || '◆' }}</span>
+                        <span class="cmp-item-name font-display">{{ item.name }}</span>
+                      </header>
 
-                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div v-if="item.vueItems?.length" class="rounded-lg p-4 bg-[#42b883]/5 border border-[#42b883]/20">
-                          <div class="flex items-center gap-2 mb-3 pb-2 border-b border-white/[0.08] text-[#42b883]">
-                            <span class="text-xl">💚</span>
-                            <span class="font-bold text-base">Vue</span>
-                          </div>
-                          <ul class="space-y-1.5">
-                            <li v-for="(vueItem, idx) in item.vueItems" :key="idx" class="text-[13px] text-slate-300 leading-relaxed pl-4 relative before:content-['•'] before:absolute before:left-0 before:text-emerald-500 before:font-bold">{{ vueItem }}</li>
+                      <div class="cmp-grid">
+                        <div v-if="item.vueItems?.length" class="cmp-side cmp-vue">
+                          <header class="cmp-side-head font-mono">
+                            <span class="cmp-side-glyph" aria-hidden="true">▸</span>
+                            <span>Vue</span>
+                          </header>
+                          <ul class="cmp-list">
+                            <li v-for="(v, idx) in item.vueItems" :key="idx">{{ v }}</li>
                           </ul>
                         </div>
 
-                        <div v-if="item.reactItems?.length" class="rounded-lg p-4 bg-[#61dafb]/5 border border-[#61dafb]/20">
-                          <div class="flex items-center gap-2 mb-3 pb-2 border-b border-white/[0.08] text-[#61dafb]">
-                            <span class="text-xl">⚛️</span>
-                            <span class="font-bold text-base">React</span>
-                          </div>
-                          <ul class="space-y-1.5">
-                            <li v-for="(reactItem, idx) in item.reactItems" :key="idx" class="text-[13px] text-slate-300 leading-relaxed pl-4 relative before:content-['•'] before:absolute before:left-0 before:text-emerald-500 before:font-bold">{{ reactItem }}</li>
+                        <div v-if="item.reactItems?.length" class="cmp-side cmp-react">
+                          <header class="cmp-side-head font-mono">
+                            <span class="cmp-side-glyph" aria-hidden="true">▸</span>
+                            <span>React</span>
+                          </header>
+                          <ul class="cmp-list">
+                            <li v-for="(r, idx) in item.reactItems" :key="idx">{{ r }}</li>
                           </ul>
                         </div>
                       </div>
 
-                      <div v-if="item.commonItems?.length" class="mt-4">
-                        <h4 class="text-sm font-bold mb-2.5 flex items-center gap-1.5 text-amber-400">
-                          <span class="text-base">🔗</span>
+                      <div v-if="item.commonItems?.length" class="cmp-subblock">
+                        <h5 class="cmp-subhead font-mono">
+                          <span aria-hidden="true">◇</span>
                           共同优势
-                        </h4>
-                        <ul class="space-y-1.5">
-                          <li v-for="(common, idx) in item.commonItems" :key="idx" class="text-[13px] text-slate-300 leading-relaxed pl-4 relative before:content-['◈'] before:absolute before:left-0 before:text-xs before:text-amber-500 before:font-bold">{{ common }}</li>
+                        </h5>
+                        <ul class="cmp-list cmp-list-common">
+                          <li v-for="(c, idx) in item.commonItems" :key="idx">{{ c }}</li>
                         </ul>
                       </div>
 
-                      <div v-if="item.disadvantages?.length" class="mt-4">
-                        <h4 class="text-sm font-bold mb-2.5 flex items-center gap-1.5 text-red-400">
-                          <span class="text-base">⚠️</span>
+                      <div v-if="item.disadvantages?.length" class="cmp-subblock">
+                        <h5 class="cmp-subhead cmp-subhead-con font-mono">
+                          <span aria-hidden="true">−</span>
                           各自劣势
-                        </h4>
-                        <ul class="space-y-1.5">
-                          <li v-for="(dis, idx) in item.disadvantages" :key="idx" class="text-[13px] text-slate-300 leading-relaxed pl-4 relative before:content-['−'] before:absolute before:left-0 before:text-red-400 before:font-bold">{{ dis }}</li>
+                        </h5>
+                        <ul class="cmp-list">
+                          <li v-for="(d, idx) in item.disadvantages" :key="idx">{{ d }}</li>
                         </ul>
                       </div>
-                    </div>
+                    </article>
                   </div>
                 </div>
-              </div>
+              </article>
             </div>
           </div>
         </div>
@@ -452,7 +468,6 @@ const cleanupScrollSpy = () => {
   activeTocId.value = null
 }
 
-// 滚动锁 + wheel 防穿透 + 卸载清理 全部委托 useDrawer
 useDrawer(modalBodyRef, computed(() => props.visible))
 useFocusTrap(modalContentRef, computed(() => props.visible))
 
@@ -482,134 +497,978 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Modal transitions */
-.modal-enter-active {
-  transition: opacity 0.3s ease;
+/* ============================================================
+ * Overlay + container
+ * ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--ink) 70%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
-.modal-enter-active .modal-content {
-  transition:
-    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-    opacity 0.3s ease;
+.modal-content {
+  width: 100%;
+  max-width: 64rem;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 32px 64px -16px color-mix(in srgb, var(--ink) 40%, transparent);
+  color: var(--ink);
+  overflow: hidden;
 }
 
-.modal-leave-active {
-  transition: opacity 0.25s ease;
+/* ============================================================
+ * Modal header
+ * ============================================================ */
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem 1.75rem;
+  border-bottom: 1px solid var(--border-soft);
+  flex-shrink: 0;
 }
 
-.modal-leave-active .modal-content {
-  transition:
-    transform 0.25s cubic-bezier(0.4, 0, 0.6, 1),
-    opacity 0.25s ease;
+.head-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
 }
 
-.modal-enter-from {
-  opacity: 0;
+.head-glyph {
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--accent);
+  flex-shrink: 0;
 }
 
-.modal-enter-from .modal-content {
-  opacity: 0;
-  transform: scale(0.95) translateY(10px);
+.head-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.2;
 }
 
-.modal-leave-to {
-  opacity: 0;
+.head-sub {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  margin-top: 0.3rem;
 }
 
-.modal-leave-to .modal-content {
-  opacity: 0;
-  transform: scale(0.95) translateY(10px);
+.close-btn {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
 }
 
-/* Build tool compare table - uses CSS Grid with dynamic var(--bt-cols) and @media overrides */
+.close-btn:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: var(--surface-elev);
+}
+
+/* ============================================================
+ * Layout: TOC + body
+ * ============================================================ */
+.modal-body-wrap {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.modal-toc {
+  width: 3rem;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 0.25rem;
+  border-right: 1px solid var(--border-soft);
+}
+
+@media (min-width: 640px) {
+  .modal-toc {
+    width: 13rem;
+    padding: 1.25rem 0.75rem;
+  }
+}
+
+.toc-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  padding: 0 0.5rem;
+  margin-bottom: 0.75rem;
+  text-align: center;
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .toc-label {
+    display: block;
+    text-align: left;
+  }
+}
+
+.toc-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.toc-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.5rem 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  border-bottom: 1px dashed var(--border-soft);
+  margin-top: 0.5rem;
+}
+
+.toc-group:first-child {
+  margin-top: 0;
+}
+
+.toc-group-icon {
+  flex-shrink: 0;
+  width: 1rem;
+  text-align: center;
+}
+
+.toc-group-name {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .toc-group-name {
+    display: inline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.toc-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  font-family: inherit;
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-align: center;
+  transition: color 0.15s ease, background-color 0.15s ease, padding-left 0.2s ease;
+  justify-content: center;
+}
+
+@media (min-width: 640px) {
+  .toc-item {
+    text-align: left;
+    justify-content: flex-start;
+    padding: 0.55rem 0.65rem;
+  }
+}
+
+.toc-item:hover {
+  color: var(--ink);
+  background: var(--surface-elev);
+}
+
+.toc-item.is-active {
+  color: var(--ink);
+  background: var(--surface-elev);
+  box-shadow: inset 2px 0 0 var(--accent);
+  font-weight: 600;
+}
+
+.toc-item.is-subitem {
+  padding-left: 1.25rem;
+  font-size: 0.72rem;
+}
+
+.toc-item-icon {
+  flex-shrink: 0;
+  width: 1rem;
+  text-align: center;
+}
+
+.toc-item-name {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .toc-item-name {
+    display: inline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* ============================================================
+ * Scrollable body
+ * ============================================================ */
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem 1.25rem 2rem;
+}
+
+@media (min-width: 1024px) {
+  .modal-body {
+    padding: 1.75rem 1.5rem 2.5rem;
+  }
+}
+
+/* ============================================================
+ * Card block (each comparison or detail card)
+ * ============================================================ */
+.card-block {
+  margin-bottom: 2rem;
+  scroll-margin-top: 1rem;
+}
+
+.card-block:last-child {
+  margin-bottom: 0;
+}
+
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding-left: 1rem;
+  margin-bottom: 1.25rem;
+  border-left: 3px solid var(--card-color, var(--accent));
+  min-height: 2.25rem;
+}
+
+.card-glyph {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+  color: var(--card-color, var(--accent));
+}
+
+.card-titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.card-desc {
+  font-size: 0.74rem;
+  color: var(--muted);
+  margin-top: 0.25rem;
+  line-height: 1.5;
+}
+
+/* ============================================================
+ * Detail stack (skill detail cards)
+ * ============================================================ */
+.detail-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reason-panel {
+  padding: 1rem 1.15rem;
+  background: var(--surface-elev);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+}
+
+.reason-text {
+  font-size: 0.84rem;
+  line-height: 1.75;
+  color: var(--ink);
+}
+
+.reason-links {
+  margin-top: 0.75rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed var(--border-soft);
+  display: flex;
+  gap: 1rem;
+}
+
+.reason-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.15s ease, gap 0.15s ease;
+}
+
+.reason-link:hover {
+  gap: 0.55rem;
+  color: color-mix(in srgb, var(--accent) 70%, var(--ink));
+}
+
+.link-glyph {
+  font-size: 0.78rem;
+}
+
+/* ============================================================
+ * Pro/Con grid
+ * ============================================================ */
+.pro-con-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .pro-con-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.pro-con-panel {
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.pro-panel {
+  border-left: 2px solid var(--success);
+}
+
+.con-panel {
+  border-left: 2px solid var(--danger);
+}
+
+.pc-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed var(--border-soft);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.pro-panel .pc-head { color: var(--success); }
+.con-panel .pc-head { color: var(--danger); }
+
+.pc-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.pc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.pc-item {
+  position: relative;
+  padding-left: 1rem;
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.pc-item::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.pro-panel .pc-item::before { color: var(--success); content: '+'; }
+.con-panel .pc-item::before { color: var(--danger); content: '−'; }
+
+/* ============================================================
+ * Children grid (sub-skill cards)
+ * ============================================================ */
+.children-block {
+  margin-top: 0.5rem;
+}
+
+.children-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  margin-bottom: 0.7rem;
+}
+
+.children-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .children-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.child-card {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 0.85rem;
+  background: var(--surface-elev);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s ease, background-color 0.15s ease, padding-left 0.2s ease;
+}
+
+.child-card:hover {
+  border-color: var(--ink);
+  padding-left: 1rem;
+}
+
+.child-glyph {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.child-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.child-name {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.child-tags {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+.child-version {
+  font-size: 0.66rem;
+  color: var(--faint);
+}
+
+.child-level {
+  font-size: 0.66rem;
+  color: var(--success);
+  font-weight: 600;
+}
+
+.child-arrow {
+  font-size: 0.95rem;
+  color: var(--faint);
+  flex-shrink: 0;
+  transition: color 0.15s ease, transform 0.2s ease;
+}
+
+.child-card:hover .child-arrow {
+  color: var(--accent);
+  transform: translateX(3px);
+}
+
+/* ============================================================
+ * Build tool table (3-col grid)
+ * ============================================================ */
+.bt-table {
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
 .bt-header-row,
 .bt-row {
   display: grid;
-  gap: 0;
-  grid-template-columns: 80px repeat(var(--bt-cols, 3), 1fr);
+  grid-template-columns: 5rem repeat(var(--bt-cols, 3), 1fr);
 }
 
 .bt-row {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--border-soft);
 }
 
-/* Build tool item list - cascading color from .bt-col-adv / .bt-col-dis parent */
+.bt-dimension-col {
+  padding: 1rem 0.75rem;
+  background: var(--surface-elev);
+  border-right: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.bt-dim-pro { color: var(--success); }
+.bt-dim-con { color: var(--danger); }
+
+.bt-dim-icon {
+  font-size: 0.95rem;
+}
+
+.bt-tool-col {
+  padding: 0.85rem;
+  border-right: 1px solid var(--border-soft);
+  min-width: 0;
+}
+
+.bt-tool-col:last-child {
+  border-right: 0;
+}
+
+.bt-tool-header {
+  padding: 0.85rem;
+}
+
+.bt-tool-card {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  background: var(--surface-elev);
+}
+
+.bt-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--accent);
+}
+
+.bt-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink);
+  flex: 1;
+}
+
+.bt-level {
+  font-size: 0.66rem;
+  color: var(--muted);
+}
+
+.bt-col-adv { background: color-mix(in srgb, var(--success) 4%, transparent); }
+.bt-col-dis { background: color-mix(in srgb, var(--danger) 4%, transparent); }
+
+.bt-item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
 .bt-item-list li {
-  font-size: 12px;
-  color: rgb(203 213 225);
-  line-height: 1.625;
   position: relative;
-  padding-left: 14px;
+  padding-left: 0.85rem;
+  font-size: 0.74rem;
+  line-height: 1.65;
+  color: var(--ink);
 }
 
 .bt-item-list li::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 7px;
-  width: 6px;
-  height: 6px;
-  border-radius: 9999px;
-  background: currentColor;
-  opacity: 0.5;
+  top: 0.5rem;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
 }
 
-.bt-col-adv .bt-item-list li {
-  color: #a7f3d0;
-}
-
-.bt-col-adv .bt-item-list li::before {
-  background: #34d399;
-}
-
-.bt-col-dis .bt-item-list li {
-  color: #fca5a5;
-}
-
-.bt-col-dis .bt-item-list li::before {
-  background: #f87171;
-}
+.bt-col-adv .bt-item-list li::before { background: var(--success); }
+.bt-col-dis .bt-item-list li::before { background: var(--danger); }
 
 @media (max-width: 639px) {
-  .build-tool-compare-table {
-    --bt-cols: 1;
+  /* Comparison table can't usefully reflow 3+ tool columns into a phone
+     width without losing the row alignment that makes it readable, so we
+     keep the full grid and let it scroll horizontally instead. */
+  .bt-table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .bt-header-row,
   .bt-row {
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 4.5rem repeat(var(--bt-cols, 3), minmax(10rem, 1fr));
+    min-width: 38rem;
   }
+}
 
-  .bt-header-row .bt-dimension-col {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  }
+/* ============================================================
+ * Framework comparison (Vue vs React etc.)
+ * ============================================================ */
+.cmp-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 
-  .bt-row .bt-dimension-col {
-    display: none;
-  }
+.cmp-item {
+  padding: 1.25rem;
+  background: var(--surface-elev);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  scroll-margin-top: 1rem;
+}
 
-  .bt-row.bt-advantages-row .bt-tool-col {
-    border-top: 2px solid rgba(52, 211, 153, 0.3);
-  }
+.cmp-item-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border-soft);
+}
 
-  .bt-row.bt-disadvantages-row .bt-tool-col {
-    border-top: 2px solid rgba(248, 113, 113, 0.3);
-  }
+.cmp-item-glyph {
+  font-size: 1.2rem;
+  color: var(--accent);
+}
 
-  .bt-col-adv .bt-item-list li::before {
-    content: '+';
-    border-radius: 0;
-    width: auto;
-    height: auto;
-    top: 1px;
-  }
+.cmp-item-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
 
-  .bt-col-dis .bt-item-list li::before {
-    content: '−';
-    border-radius: 0;
-    width: auto;
-    height: auto;
-    top: 1px;
+.cmp-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .cmp-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
+}
+
+.cmp-side {
+  padding: 0.85rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+}
+
+.cmp-vue { border-left: 2px solid var(--success); }
+.cmp-react { border-left: 2px solid var(--accent); }
+
+.cmp-side-head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px dashed var(--border-soft);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.cmp-vue .cmp-side-head { color: var(--success); }
+.cmp-react .cmp-side-head { color: var(--accent); }
+
+.cmp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cmp-list li {
+  position: relative;
+  padding-left: 1rem;
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+.cmp-list li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--muted);
+}
+
+.cmp-vue .cmp-list li::before { color: var(--success); content: '+'; }
+.cmp-react .cmp-list li::before { color: var(--accent); content: '+'; }
+
+.cmp-list-common li::before {
+  color: var(--warning, var(--accent));
+  content: '◇';
+}
+
+.cmp-subblock {
+  margin-top: 1rem;
+}
+
+.cmp-subhead {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--warning, var(--accent));
+  margin-bottom: 0.5rem;
+}
+
+.cmp-subhead-con {
+  color: var(--danger);
+}
+
+.cmp-subhead-con + .cmp-list li::before {
+  color: var(--danger);
+  content: '−';
+}
+
+/* ============================================================
+ * Modal transitions
+ * ============================================================ */
+.modal-enter-active { transition: opacity 0.3s ease; }
+.modal-enter-active .modal-content {
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.3s ease;
+}
+
+.modal-leave-active { transition: opacity 0.25s ease; }
+.modal-leave-active .modal-content {
+  transition:
+    transform 0.25s cubic-bezier(0.4, 0, 0.6, 1),
+    opacity 0.25s ease;
+}
+
+.modal-enter-from { opacity: 0; }
+.modal-enter-from .modal-content {
+  opacity: 0;
+  transform: scale(0.95) translateY(10px);
+}
+
+.modal-leave-to { opacity: 0; }
+.modal-leave-to .modal-content {
+  opacity: 0;
+  transform: scale(0.95) translateY(10px);
+}
+</style>
+
+<style>
+/* ============================================================
+ * Theme-specific overrides
+ * ============================================================ */
+
+/* ---- Brutal: monochrome ink, no blur, hard corners ---- */
+:root[data-theme="brutal"] .modal-overlay {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: color-mix(in srgb, var(--ink) 85%, transparent);
+}
+
+:root[data-theme="brutal"] .modal-content {
+  border: 2px solid var(--ink);
+  box-shadow: 8px 8px 0 0 var(--accent);
+}
+
+:root[data-theme="brutal"] .modal-head {
+  border-bottom: 2px solid var(--ink);
+}
+
+:root[data-theme="brutal"] .head-glyph,
+:root[data-theme="brutal"] .card-glyph {
+  color: var(--ink);
+}
+
+:root[data-theme="brutal"] .card-head {
+  border-left-color: var(--ink);
+  border-left-width: 4px;
+}
+
+:root[data-theme="brutal"] .pro-panel,
+:root[data-theme="brutal"] .con-panel,
+:root[data-theme="brutal"] .reason-panel,
+:root[data-theme="brutal"] .cmp-item,
+:root[data-theme="brutal"] .cmp-side,
+:root[data-theme="brutal"] .bt-table,
+:root[data-theme="brutal"] .bt-tool-card,
+:root[data-theme="brutal"] .child-card {
+  background: transparent;
+  border-color: var(--border);
+}
+
+:root[data-theme="brutal"] .pro-panel,
+:root[data-theme="brutal"] .cmp-vue { border-left-color: var(--ink); }
+:root[data-theme="brutal"] .con-panel,
+:root[data-theme="brutal"] .cmp-react { border-left-color: var(--ink); }
+
+:root[data-theme="brutal"] .pro-panel .pc-head,
+:root[data-theme="brutal"] .con-panel .pc-head,
+:root[data-theme="brutal"] .cmp-vue .cmp-side-head,
+:root[data-theme="brutal"] .cmp-react .cmp-side-head,
+:root[data-theme="brutal"] .bt-dim-pro,
+:root[data-theme="brutal"] .bt-dim-con,
+:root[data-theme="brutal"] .children-title {
+  color: var(--ink);
+}
+
+:root[data-theme="brutal"] .pro-panel .pc-item::before,
+:root[data-theme="brutal"] .con-panel .pc-item::before,
+:root[data-theme="brutal"] .bt-col-adv .bt-item-list li::before,
+:root[data-theme="brutal"] .bt-col-dis .bt-item-list li::before {
+  background: var(--ink);
+  color: var(--ink);
+}
+
+:root[data-theme="brutal"] .toc-item.is-active {
+  box-shadow: inset 3px 0 0 var(--ink);
+}
+
+/* ---- Mag + Indust: opt INTO per-tool brand color expression.
+       Swiss + Brutal stay monochrome by default. ---- */
+:root[data-theme="mag"] .bt-tool-card,
+:root[data-theme="indust"] .bt-tool-card {
+  border-color: color-mix(in srgb, var(--tool-color, var(--accent)) 45%, var(--border-soft));
+  background: color-mix(in srgb, var(--tool-color, var(--accent)) 10%, var(--surface));
+}
+
+:root[data-theme="mag"] .bt-dot,
+:root[data-theme="indust"] .bt-dot {
+  background: var(--tool-color, var(--accent));
+}
+
+:root[data-theme="mag"] .bt-name,
+:root[data-theme="indust"] .bt-name {
+  color: var(--tool-color, var(--ink));
+}
+
+/* ---- Mag: italic display, jewel pop ---- */
+:root[data-theme="mag"] .modal-content {
+  border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
+}
+
+:root[data-theme="mag"] .head-title,
+:root[data-theme="mag"] .card-title,
+:root[data-theme="mag"] .cmp-item-name {
+  font-style: italic;
+}
+
+:root[data-theme="mag"] .head-glyph {
+  color: var(--accent);
+}
+
+:root[data-theme="mag"] .pro-panel { border-left-color: var(--accent-mag-3, var(--success)); }
+:root[data-theme="mag"] .pro-panel .pc-head { color: var(--accent-mag-3, var(--success)); }
+:root[data-theme="mag"] .pro-panel .pc-item::before { color: var(--accent-mag-3, var(--success)); }
+
+:root[data-theme="mag"] .cmp-vue { border-left-color: var(--accent-mag-3, var(--success)); }
+:root[data-theme="mag"] .cmp-vue .cmp-side-head { color: var(--accent-mag-3, var(--success)); }
+:root[data-theme="mag"] .cmp-vue .cmp-list li::before { color: var(--accent-mag-3, var(--success)); }
+
+/* ---- Indust: neon accents, glow, uppercase ---- */
+:root[data-theme="indust"] .modal-content {
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent),
+    0 32px 64px -16px color-mix(in srgb, var(--ink) 60%, transparent);
+}
+
+:root[data-theme="indust"] .head-title {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 1.3rem;
+}
+
+:root[data-theme="indust"] .card-title {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+:root[data-theme="indust"] .head-glyph {
+  text-shadow: 0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+:root[data-theme="indust"] .bt-dot {
+  box-shadow: 0 0 8px color-mix(in srgb, var(--tool-color, var(--accent)) 60%, transparent);
+}
+
+:root[data-theme="indust"] .toc-item.is-active {
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface-elev));
+  box-shadow: inset 2px 0 0 var(--accent), 0 0 8px color-mix(in srgb, var(--accent) 25%, transparent);
 }
 </style>

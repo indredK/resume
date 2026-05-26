@@ -1,103 +1,99 @@
 <template>
   <BaseDrawer :visible="visible" @close="$emit('close')">
-    <div class="p-8 pb-6 flex items-center justify-between border-b border-white/5 bg-linear-to-b from-white/[0.02] to-transparent">
-      <div class="flex items-center gap-4">
-        <span class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-lg">{{ approachData.step }}</span>
-        <div>
-          <h2 class="text-xl font-bold text-white mb-1">{{ approachData.title }}</h2>
-          <p class="text-xs text-slate-500 uppercase tracking-wider">{{ approachData.moduleName }}</p>
+    <!-- ============================================================
+     * Header — eyebrow + step badge + title pattern
+     * ============================================================ -->
+    <header class="drawer-head">
+      <div class="head-left">
+        <span class="step-badge font-mono">{{ approachData.step }}</span>
+        <div class="head-titles">
+          <p class="head-eyebrow font-mono">{{ approachData.moduleName }}</p>
+          <h2 class="head-title font-display">{{ approachData.title }}</h2>
         </div>
       </div>
-      <button class="w-9 h-9 flex items-center justify-center rounded-xl bg-white/5 border border-white/5 text-slate-400 transition-all duration-300 hover:bg-white/10 hover:text-white" aria-label="关闭" @click="$emit('close')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
+      <button class="close-btn" aria-label="关闭" @click="$emit('close')">
+        <span aria-hidden="true">×</span>
       </button>
-    </div>
+    </header>
 
-    <div ref="drawerBodyRef" class="custom-scrollbar flex-1 overflow-y-auto px-8 py-6">
+    <!-- ============================================================
+     * Scrollable body
+     * ============================================================ -->
+    <div ref="drawerBodyRef" class="drawer-body">
       <!-- 需求背景 -->
-      <div class="mb-8">
-        <h3 class="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-          </svg>
+      <section class="block">
+        <h3 class="block-title font-mono">
+          <span class="block-marker">01</span>
           需求背景
         </h3>
-        <p class="text-sm text-slate-400 leading-relaxed p-4 rounded-xl bg-white/[0.02] border border-white/5">{{ approachData.requirement }}</p>
-      </div>
+        <p class="prose-card">{{ approachData.requirement }}</p>
+      </section>
 
       <!-- 实现逻辑 -->
-      <div class="mb-8">
-        <h3 class="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
-            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-          </svg>
+      <section class="block">
+        <h3 class="block-title font-mono">
+          <span class="block-marker">02</span>
           实现逻辑
         </h3>
-        <p class="text-sm text-slate-400 leading-relaxed p-4 rounded-xl bg-white/[0.02] border border-white/5">{{ approachData.implementation }}</p>
-      </div>
+        <p class="prose-card">{{ approachData.implementation }}</p>
+      </section>
 
       <!-- 技术选型 -->
-      <div class="mb-8">
-        <h3 class="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
-            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-            <polyline points="2 17 12 22 22 17"></polyline>
-            <polyline points="2 12 12 17 22 12"></polyline>
-          </svg>
+      <section class="block">
+        <h3 class="block-title font-mono">
+          <span class="block-marker">03</span>
           技术选型
         </h3>
-        <div class="flex flex-wrap gap-2">
-          <span v-for="tech in approachData.tech" :key="tech" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">{{ tech }}</span>
+        <div class="tech-tags">
+          <span v-for="tech in approachData.tech" :key="tech" class="tech-tag font-mono">{{ tech }}</span>
         </div>
-        <p class="text-sm text-slate-400 leading-relaxed p-4 rounded-xl bg-white/[0.02] border border-white/5 mt-4">{{ approachData.selectionReason }}</p>
-      </div>
+        <p class="prose-card">{{ approachData.selectionReason }}</p>
+      </section>
 
       <!-- 方案对比 -->
-      <div class="mb-8">
-        <h3 class="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="15" y1="9" x2="9" y2="15"></line>
-            <line x1="9" y1="9" x2="15" y2="15"></line>
-          </svg>
+      <section class="block">
+        <h3 class="block-title font-mono">
+          <span class="block-marker">04</span>
           方案对比
         </h3>
-        <div class="space-y-4">
-          <div v-for="(option, idx) in approachData.alternatives" :key="idx" class="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-            <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-semibold text-white">{{ option.name }}</span>
-              <span v-if="option.selected" class="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">选中方案</span>
-            </div>
-            <div class="text-xs text-slate-400 mb-1">
-              <span class="text-emerald-400 font-medium">优势：</span>
-              <span>{{ option.pros }}</span>
-            </div>
-            <div class="text-xs text-slate-400 mb-1">
-              <span class="text-rose-400 font-medium">劣势：</span>
-              <span>{{ option.cons }}</span>
-            </div>
-          </div>
+        <div class="alt-list">
+          <article
+            v-for="(option, idx) in approachData.alternatives"
+            :key="idx"
+            class="alt-card"
+            :class="{ 'is-selected': option.selected }"
+          >
+            <header class="alt-head">
+              <span class="alt-name font-display">{{ option.name }}</span>
+              <span v-if="option.selected" class="alt-flag font-mono">选中</span>
+            </header>
+            <dl class="alt-meta">
+              <div class="meta-row">
+                <dt class="meta-key meta-pro font-mono">+</dt>
+                <dd class="meta-val">{{ option.pros }}</dd>
+              </div>
+              <div class="meta-row">
+                <dt class="meta-key meta-con font-mono">−</dt>
+                <dd class="meta-val">{{ option.cons }}</dd>
+              </div>
+            </dl>
+          </article>
         </div>
-      </div>
+      </section>
 
       <!-- 关键难点 -->
-      <div class="mb-8">
-        <h3 class="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
-            <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-          </svg>
+      <section class="block">
+        <h3 class="block-title font-mono">
+          <span class="block-marker">05</span>
           关键难点与解决方案
         </h3>
-        <div class="space-y-3">
-          <div v-for="(challenge, idx) in approachData.challenges" :key="idx" class="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-            <div class="text-sm font-semibold text-white mb-2">{{ challenge.problem }}</div>
-            <div class="text-xs text-slate-400 leading-relaxed">{{ challenge.solution }}</div>
-          </div>
+        <div class="challenge-list">
+          <article v-for="(challenge, idx) in approachData.challenges" :key="idx" class="challenge-card">
+            <h4 class="challenge-problem font-display">{{ challenge.problem }}</h4>
+            <p class="challenge-solution">{{ challenge.solution }}</p>
+          </article>
         </div>
-      </div>
+      </section>
     </div>
   </BaseDrawer>
 </template>
@@ -120,7 +116,6 @@ defineEmits<{
 const drawerBodyRef = ref<HTMLElement | null>(null)
 const visibleComputed = computed(() => props.visible)
 
-// 使用抽屉滚动管理 Hook
 useDrawer(drawerBodyRef, visibleComputed, {
   step: () => props.approachData.step,
   moduleName: () => props.approachData.moduleName
@@ -128,12 +123,353 @@ useDrawer(drawerBodyRef, visibleComputed, {
 </script>
 
 <style scoped>
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+/* ============================================================
+ * Header
+ * ============================================================ */
+.drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.75rem 1.75rem 1.25rem;
+  border-bottom: 1px solid var(--border-soft);
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 9999px;
+.head-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.step-badge {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-elev);
+}
+
+.head-titles {
+  min-width: 0;
+}
+
+.head-eyebrow {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+
+.head-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.close-btn {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.close-btn:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: var(--surface-elev);
+}
+
+/* ============================================================
+ * Body
+ * ============================================================ */
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem 1.75rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ============================================================
+ * Section block
+ * ============================================================ */
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.block-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+
+.block-marker {
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+/* ============================================================
+ * Prose card (single paragraph in subtle surface)
+ * ============================================================ */
+.prose-card {
+  font-size: 0.86rem;
+  line-height: 1.75;
+  color: var(--ink);
+  padding: 1rem 1.1rem;
+  background: var(--surface-elev);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+}
+
+/* ============================================================
+ * Tech tags
+ * ============================================================ */
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tech-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: var(--radius);
+  letter-spacing: 0.02em;
+}
+
+/* ============================================================
+ * Alternatives — pros/cons comparison list
+ * ============================================================ */
+.alt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.alt-card {
+  padding: 1rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  transition: border-color 0.15s ease;
+}
+
+.alt-card.is-selected {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}
+
+.alt-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px dashed var(--border-soft);
+}
+
+.alt-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.alt-flag {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--accent);
+}
+
+.alt-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.meta-row {
+  display: grid;
+  grid-template-columns: 1rem 1fr;
+  gap: 0.6rem;
+  align-items: baseline;
+}
+
+.meta-key {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.meta-pro { color: var(--success, var(--accent)); }
+.meta-con { color: var(--danger, var(--muted)); }
+
+.meta-val {
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ============================================================
+ * Challenges
+ * ============================================================ */
+.challenge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.challenge-card {
+  padding: 1rem 1.1rem;
+  background: var(--surface);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.challenge-problem {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+.challenge-solution {
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+</style>
+
+<style>
+/* ============================================================
+ * Theme-specific overrides
+ * ============================================================ */
+
+/* ---- Brutal: ASCII / hard ---- */
+:root[data-theme="brutal"] .drawer-head {
+  border-bottom: 2px solid var(--border);
+}
+
+:root[data-theme="brutal"] .step-badge {
+  border-radius: 0;
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  background: transparent;
+}
+
+:root[data-theme="brutal"] .head-eyebrow,
+:root[data-theme="brutal"] .block-title {
+  color: var(--ink);
+}
+
+:root[data-theme="brutal"] .prose-card,
+:root[data-theme="brutal"] .alt-card,
+:root[data-theme="brutal"] .challenge-card {
+  background: transparent;
+  border-color: var(--border);
+}
+
+:root[data-theme="brutal"] .alt-card.is-selected {
+  background: var(--surface-elev);
+  border-color: var(--ink);
+  border-style: solid;
+  border-width: 2px;
+}
+
+:root[data-theme="brutal"] .alt-flag {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+:root[data-theme="brutal"] .tech-tag {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+:root[data-theme="brutal"] .challenge-card {
+  border-left-color: var(--ink);
+  border-left-width: 3px;
+}
+
+/* ---- Mag: italic display, jewel hover ---- */
+:root[data-theme="mag"] .head-title,
+:root[data-theme="mag"] .alt-name,
+:root[data-theme="mag"] .challenge-problem {
+  font-style: italic;
+}
+
+:root[data-theme="mag"] .step-badge {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+:root[data-theme="mag"] .alt-card.is-selected {
+  border-color: var(--accent);
+  border-width: 1px;
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+
+/* ---- Indust: condensed uppercase titles, neon accents ---- */
+:root[data-theme="indust"] .head-title {
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+}
+
+:root[data-theme="indust"] .step-badge {
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface-elev));
+  border-color: var(--accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+:root[data-theme="indust"] .block-title {
+  font-size: 0.66rem;
+  letter-spacing: 0.22em;
+}
+
+:root[data-theme="indust"] .challenge-card {
+  box-shadow: -3px 0 12px -6px color-mix(in srgb, var(--accent) 50%, transparent);
 }
 </style>
