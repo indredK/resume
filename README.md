@@ -14,11 +14,12 @@
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                     Portfolio Hub                            │
-│              主聚合站点 (Vue3 + Vite + TailwindCSS)           │
+│       Vue 3 + Vite 7 + TailwindCSS 4 + 4 主题设计系统          │
 │                                                               │
 │   ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐  │
-│   │  技术栈切换器  │  │   技能树展示   │  │    项目导航卡片   │  │
-│   │  (跳转外站)   │  │ (VSCode风格)  │  │   (跳转到各仓库)  │  │
+│   │   主题切换器   │  │   技能矩阵    │  │  案例项目深度展示  │  │
+│   │ (swiss/brutal│  │ (14 类 / 198 │  │ (公司 → 项目 →    │  │
+│   │  /mag/indust)│  │   技能行)    │  │  模块 → 实现思路) │  │
 │   └──────────────┘  └──────────────┘  └──────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -69,12 +70,30 @@ npm run lint
 
 ### 主站点(已实现)
 - Vue 3 + Composition API
-- Vite 5
+- Vite 7
 - Vue Router 4
-- TailwindCSS
+- TailwindCSS 4(CSS-first 配置,无 `tailwind.config.js`)
 - TypeScript(渐进式启用 strict)
+- @fontsource(自托管所有主题字体,无 CDN 依赖)
 - ESLint(vue3-recommended + ts-eslint)
 - GitHub Pages 部署
+
+### 🎨 设计系统(2026-05 全站翻新)
+
+四套可切换主题,通过 `<html data-theme>` 切换,所有组件基于 semantic
+tokens (`--bg`/`--ink`/`--surface`/`--accent`/`--success`/`--danger`…)
+和 `color-mix` 派生色书写,主题切换零闪烁。
+
+| 主题 | 风格 | 字体方向 |
+|------|------|---------|
+| `swiss` (default) | Editorial Swiss — 暖米底 / 锈红 accent / 0 圆角 | Newsreader + IBM Plex |
+| `brutal` | Terminal Brutalism — 纯黑底 / 单色 / 方块滚动条 | ui-monospace 全栈 |
+| `mag` | Editorial Magazine — 暖奶油底 / 酒红宝石 / 斜体显示 | Fraunces + IBM Plex |
+| `indust` | Neo-Industrial — 深灰底 / 霓虹橙 / 大写排版 / 发光 | Space Grotesk + Archivo Narrow + JetBrains Mono |
+
+每个实体(公司、技能、卡片、工具)走 `--co-color`/`--card-color`/
+`--tool-color` 这类 entity-scoped CSS 变量:Swiss + Brutal 强制收回到
+ink/accent 保持克制,Mag + Indust 通过专属 override opt-in 表达品牌色。
 
 ## 🗺️ Roadmap(尚未实现)
 
@@ -90,16 +109,23 @@ npm run lint
 | Python API | Python + FastAPI | 📋 计划中 |
 | Docker DevOps | Docker | 📋 计划中 |
 
-其它 Roadmap 项:暗色/亮色主题切换、国际化、技能树跳转至演示项目。
+其它 Roadmap 项:国际化、技能树跳转至演示项目。
 
-## 📊 技能树(展示)
+## 📊 技能矩阵(已实现)
 
-技能树采用 VSCode 侧边栏风格,目前仅作为**静态展示**:
+`/skills` 路由展示 14 类共 198 个技能行,点击可弹出详情/对比 modal:
 
-- ⚡ **前端技术**: Vue 3, React 18, Qiankun, TypeScript, TailwindCSS
-- 🔧 **后端技术**: Node.js, Python FastAPI, Go, PostgreSQL, MongoDB
-- 🖥️ **桌面端**: Electron, Wails (Go), Tauri
-- 🚀 **DevOps**: Docker, Kubernetes, GitHub Actions, AWS
+- ⚡ 前端 / Vue 生态 / React 生态
+- 🔧 后端(Node / Python / Java / Go / Rust / C#)
+- 🗄️ 数据库(关系型 / NoSQL / 向量)
+- 🖥️ 桌面端(Web 桌面端 / .NET 生态 / C++ / 跨平台)
+- 🚀 DevOps + 容器 + IaC + 云服务
+- 🤖 新兴技术(AI/ML / 区块链 / 量子计算)
+- 🏭 工业控制 / 嵌入式 / 行业方案
+- 🛠️ 工具链 / 解决方案
+
+`/case-studies` 路由提供项目深度展示:**公司 → 项目分类 → 项目 → 模块 → 实现思路**
+四层下钻,所有路径走 sticky aside + 抽屉式实现细节展示。
 
 ## 🔄 CI/CD
 
