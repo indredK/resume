@@ -1,24 +1,25 @@
 <template>
-  <div class="relative min-h-full flex flex-col pt-[61px]">
-    <div class="glass-panel sticky top-[61px] z-40 py-4 border-b border-white/5 min-h-fit bg-[rgba(2,6,23,0.95)] backdrop-blur-md">
+  <div class="skills-page">
+    <div class="skills-tabs-wrap">
       <div class="container mx-auto px-6">
-        <div class="flex gap-2 flex-wrap justify-center">
+        <div class="skills-tabs">
           <button
             v-for="cat in categoriesRef"
             :key="cat.id"
-            class="category-tab flex items-center gap-2 px-4 py-1.5 rounded-xl border border-transparent cursor-pointer transition-all duration-300 text-slate-400 bg-white/[0.03] hover:bg-white/5 hover:text-slate-200"
-            :class="{ active: selectedCategory === cat.id, '!text-white !border-white/10': selectedCategory === cat.id }"
-            :style="{ '--cat-color': cat.color }"
+            type="button"
+            class="cat-tab font-mono"
+            :class="{ active: selectedCategory === cat.id }"
+            :style="cat.id === 'all' ? {} : { '--cat-color': cat.color }"
             @click="selectCategory(cat.id)"
           >
-            <span class="text-sm">{{ cat.icon }}</span>
-            <span class="text-xs font-bold uppercase tracking-wide">{{ cat.name }}</span>
+            <span class="cat-glyph" aria-hidden="true">{{ cat.icon }}</span>
+            <span class="cat-name">{{ cat.name }}</span>
           </button>
         </div>
       </div>
     </div>
 
-    <div class="flex-1 relative pt-4">
+    <div class="skills-body">
       <SkillTree :category="selectedCategory" />
     </div>
   </div>
@@ -44,9 +45,134 @@ const selectCategory = (id: string) => {
 </script>
 
 <style scoped>
-.category-tab.active {
-  background: color-mix(in srgb, var(--cat-color) 20%, rgba(255, 255, 255, 0.05));
-  box-shadow: 0 0 20px -5px color-mix(in srgb, var(--cat-color) 30%, transparent);
-  border-color: color-mix(in srgb, var(--cat-color) 40%, transparent);
+.skills-page {
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 61px);
+}
+
+/* ============================================================
+ * Sticky tab bar
+ * ============================================================ */
+.skills-tabs-wrap {
+  position: sticky;
+  top: 61px;
+  z-index: 40;
+  padding: 1rem 0;
+  background-color: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.skills-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+}
+
+.cat-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.cat-tab:hover {
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+.cat-tab.active {
+  color: var(--bg);
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.cat-glyph {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.cat-name {
+  font-weight: 600;
+}
+
+/* ============================================================
+ * Skill tree body
+ * ============================================================ */
+.skills-body {
+  flex: 1;
+  padding-top: 1rem;
+}
+</style>
+
+<style>
+/* ============================================================
+ * Theme-specific overrides
+ * ============================================================ */
+
+/* ---- Brutal: no blur, dashed inactive, solid active ---- */
+:root[data-theme="brutal"] .skills-page .skills-tabs-wrap {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+:root[data-theme="brutal"] .skills-page .cat-tab {
+  border-style: dashed;
+  border-color: var(--border);
+}
+
+:root[data-theme="brutal"] .skills-page .cat-tab.active {
+  border-style: solid;
+}
+
+/* ---- Mag: italic names, accent-blended active using cat-color ---- */
+:root[data-theme="mag"] .skills-page .cat-tab {
+  background: var(--surface);
+}
+
+:root[data-theme="mag"] .skills-page .cat-tab.active {
+  background: var(--cat-color, var(--accent));
+  border-color: var(--cat-color, var(--accent));
+  color: var(--bg);
+}
+
+:root[data-theme="mag"] .skills-page .cat-name {
+  font-style: italic;
+  font-family: var(--font-display);
+  font-weight: 500;
+  text-transform: none;
+  font-size: 0.8rem;
+  letter-spacing: 0;
+}
+
+/* ---- Indust: cat-color glow on active, surface-elev base ---- */
+:root[data-theme="indust"] .skills-page .cat-tab {
+  background: var(--surface);
+}
+
+:root[data-theme="indust"] .skills-page .cat-tab.active {
+  background: color-mix(in srgb, var(--cat-color, var(--accent)) 18%, var(--surface-elev));
+  border-color: var(--cat-color, var(--accent));
+  color: var(--ink);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--cat-color, var(--accent)) 30%, transparent);
+}
+
+:root[data-theme="indust"] .skills-page .cat-glyph {
+  color: var(--cat-color, var(--accent));
 }
 </style>
