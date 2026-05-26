@@ -1,34 +1,174 @@
+/* Fontsource — self-host all theme fonts via npm packages.
+   Brutal uses ui-monospace (zero bytes) so no import needed. */
+@import '@fontsource-variable/newsreader';
+@import '@fontsource/ibm-plex-sans';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-mono';
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/space-grotesk';
+@import '@fontsource/archivo-narrow';
+@import '@fontsource/archivo-narrow/700.css';
+@import '@fontsource/jetbrains-mono';
+@import '@fontsource/jetbrains-mono/700.css';
+
 @import "tailwindcss";
 
-:root {
-  --color-primary: #3b82f6;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
-  --color-bg-dark: #020617;
-  --color-bg-card: rgba(30, 41, 59, 0.5);
-  --glass-bg: rgba(15, 23, 42, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --theme-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+/* ============================================================
+ * Theme tokens — Tailwind v4 @theme bridge
+ * Semantic vars (--bg, --ink, --accent, ...) are overridden per
+ * [data-theme] block below. Tailwind generates utilities from the
+ * @theme block (bg-bg, text-ink, border-accent, font-display, etc).
+ * Opacity modifiers (bg-accent/10) keep working via color-mix.
+ * ============================================================ */
+@theme {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-elev: var(--surface-elev);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-border: var(--border);
+  --color-border-soft: var(--border-soft);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+
+  --radius-base: var(--radius);
 }
 
+/* Default + Editorial Swiss */
+:root,
+:root[data-theme="swiss"] {
+  --bg: #F4F1EA;
+  --surface: #FFFFFF;
+  --surface-elev: #FBF8F1;
+  --ink: #1A1814;
+  --muted: #4A463E;
+  --faint: #8A8478;
+  --accent: #C8451F;
+  --accent-soft: #C8451F;
+  --border: #1A1814;
+  --border-soft: #DDD7C8;
+  --success: #2D6A4F;
+  --warning: #B07A18;
+  --danger: #9B1B30;
+  --font-display: "Newsreader Variable", "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --radius: 0px;
+}
+
+/* Terminal Brutalism */
+:root[data-theme="brutal"] {
+  --bg: #0A0A0A;
+  --surface: #0F0F0F;
+  --surface-elev: #1A1A1A;
+  --ink: #E8E8E8;
+  --muted: #888888;
+  --faint: #555555;
+  --accent: #E8E8E8;
+  --accent-soft: #E8E8E8;
+  --border: #2A2A2A;
+  --border-soft: #1F1F1F;
+  --success: #E8E8E8;
+  --warning: #E8E8E8;
+  --danger: #E8E8E8;
+  --font-display: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-body: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --radius: 0px;
+}
+
+/* Editorial Magazine */
+:root[data-theme="mag"] {
+  --bg: #F2EDE3;
+  --surface: #FFFEF9;
+  --surface-elev: #EAE2D0;
+  --ink: #1B1410;
+  --muted: #5A4E3F;
+  --faint: #8F8270;
+  --accent: #8A1538;
+  --accent-soft: #8A1538;
+  --border: #1B1410;
+  --border-soft: #D9CFBA;
+  --success: #2D4A3E;
+  --warning: #C19A4B;
+  --danger: #8A1538;
+  --accent-mag-2: #C19A4B;
+  --accent-mag-3: #2D4A3E;
+  --font-display: "Fraunces Variable", "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --radius: 2px;
+}
+
+/* Neo-Industrial */
+:root[data-theme="indust"] {
+  --bg: #1F1F1F;
+  --surface: #2A2A2A;
+  --surface-elev: #353535;
+  --ink: #E8E8E8;
+  --muted: #999999;
+  --faint: #666666;
+  --accent: #FF6B1A;
+  --accent-soft: #FF6B1A;
+  --border: #3D3D3D;
+  --border-soft: #2E2E2E;
+  --success: #5DAB6B;
+  --warning: #E0A030;
+  --danger: #E84B2A;
+  --font-display: "Space Grotesk Variable", "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-body: "Archivo Narrow", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --radius: 2px;
+}
+
+/* ============================================================
+ * Base
+ * ============================================================ */
 body {
-  background-color: #020617;
-  color: rgb(226 232 240); /* slate-200 */
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: var(--theme-font);
-  background-image:
-    radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
-  background-attachment: fixed;
+  font-feature-settings: "kern", "liga", "calt";
+  transition: background-color 0.18s ease, color 0.18s ease;
 }
 
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* App loading splash — themed per data-theme so first paint matches */
+html[data-theme="swiss"]  #app-loading { background: #F4F1EA; }
+html[data-theme="brutal"] #app-loading { background: #0A0A0A; }
+html[data-theme="mag"]    #app-loading { background: #F2EDE3; }
+html[data-theme="indust"] #app-loading { background: #1F1F1F; }
+
+html[data-theme="swiss"]  .loading-spinner { border-color: rgba(26, 24, 20, 0.12); border-top-color: #C8451F; }
+html[data-theme="brutal"] .loading-spinner { border-color: rgba(232, 232, 232, 0.12); border-top-color: #E8E8E8; }
+html[data-theme="mag"]    .loading-spinner { border-color: rgba(27, 20, 16, 0.12); border-top-color: #8A1538; }
+html[data-theme="indust"] .loading-spinner { border-color: rgba(232, 232, 232, 0.12); border-top-color: #FF6B1A; }
+
+/* ============================================================
+ * Legacy utility classes — KEPT during PR 1-4 transition.
+ * Existing views still reference .glass-panel / .glass-card /
+ * .gradient-border. Will be removed in PR2-5 as each view migrates
+ * to semantic tokens.
+ * ============================================================ */
 .glass-panel {
-  background: var(--glass-bg);
+  background: rgba(15, 23, 42, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .glass-card {
@@ -44,7 +184,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* 渐变边框效果 */
 .gradient-border {
   position: relative;
   border: 1px solid transparent;
@@ -54,32 +193,36 @@ body {
 .gradient-border::after {
   content: '';
   position: absolute;
-  top: -1px; bottom: -1px; left: -1px; right: -1px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+  top: -1px;
+  bottom: -1px;
+  left: -1px;
+  right: -1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
   z-index: -1;
   border-radius: inherit;
 }
 
-/* 自定义滚动条 */
+/* ============================================================
+ * Custom scrollbar — theme-aware via color-mix
+ * ============================================================ */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.2);
+  background: color-mix(in srgb, var(--ink) 22%, transparent);
   border-radius: 10px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.4);
+  background: color-mix(in srgb, var(--ink) 42%, transparent);
 }
 
-/* 进场动画 */
+/* ============================================================
+ * Page entry animation (unchanged)
+ * ============================================================ */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -95,14 +238,13 @@ body {
   animation: fadeInUp 0.5s ease-out forwards;
 }
 
-/* 页面布局统一配置 */
+/* ============================================================
+ * Layout helpers (unchanged)
+ * ============================================================ */
 .main-content {
   min-height: calc(100vh - 73px);
 }
 
-/* 交互元素统一手势:
-   - <button>(除 disabled)、<a href>、<label[for]>、role=button、[data-clickable]
-   - Firefox 等浏览器 <button> 默认 cursor 是 default,这里统一矫正 */
 button:not(:disabled),
 a[href],
 label[for],
@@ -116,7 +258,6 @@ button:disabled,
   cursor: not-allowed;
 }
 
-/* 隐藏滚动条但保持滚动功能 */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;

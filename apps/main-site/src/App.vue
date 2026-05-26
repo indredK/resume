@@ -19,15 +19,18 @@
             </span>
           </router-link>
           
-          <div class="flex items-center gap-1 p-1 bg-white/5 rounded-xl border border-white/5 relative z-[101]">
-            <router-link
-              v-for="item in navItems"
-              :key="item.name"
-              :to="item.path"
-              class="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium text-slate-400 transition-all duration-300 hover:text-slate-100 hover:bg-white/5 [&.router-link-active]:text-blue-400 [&.router-link-active]:bg-blue-500/10 [&.router-link-active]:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
-            >
-              {{ item.name }}
-            </router-link>
+          <div class="flex items-center gap-4 sm:gap-6">
+            <div class="flex items-center gap-1 p-1 bg-white/5 rounded-xl border border-white/5 relative z-[101]">
+              <router-link
+                v-for="item in navItems"
+                :key="item.name"
+                :to="item.path"
+                class="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium text-slate-400 transition-all duration-300 hover:text-slate-100 hover:bg-white/5 [&.router-link-active]:text-blue-400 [&.router-link-active]:bg-blue-500/10 [&.router-link-active]:shadow-[0_0_20px_rgba(59,130,246,0.1)]"
+              >
+                {{ item.name }}
+              </router-link>
+            </div>
+            <ThemeSwitcher />
           </div>
         </div>
       </nav>
@@ -76,6 +79,7 @@
 
 <script setup lang="ts">
 import { CONTACT } from '@/data/contact'
+import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
 
 const navItems = [
   { name: '简历', path: '/' },

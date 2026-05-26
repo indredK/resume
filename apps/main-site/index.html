@@ -4,9 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portfolio Hub - 个人技术能力展示中心</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- 主题预设:同步读取 localStorage 并设 <html data-theme>,首屏无闪烁 -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('portfolio-theme');
+          var valid = ['swiss', 'brutal', 'mag', 'indust'];
+          document.documentElement.dataset.theme = valid.indexOf(t) !== -1 ? t : 'swiss';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'swiss';
+        }
+      })();
+    </script>
+
     <style>
+      /* Loading splash — inline so first paint matches persisted theme
+         before style.css (with @fontsource imports) is parsed. */
       #app-loading {
         position: fixed;
         inset: 0;
@@ -14,7 +28,6 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background: #020617;
         z-index: 9999;
         transition: opacity 0.3s ease;
       }
@@ -22,35 +35,53 @@
         opacity: 0;
         pointer-events: none;
       }
+      html[data-theme='swiss'] #app-loading { background: #F4F1EA; }
+      html[data-theme='brutal'] #app-loading { background: #0A0A0A; }
+      html[data-theme='mag'] #app-loading { background: #F2EDE3; }
+      html[data-theme='indust'] #app-loading { background: #1F1F1F; }
+
       .loading-spinner {
         width: 40px;
         height: 40px;
-        border: 3px solid rgba(59, 130, 246, 0.1);
-        border-top-color: #3b82f6;
+        border: 3px solid;
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
       }
+      html[data-theme='swiss'] .loading-spinner { border-color: rgba(26, 24, 20, 0.12); border-top-color: #C8451F; }
+      html[data-theme='brutal'] .loading-spinner { border-color: rgba(232, 232, 232, 0.12); border-top-color: #E8E8E8; }
+      html[data-theme='mag'] .loading-spinner { border-color: rgba(27, 20, 16, 0.12); border-top-color: #8A1538; }
+      html[data-theme='indust'] .loading-spinner { border-color: rgba(232, 232, 232, 0.12); border-top-color: #FF6B1A; }
+
+      html[data-theme='swiss'] #app-loading { color: #4A463E; }
+      html[data-theme='brutal'] #app-loading { color: #888888; }
+      html[data-theme='mag'] #app-loading { color: #5A4E3F; }
+      html[data-theme='indust'] #app-loading { color: #999999; }
+
       @keyframes spin {
         to { transform: rotate(360deg); }
       }
     </style>
+
     <script>
-      window.addEventListener('load', function() {
-        document.getElementById('app-loading').classList.add('hidden');
-        setTimeout(function() {
-          var el = document.getElementById('app-loading');
-          if (el) el.remove();
+      window.addEventListener('load', function () {
+        var el = document.getElementById('app-loading');
+        if (!el) return;
+        el.classList.add('hidden');
+        setTimeout(function () {
+          var el2 = document.getElementById('app-loading');
+          if (el2) el2.remove();
         }, 300);
       });
-      setTimeout(function() {
+      setTimeout(function () {
         var el = document.getElementById('app-loading');
         if (el && !el.classList.contains('hidden')) {
-          el.innerHTML = '<div style="color:#94a3b8;font-size:14px">加载较慢,请检查网络</div>';
+          el.innerHTML = '<div style="color:currentColor;font-size:14px">加载较慢,请检查网络</div>';
         }
       }, 8000);
     </script>
+
     <script>
-      (function() {
+      (function () {
         var redirect = sessionStorage.getItem('redirect');
         if (redirect) {
           sessionStorage.removeItem('redirect');

@@ -15,6 +15,13 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@fontsource-variable/fraunces": "^5.2.9",
+    "@fontsource-variable/newsreader": "^5.2.10",
+    "@fontsource-variable/space-grotesk": "^5.2.10",
+    "@fontsource/archivo-narrow": "^5.2.8",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@fontsource/ibm-plex-sans": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
     "vue": "^3.5.0",
     "vue-router": "^4.5.0"
   },
