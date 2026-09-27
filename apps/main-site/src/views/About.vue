@@ -5,10 +5,10 @@
      * ============================================================ -->
     <section class="about-hero">
       <div class="container mx-auto px-6">
-        <div class="hero-eyebrow font-mono">About · 关于我</div>
-        <h1 class="hero-title font-display">Zhong <span class="hero-tag">INTJ</span></h1>
+        <div class="hero-eyebrow font-mono">Profile · 职业概述</div>
+        <h1 class="hero-title font-display">工程实践</h1>
         <p class="hero-tagline">
-          建筑师型人格 · 理性思考者 · 追求卓越的工程师
+          企业级前端 · 多端交付 · 复杂业务梳理
         </p>
       </div>
     </section>
@@ -16,14 +16,14 @@
     <div class="container mx-auto px-6 pb-24">
       <div class="max-w-5xl mx-auto space-y-16">
         <!-- ============================================================
-         * INTJ Personality
+         * Engineering strengths
          * ============================================================ -->
         <section>
           <header class="block-header">
             <span class="block-marker font-mono">01</span>
             <div>
-              <h2 class="block-title font-display">INTJ 建筑师型人格</h2>
-              <p class="block-sub font-mono">Introverted · Intuitive · Thinking · Judging</p>
+              <h2 class="block-title font-display">能力侧重</h2>
+              <p class="block-sub font-mono">Frontend · Architecture · Delivery</p>
             </div>
           </header>
 
@@ -46,14 +46,44 @@
         </section>
 
         <!-- ============================================================
-         * Methodology
+         * Working style
          * ============================================================ -->
         <section>
           <header class="block-header">
             <span class="block-marker font-mono">02</span>
             <div>
-              <h2 class="block-title font-display">工作方法论</h2>
-              <p class="block-sub font-mono">Data-driven · Continuous iteration</p>
+              <h2 class="block-title font-display">工作风格</h2>
+              <p class="block-sub font-mono">Structured · Proactive · Collaborative</p>
+            </div>
+          </header>
+
+          <div class="trait-grid">
+            <article v-for="trait in workStyleTraits" :key="trait.title" class="trait-card">
+              <div class="trait-head">
+                <span class="trait-glyph" aria-hidden="true">{{ trait.glyph }}</span>
+                <h3 class="trait-title font-display">{{ trait.title }}</h3>
+              </div>
+              <p class="trait-body">{{ trait.desc }}</p>
+            </article>
+          </div>
+
+          <div class="callout">
+            <p class="callout-label font-mono">做事特点</p>
+            <div class="tag-list">
+              <span v-for="trait in personalTraits" :key="trait" class="tag font-mono">{{ trait }}</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+         * Methodology
+         * ============================================================ -->
+        <section>
+          <header class="block-header">
+            <span class="block-marker font-mono">03</span>
+            <div>
+              <h2 class="block-title font-display">协作与交付</h2>
+              <p class="block-sub font-mono">Clarify · Align · Validate</p>
             </div>
           </header>
 
@@ -70,8 +100,7 @@
           <div class="callout">
             <p class="callout-label font-mono">实践理念</p>
             <p class="callout-body">
-              按<strong>公司与项目维度</strong>,量化呈现每一段经历中的<strong>核心成果</strong>与<strong>方法论</strong>。
-              用数据说话,用结果证明,持续优化,追求卓越。
+              先澄清业务规则与数据契约，再拆分组件、状态和页面流程；通过真实接口联调、多端检查与端到端验收闭合交付。
             </p>
           </div>
         </section>
@@ -81,7 +110,7 @@
          * ============================================================ -->
         <section>
           <header class="block-header">
-            <span class="block-marker font-mono">03</span>
+            <span class="block-marker font-mono">04</span>
             <div>
               <h2 class="block-title font-display">联系方式</h2>
               <p class="block-sub font-mono">Get in touch · 欢迎交流与合作</p>
@@ -89,11 +118,6 @@
           </header>
 
           <div class="contact-grid">
-            <a :href="`tel:${CONTACT.phone}`" class="contact-row">
-              <span class="contact-key font-mono">phone</span>
-              <span class="contact-val font-mono">{{ CONTACT.phoneDisplay }}</span>
-              <span class="contact-arrow" aria-hidden="true">→</span>
-            </a>
             <a :href="`mailto:${CONTACT.email}`" class="contact-row">
               <span class="contact-key font-mono">email</span>
               <span class="contact-val font-mono">{{ CONTACT.email }}</span>
@@ -127,27 +151,52 @@ const principles = ref<Array<{title: string, icon: string, desc: string}>>([])
 const traits = [
   {
     glyph: '◎',
-    title: '战略思维',
-    desc: '善于从全局视角分析问题,制定长期规划。在技术选型和架构设计中,总是考虑可扩展性和未来演进方向。'
+    title: '业务拆解',
+    desc: '将复杂需求拆分为页面流程、数据契约、权限边界和验收场景，便于跨角色协作推进。'
   },
   {
     glyph: '◇',
-    title: '创新驱动',
-    desc: '不满足于现状,持续探索新技术和最佳实践。从 jQuery 到 Vue3,从单体应用到微前端,始终保持技术敏感度。'
+    title: '跨端适配',
+    desc: '在 H5、App 与小程序之间梳理平台差异，尽量复用业务能力并保持交互行为一致。'
   },
   {
     glyph: '◈',
-    title: '追求完美',
-    desc: '对代码质量有高标准要求,注重工程化实践。TypeScript 覆盖率从 5% 提升到 40%,体现了对类型安全的执着。'
+    title: '组件与架构',
+    desc: '具备 Vue、React 与微前端项目实践，关注组件边界、状态管理和渐进式重构。'
   },
   {
     glyph: '◆',
-    title: '独立学习',
-    desc: '自主完成多个全栈开源项目,从 GIS 可视化到跨平台聊天应用,展现了强大的自学能力和执行力。'
+    title: '质量闭环',
+    desc: '把接口联调、响应式检查和端到端验收纳入交付过程，针对边缘状态及时修复。'
   }
 ]
 
-const coreTraits = ['理性分析', '系统思考', '追求效率', '独立自主', '注重细节', '长期规划']
+const coreTraits = ['需求拆解', '权限路由', '组件复用', '多端一致', '接口协同', '质量验收']
+
+const workStyleTraits = [
+  {
+    glyph: '◎',
+    title: '结构化思考',
+    desc: '习惯先厘清目标、业务流程、数据与权限，再拆成可讨论、可实现和可验收的任务。'
+  },
+  {
+    glyph: '◇',
+    title: '主动推进',
+    desc: '从需求澄清、接口联调持续跟进到多端验收，遇到偏差会继续定位原因并推动闭环。'
+  },
+  {
+    glyph: '◈',
+    title: '重视协作',
+    desc: '注重与产品、后端及设备侧团队对齐业务语义和接口约定，尽量用清晰的记录减少反复沟通。'
+  },
+  {
+    glyph: '◆',
+    title: '质量意识',
+    desc: '关注边界状态、跨端差异与错误恢复；倾向用实际运行结果验证，并把重复问题沉淀为规范。'
+  }
+]
+
+const personalTraits = ['条理清晰', '责任心强', '乐于协作', '持续复盘', '关注细节']
 
 onMounted(async () => {
   const data = await loadPrinciples()

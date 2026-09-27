@@ -73,7 +73,7 @@
                 <p class="detail-summary">{{ currentCompany.summary }}</p>
               </header>
 
-              <section class="detail-section">
+              <section v-if="currentCompany.totalStats.length > 0" class="detail-section">
                 <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 整体成果数据</h3>
                 <div class="metric-grid">
                   <div v-for="stat in currentCompany.totalStats" :key="stat.label" class="metric-card">
@@ -159,21 +159,21 @@
 
               <!-- Module detail -->
               <template v-if="currentModule">
-                <section class="detail-section">
+                <section v-if="currentModule.business" class="detail-section">
                   <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 业务需求</h3>
                   <div class="prose-box">
                     <p>{{ currentModule.business }}</p>
                   </div>
                 </section>
 
-                <section class="detail-section">
+                <section v-if="currentModule.tech.length > 0" class="detail-section">
                   <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 技术选型</h3>
                   <div class="tag-list tag-list-lg">
                     <span v-for="tech in currentModule.tech" :key="tech" class="tag tag-lg font-mono">{{ tech }}</span>
                   </div>
                 </section>
 
-                <section class="detail-section">
+                <section v-if="currentModule.approach.length > 0" class="detail-section">
                   <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 实现思路</h3>
                   <div class="approach-grid">
                     <button
@@ -193,7 +193,7 @@
                   </div>
                 </section>
 
-                <section class="detail-section">
+                <section v-if="currentModule.futurePlans.length > 0" class="detail-section">
                   <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 未来规划</h3>
                   <ul class="future-list">
                     <li v-for="(plan, i) in currentModule.futurePlans" :key="i">
@@ -206,7 +206,7 @@
 
               <!-- Project overview (no module selected) -->
               <template v-else>
-                <section class="detail-section">
+                <section v-if="currentProject.metrics.length > 0" class="detail-section">
                   <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 核心数据提升</h3>
                   <div class="metric-grid metric-grid-3">
                     <div v-for="metric in currentProject.metrics" :key="metric.label" class="metric-card">
@@ -217,7 +217,7 @@
                   </div>
                 </section>
 
-                <section class="detail-section">
+                <section v-if="currentProject.approach.length > 0" class="detail-section">
                   <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 我是如何做到的</h3>
                   <div class="approach-grid">
                     <button
@@ -237,7 +237,7 @@
                   </div>
                 </section>
 
-                <section class="detail-section">
+                <section v-if="currentProject.futurePlans.length > 0" class="detail-section">
                   <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 未来我会如何做</h3>
                   <ul class="future-list">
                     <li v-for="(plan, i) in currentProject.futurePlans" :key="i">
@@ -280,12 +280,13 @@ interface Category {
 }
 
 const categories: Category[] = [
-  { id: 'milesight', name: '星纵物联', icon: '◆', color: 'emerald', companyIndex: 0 },
-  { id: 'highway', name: '高速工程顾问', icon: '◇', color: 'blue', companyIndex: 1 },
-  { id: 'personal', name: '个人项目', icon: '◈', color: 'purple', companyIndex: 2 }
+  { id: 'recent', name: '近期多端项目', icon: '◆', color: 'emerald', companyIndex: 0 },
+  { id: 'iot', name: '物联网项目', icon: '◇', color: 'blue', companyIndex: 1 },
+  { id: 'enterprise', name: '企业平台项目', icon: '◈', color: 'purple', companyIndex: 2 },
+  { id: 'personal', name: '个人开源项目', icon: '○', color: 'emerald', companyIndex: 3 }
 ]
 
-const activeCategory = ref<string>('milesight')
+const activeCategory = ref<string>('recent')
 const activeProject = ref<number | null>(null)
 const activeModule = ref<number | null>(null)
 const drawerVisible = ref(false)

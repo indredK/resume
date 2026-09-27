@@ -18,7 +18,7 @@ export default {
           advantages: [
             'Windows 工控生态成熟',
             'WPF 界面开发效率高',
-            '与西门子/ABB 等 PLC 通讯库丰富',
+            '常见 PLC 通讯库与工业协议生态较成熟',
             '强类型,稳定性好',
             'Visual Studio 工具完善',
             '企业级支持稳定'

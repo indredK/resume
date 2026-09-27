@@ -2,14 +2,135 @@ import type { Company, Principle } from './types'
 
 export const companies: Company[] = [
   {
-    name: '厦门星纵物联科技有限公司',
-    shortName: '星纵物联',
+    name: '销售管理系统项目',
+    shortName: '销售系统',
+    period: '2026.07 - 2026.08',
+    position: '前端研发',
+    icon: '◆',
+    color: 'emerald',
+    gradient: 'from-emerald-400 to-green-300',
+    summary: '面向销售团队的多端业务管理系统，覆盖客户与销售活动、拜访、申请审批、公告消息、附件资料及考核报表。负责前端需求拆解、业务模块交付、接口联调与多端质量闭环。',
+    totalStats: [],
+    projects: [
+      {
+        title: '销售管理多端应用',
+        role: '前端研发',
+        period: '2026.07 - 2026.08',
+        icon: '◇',
+        description: '基于 uni-app、Vue 3 与 Pinia 构建 H5、App 和微信小程序端，覆盖销售业务录入、拜访活动、审批协同、通知待办和考核报表。',
+        tags: ['uni-app', 'Vue 3', 'Pinia', 'Vue I18n', 'H5', 'App', '微信小程序', 'Playwright'],
+        metrics: [],
+        approach: [
+          {
+            title: '需求拆解与三端适配',
+            detail: '梳理销售、拜访、活动、招待与礼品申请、经销商、市场资料等业务需求，并区分 H5、App 与微信小程序的交互边界。',
+            requirement: '同一销售业务需要在桌面浏览器、移动 App 和微信小程序中使用。各端的屏幕尺寸、导航方式、样式单位、字体加载和原生能力不同；业务规则又覆盖多类申请和销售记录，若按端分别实现，容易出现功能和状态不一致。',
+            implementation: '以 uni-app 统一承载主要页面和业务逻辑，先将需求整理为模块与验收场景，再逐项适配端侧导航、样式单位、字体和平台 API。对样式断点、原生事件和条件编译进行专项检查，保证共用逻辑一致，同时保留必要的平台差异处理。',
+            tech: ['uni-app', 'Vue 3', 'Pinia', 'H5 / App / 微信小程序'],
+            selectionReason: '现有项目日志记录了 uni-app 三端跑通与版本对齐工作。统一代码结构便于复用业务流程，并把平台差异集中到适配逻辑和验收项中。',
+            alternatives: [
+              { name: '各端独立实现', pros: '可以分别贴合平台原生交互。', cons: '重复实现和后续维护成本更高，业务行为需要多处同步。' },
+              { name: 'uni-app 统一实现（采用）', pros: '共享主要页面和业务逻辑，便于持续对齐三端能力。', cons: '仍需处理平台组件、样式和原生 API 的差异。', selected: true }
+            ],
+            challenges: [
+              { problem: '小程序与 App 的样式单位、字体加载和组件行为存在差异。', solution: '统一样式令牌和移动端单位规则，针对小程序、App 做专项运行检查，并按平台能力封装差异。' },
+              { problem: '多端共享实现可能掩盖平台专属 API 和交互边界。', solution: '对裸调原生 API、条件编译和三端逻辑一致性建立检查项，关键业务流程通过端到端场景复核。' }
+            ]
+          },
+          {
+            title: '权限与接口契约',
+            detail: '按角色与后端菜单数据生成页面入口，统一路由访问规则；销售域接口字段和数据传输对象与服务端契约对齐。',
+            requirement: '系统入口和功能菜单随用户角色变化，销售域接口与字典字段由服务端维护。前端若继续使用本地菜单模板或自行转换字段，容易造成菜单权限与实际操作不一致、请求数据被后端拒绝。',
+            implementation: '以真实后端菜单接口作为菜单来源，移除本地菜单模板，按角色权限矩阵组织页面访问；登录后异步加载菜单并提供骨架状态。销售域字段按 API/Swagger 契约对齐 camelCase DTO，字典和字段选项从服务端获取并按需预拉取。',
+            tech: ['动态菜单', '角色权限矩阵', 'REST API', 'DTO', 'Swagger 契约'],
+            selectionReason: '菜单与字段以服务端实际契约为准，减少前端静态配置和手工映射造成的数据漂移，并让三端共享一致的授权依据。',
+            alternatives: [
+              { name: '前端内置菜单和字典模板', pros: '原型开发快速，不依赖服务端配置。', cons: '角色变更和字典调整需要前端同步发布，容易与服务端数据脱节。' },
+              { name: '基于真实接口与契约构建（采用）', pros: '菜单、角色和字段选项与服务端保持一致。', cons: '需要处理异步加载状态和接口异常。', selected: true }
+            ],
+            challenges: [
+              { problem: '登录后菜单异步加载期间，页面可能先显示错误入口或空白状态。', solution: '增加菜单加载骨架状态，并在菜单数据到齐后再完成路由和入口渲染。' },
+              { problem: '多端字段命名和本地模拟数据可能与真实接口结构不一致。', solution: '依据 Swagger 对齐 DTO 和 API 字段，并将 Mock 数据调整为真实载荷形态后再进行联调。' }
+            ]
+          },
+          {
+            title: '销售业务模块与接口联调',
+            detail: '完成销售记录、订单预测、客户分类汇总、拜访活动、申请明细及市场资料等模块的数据接入与交互。',
+            requirement: '销售管理需要覆盖客户和销售数据维护、拜访活动记录、订单预测、客户 ABC 分类，以及招待、礼品、经销商和市场资料等业务。表单选项、字段校验与列表数据依赖后端字典和业务接口。',
+            implementation: '按业务域拆分页面和数据访问逻辑，接入销售域 CRUD、字典与附件接口；字段选项按需预取，复杂申请表单根据真实载荷组织提交数据。市场资料由静态路由逐步切换为服务端树形数据，附件展示、上传进度和图片缩略图与文件接口保持一致。',
+            tech: ['uni-app', 'Vue 3', 'Pinia', 'REST API', '字典数据', '文件上传'],
+            selectionReason: '按照业务域拆分页面与接口职责，并以服务端字段和字典为准，便于多端复用、接口联调和后续模块迭代。',
+            alternatives: [
+              { name: '页面内直接维护字段选项与请求逻辑', pros: '单页面开发直观。', cons: '相同业务规则容易分散，字段和接口变化时需要多处修改。' },
+              { name: '按业务域组织接口与页面逻辑（采用）', pros: '模块职责清晰，字段契约和数据来源更容易统一。', cons: '需要先整理模块边界和共享数据约定。', selected: true }
+            ],
+            challenges: [
+              { problem: '申请类表单的字段、明细名称和真实后端载荷需要保持一致。', solution: '按实际 DTO 对齐字段与明细选项，联调时使用真实接口数据修正前端模型。' },
+              { problem: '市场资料包含层级导航和附件上传，静态页面模型难以承接真实数据。', solution: '将资料目录改为接口驱动的树形导航，并打通文件保存、上传进度与缩略图展示。' }
+            ]
+          },
+          {
+            title: '审批、待办与实时消息闭环',
+            detail: '统一审批提交和审核状态流转，串联待办详情、站内通知与实时推送。',
+            requirement: '申请提交后需要在发起人、审批人和待办入口之间共享一致状态，并支持通过、驳回、撤回和重新提交等业务操作；新消息和待办数量需要及时反馈到移动端入口。',
+            implementation: '按统一工作流提交契约接入申请，审核详情根据字典状态展示通过与驳回操作；处理撤回、重新提交的内容差异、待办反查、审批邮件深链及已通过记录的删除限制。统一待办和通知模型，通过 SignalR 与移动推送更新未读和待处理角标。',
+            tech: ['工作流接口', '状态字典', 'SignalR', 'UniPush', '深链路由'],
+            selectionReason: '将审批状态、待办详情和通知入口纳入同一业务状态链，减少页面局部状态与服务端流程状态不一致。',
+            alternatives: [
+              { name: '页面各自维护审批和消息状态', pros: '每个模块能独立开发。', cons: '同一记录可能在审批、待办和通知中展示不同状态。' },
+              { name: '统一状态模型并接入实时事件（采用）', pros: '审批动作、待办列表和消息角标使用一致状态来源。', cons: '需要处理推送连接状态与接口数据的同步。', selected: true }
+            ],
+            challenges: [
+              { problem: '撤回与重新提交会产生不同的申请版本，审批详情需要呈现有效差异。', solution: '按流程状态和历史内容区分可操作动作，并在详情中展示重新提交前后的字段差异。' },
+              { problem: '实时消息可能延迟或断开，不能只依赖推送结果维持未读数量。', solution: '将推送用于及时刷新，并保留待办/通知接口作为状态确认来源。' }
+            ]
+          },
+          {
+            title: '登录认证与多端接入',
+            detail: '对接企业单点登录、微信登录和 App 登录流程，并适配 H5 自动跳转与移动端回跳。',
+            requirement: '同一业务系统需要从浏览器、App 和微信小程序访问，登录入口和身份验证方式不同；登录成功后还需恢复正确页面并加载角色菜单。',
+            implementation: '接入企业身份认证与单点登录，H5 按登录态进入认证流程；App 通过系统浏览器认证后回跳，小程序适配微信登录流程。登录完成后统一进入菜单加载与页面授权步骤，并清理演示账号入口。',
+            tech: ['uni-app', '企业 SSO', 'OAuth 登录', 'App 回跳', '微信登录'],
+            selectionReason: '各端使用合适的认证入口，登录完成后汇入统一的用户、菜单和路由初始化流程，避免每个平台重复实现业务授权。',
+            alternatives: [
+              { name: '各端保留独立的演示或登录状态', pros: '早期联调方便。', cons: '难以保证真实用户身份和权限数据的一致性。' },
+              { name: '统一身份来源并按端适配登录入口（采用）', pros: '用户身份和授权链路统一，平台差异集中处理。', cons: '需要处理浏览器回跳、登录态恢复和异步菜单初始化。', selected: true }
+            ],
+            challenges: [
+              { problem: 'App 外部浏览器认证回跳和 H5 自动跳转有不同的生命周期。', solution: '按端处理认证入口与回调，再汇入统一的登录态恢复和菜单初始化流程。' },
+              { problem: '登录成功不代表菜单和权限数据已就绪。', solution: '在身份认证与菜单加载之间维护明确的加载状态，避免未授权页面短暂闪现。' }
+            ]
+          },
+          {
+            title: '国际化、报表与质量验收',
+            detail: '统一多语言、主题和响应式规范，交付季度考核看板与 PDF 导出，并通过自动化用例覆盖关键业务链路。',
+            requirement: '多端业务需要保持一致的视觉和语言配置，同时管理人员需要查看季度考核数据并导出；上线前需确认审批、销售等主链路在真实接口和目标平台可用。',
+            implementation: '集中维护 i18n 文案、字典编码、主题令牌和全局配置；按移动端断点处理页面布局、图标字体和样式单位。实现季度考核看板与 PDF 导出，使用 Playwright 建立 E2E/API 集成用例，并补充微信小程序冒烟与测试缺口分析。',
+            tech: ['Vue I18n', '主题令牌', 'Playwright', 'Vitest', 'PDF 导出'],
+            selectionReason: '将国际化、主题和平台差异变成集中配置及可重复检查项，并以端到端业务场景验证真实接口、权限和流程，不依赖单纯的页面静态检查。',
+            alternatives: [
+              { name: '发布前人工抽查页面', pros: '启动成本较低。', cons: '难以稳定覆盖多端、权限和审批状态组合。' },
+              { name: '自动化主流程 + 平台冒烟 + 人工验收（采用）', pros: '关键业务链路可重复验证，平台专项问题也能单独检查。', cons: '需要持续维护测试数据、选择器和平台运行环境。', selected: true }
+            ],
+            challenges: [
+              { problem: '多端样式和国际化检查容易依赖人工记忆，问题可能在功能修改后回归。', solution: '对 i18n key、主题硬编码、样式单位、配置同步和三端逻辑建立专项检查。' },
+              { problem: '审批等跨角色流程需要真实层级和多个页面状态才能验收。', solution: '使用 Playwright E2E/API 集成与小程序冒烟覆盖活动、拜访、申请和审批等关键闭环。' }
+            ]
+          }
+        ],
+        futurePlans: []
+      }
+    ]
+  },
+  {
+    name: '物联网产品项目',
+    shortName: '物联网项目',
     period: '2023.02 - 2025.11',
     position: '前端开发工程师',
     icon: '🏢',
     color: 'emerald',
     gradient: 'from-emerald-400 to-green-300',
-    summary: '星纵物联（Milesight）是专业的数字感知产品提供商，专注智能物联网设备研发生产与销售，产品涵盖 LoRaWAN 网关、传感器、4G/5G 数据采集终端、AI 视觉感知等，应用于智慧园区、智慧楼宇、智慧农业等领域，业务遍及 120+ 国家和地区。负责物联网平台核心开发，主导星纵云物联网管理平台核心功能开发（支撑 40+ 类工业设备与 200+ 种传感器接入），主导网关系统架构从 jQuery 向 React 迁移升级，独立完成特殊网关后台系统从零构建（可复用组件库支撑 9 种网关型号扩展）。',
+    summary: '主导物联网平台核心功能开发，支撑 40+ 类工业设备与 200+ 种传感器接入；推进网关管理系统从 jQuery 向 React 升级，并独立构建可复用组件支撑多型号扩展。',
     totalStats: [
       { label: '渲染性能提升', value: '30%+' },
       { label: '设备型号支撑', value: '9+' },
@@ -18,7 +139,7 @@ export const companies: Company[] = [
     ],
     projects: [
       {
-        title: '星纵云物联网管理平台',
+        title: '物联网设备管理平台',
         role: '核心开发者',
         period: '2023.02 - 2024.07',
         icon: '☁️',
@@ -44,8 +165,8 @@ export const companies: Company[] = [
             business: '实时监控 200+ 传感器的数据状态，展示设备运行指标；绘制历史数据趋势图，支持温度、湿度、CO2、用电量等多类型传感器的数据可视化；设置告警阈值，异常数据实时高亮提醒。',
             tech: ['React', 'WebSocket', 'ECharts', 'Immer', '请求合并策略'],
             approach: [
-              { 
-                title: 'WebSocket 长连接 + 请求合并', 
+              {
+                title: 'WebSocket 长连接 + 请求合并',
                 detail: '通过 WebSocket 接收 200+ 传感器高频推送数据，采用请求合并策略将多次数据更新合并为批量渲染，大幅降低 DOM 操作频率。',
                 requirement: '物联网场景下，200+ 传感器每秒产生大量数据，传统轮询方式无法满足实时性要求，且频繁的 HTTP 请求会造成服务器压力和网络开销。',
                 implementation: '1. 使用 WebSocket 建立长连接，服务端主动推送数据变更；2. 实现请求合并队列，将 500ms 内的多次数据更新合并为一次批量渲染；3. 使用 requestAnimationFrame 确保渲染时机与浏览器刷新同步；4. 实现心跳检测和断线重连机制，保证连接稳定性。',
@@ -61,8 +182,8 @@ export const companies: Company[] = [
                   { problem: '高频数据更新导致 UI 卡顿', solution: '使用请求合并和 requestAnimationFrame 控制渲染频率' }
                 ]
               },
-              { 
-                title: 'React 增量更新优化', 
+              {
+                title: 'React 增量更新优化',
                 detail: '使用 React Hooks 管理实时数据流，结合 Immer 实现不可变数据更新，只渲染变化的部分而非全量重绘。',
                 requirement: '传感器数据频繁更新时，React 组件可能出现不必要的重渲染，导致页面响应变慢。',
                 implementation: '1. 使用 useCallback 和 useMemo 缓存计算结果和回调函数；2. 使用 Immer 简化不可变数据更新逻辑；3. 将传感器数据拆分为独立的可观察对象，配合 React.memo 实现细粒度更新；4. 使用 useReducer 管理复杂状态，减少状态分散。',
@@ -78,8 +199,8 @@ export const companies: Company[] = [
                   { problem: '深层嵌套对象更新复杂', solution: '使用 Immer 的 produce 函数简化更新逻辑' }
                 ]
               },
-              { 
-                title: 'ECharts 多类型图表', 
+              {
+                title: 'ECharts 多类型图表',
                 detail: '集成 ECharts 绘制折线图、柱状图、热力图等，展示传感器历史数据趋势、异常告警等可视化需求。',
                 requirement: '需要展示多种类型的传感器数据，包括实时数值、历史趋势、数据分布等，要求图表美观且交互流畅。',
                 implementation: '1. 封装统一的图表组件，支持折线图、柱状图、热力图、仪表盘等多种类型；2. 实现图表数据的增量更新，避免全量重绘；3. 添加图表联动功能，点击一个图表可过滤其他图表数据；4. 支持图表导出为图片或 PDF。',
@@ -95,8 +216,8 @@ export const companies: Company[] = [
                   { problem: '图表响应式适配复杂', solution: '使用 ResizeObserver 监听容器尺寸变化，自动调整图表大小' }
                 ]
               },
-              { 
-                title: '虚拟列表与数据分片', 
+              {
+                title: '虚拟列表与数据分片',
                 detail: '对大量传感器数据采用虚拟滚动，对长周期历史数据采用分片加载策略，避免页面卡顿。',
                 requirement: '当传感器数量达到数百个时，一次性渲染所有数据会导致严重的性能问题。',
                 implementation: '1. 使用 react-window 实现虚拟列表，只渲染可视区域内的传感器项；2. 历史数据按时间范围分片，通过滚动加载更多数据；3. 实现数据预加载机制，提前获取即将进入视口的数据；4. 使用 IntersectionObserver 检测列表项可见性。',
@@ -124,8 +245,8 @@ export const companies: Company[] = [
             business: '在地图上展示物联网设备位置，支持查看设备实时状态；绘制矩形、圆形等地理围栏，设置围栏名称、告警阈值、关联设备；设备进出围栏时实时触发告警通知，可联动规则引擎执行预设动作。',
             tech: ['Google Maps API', 'WebSocket', 'DrawingManager', 'Canvas 渲染', 'Supercluster', '空间索引'],
             approach: [
-              { 
-                title: '实时数据 - WebSocket 设备追踪', 
+              {
+                title: '实时数据 - WebSocket 设备追踪',
                 detail: '通过 WebSocket 接收传感器 GPS 坐标数据，建立设备与地图标记的实时绑定；实现断线重连与数据缓冲机制，确保设备位置更新的连续性。',
                 requirement: '物联网设备需要实时显示位置信息，传统轮询方式延迟高、效率低，无法满足实时追踪需求。',
                 implementation: '1. 建立 WebSocket 连接接收设备 GPS 数据推送；2. 维护设备 ID 到地图标记的映射关系；3. 实现断线重连和数据缓冲，断连期间的数据在重连后补发；4. 使用 requestAnimationFrame 批量更新标记位置，避免频繁 DOM 操作。',
@@ -141,8 +262,8 @@ export const companies: Company[] = [
                   { problem: '大量设备同时上线导致消息风暴', solution: '实现消息限流和批量处理' }
                 ]
               },
-              { 
-                title: '地图 SDK - 坐标与围栏渲染', 
+              {
+                title: '地图 SDK - 坐标与围栏渲染',
                 detail: '基于 Google Maps JavaScript API 处理 WGS84 坐标转换；使用 Polygon / Circle API 绘制围栏边界；InfoWindow 展示设备详情与围栏状态。',
                 requirement: '需要在地图上精确显示设备位置和地理围栏，支持多种坐标格式和围栏形状。',
                 implementation: '1. 封装坐标转换工具，支持 WGS84、GCJ-02、BD-09 坐标互转；2. 使用 Google Maps Polygon 和 Circle API 绘制围栏；3. 实现围栏样式自定义（颜色、透明度、边框）；4. 使用 InfoWindow 展示设备详情和围栏信息。',
@@ -158,8 +279,8 @@ export const companies: Company[] = [
                   { problem: '围栏绘制性能问题', solution: '使用 Canvas 渲染大量围栏，减少 DOM 元素' }
                 ]
               },
-              { 
-                title: '交互绘制 - 围栏绘制工具', 
+              {
+                title: '交互绘制 - 围栏绘制工具',
                 detail: '集成 DrawingManager 控件，支持手动在地图上绘制矩形、圆形、多边形围栏；封装围栏参数配置面板（名称、告警阈值、关联设备列表）。',
                 requirement: '用户需要直观地在地图上绘制地理围栏，设置围栏属性和关联设备。',
                 implementation: '1. 集成 Google Maps DrawingManager 控件；2. 自定义绘制工具栏，支持矩形、圆形、多边形绘制；3. 实现围栏编辑功能（移动、调整大小、删除）；4. 封装围栏配置面板，支持设置名称、告警阈值、关联设备。',
@@ -175,8 +296,8 @@ export const companies: Company[] = [
                   { problem: '多边形顶点编辑复杂', solution: '提供顶点拖拽和删除功能' }
                 ]
               },
-              { 
-                title: '性能优化 - Canvas 与空间索引', 
+              {
+                title: '性能优化 - Canvas 与空间索引',
                 detail: '使用 Canvas 渲染模式替代 DOM 标记，应对千级设备同屏场景；引入 Supercluster 实现设备点聚合；Web Worker 线程计算设备与围栏的空间关系。',
                 requirement: '当设备数量达到数千个时，传统 DOM 渲染方式性能严重下降。',
                 implementation: '1. 使用 Canvas 绑定层渲染大量设备标记；2. 引入 Supercluster 实现设备点聚合，根据缩放级别动态调整聚合粒度；3. 使用 Web Worker 计算设备与围栏的空间关系，避免阻塞主线程；4. 实现视口裁剪，只渲染可见区域内的设备。',
@@ -204,8 +325,8 @@ export const companies: Company[] = [
             business: '可视化配置自动化规则，将复杂逻辑抽象为「条件节点 + 动作节点」的树形结构；支持 8 种条件类型（如温度>30℃、时间触发、设备状态变化）和 40+ 种动作（如发送邮件、开关设备、HTTP 回调）；规则下发至边缘网关或云端执行引擎执行。',
             tech: ['React', '拖拽编排', 'MQTT', 'WebSocket', 'DSL'],
             approach: [
-              { 
-                title: '条件节点与动作节点设计', 
+              {
+                title: '条件节点与动作节点设计',
                 detail: '将规则抽象为「条件节点（如：温度>30℃）」与「动作节点（如：发送邮件/开关设备）」，通过树形结构组合。',
                 requirement: '用户需要可视化配置自动化规则，规则逻辑可能包含复杂的条件组合和动作序列。',
                 implementation: '1. 定义条件节点类型（数值比较、时间触发、设备状态变化等）；2. 定义动作节点类型（发送邮件、开关设备、HTTP 回调等）；3. 使用树形数据结构表示规则逻辑；4. 实现节点间的逻辑关系（AND/OR/NOT）。',
@@ -221,8 +342,8 @@ export const companies: Company[] = [
                   { problem: '逻辑关系表达复杂', solution: '提供预设模板和可视化辅助' }
                 ]
               },
-              { 
-                title: '拖拽式规则编排', 
+              {
+                title: '拖拽式规则编排',
                 detail: '实现节点拖拽、连接线绘制、参数配置等交互，支持规则的保存、复制、导入导出。',
                 requirement: '用户需要直观地通过拖拽方式构建规则，支持规则的复用和分享。',
                 implementation: '1. 使用 react-flow 或自定义拖拽实现节点编排；2. 实现节点拖拽放置、连接线绘制、删除等交互；3. 支持规则的保存、复制、导入导出；4. 实现规则模板功能，支持快速创建常见规则。',
@@ -238,8 +359,8 @@ export const companies: Company[] = [
                   { problem: '大规模规则卡顿', solution: '实现虚拟滚动和按需渲染' }
                 ]
               },
-              { 
-                title: '规则下发与设备联动', 
+              {
+                title: '规则下发与设备联动',
                 detail: '规则保存后通过 MQTT/WebSocket 下发至边缘网关或云端执行引擎，实时监控规则触发状态与执行日志。',
                 requirement: '规则需要下发到边缘网关或云端执行，支持离线场景下的规则执行。',
                 implementation: '1. 将规则转换为可执行的 JSON 格式；2. 通过 MQTT/WebSocket 下发到执行引擎；3. 实现规则版本管理和增量更新；4. 实时监控规则执行状态和日志。',
@@ -255,8 +376,8 @@ export const companies: Company[] = [
                   { problem: '规则冲突检测', solution: '规则下发前进行冲突检测' }
                 ]
               },
-              { 
-                title: '复杂条件表达式解析', 
+              {
+                title: '复杂条件表达式解析',
                 detail: '设计条件表达式 DSL，支持AND/OR/NOT逻辑组合、时间窗口、设备属性阈值等多维度条件表达。',
                 requirement: '规则条件可能包含复杂的逻辑组合和时间窗口限制。',
                 implementation: '1. 设计条件表达式 DSL，支持 AND/OR/NOT 逻辑；2. 实现表达式解析器和执行器；3. 支持时间窗口、设备属性阈值等条件；4. 实现表达式验证和错误提示。',
@@ -659,7 +780,7 @@ export const companies: Company[] = [
           {
             title: '蓝牙扫描与连接',
             icon: '📡',
-            business: '扫描发现附近的星纵传感器设备，展示设备名称、信号强度、剩余电量等信息，建立蓝牙连接进行数据交互。',
+            business: '扫描发现附近的工业传感器设备，展示设备名称、信号强度、剩余电量等信息，建立蓝牙连接进行数据交互。',
             tech: ['UniApp', '蓝牙 BLE', '状态机'],
             futurePlans: [
               '支持多设备同时连接，实现批量激活',
@@ -668,9 +789,9 @@ export const companies: Company[] = [
             approach: [
               {
                 title: '蓝牙扫描与筛选',
-                detail: '利用设备广播名过滤星纵设备，解析广播数据中的传感器型号和电量信息。',
+                detail: '利用设备广播名过滤工业设备，解析广播数据中的传感器型号和电量信息。',
                 requirement: '现场可能有多个传感器同时广播，需要快速准确识别目标设备。',
-                implementation: '1. 调用 uni.startBluetoothDeviceDiscovery 开始扫描；2. 通过广播名过滤 Milesight 设备；3. 解析广播数据中的型号、电量、信号强度；4. 按 RSSI 排序展示设备列表。',
+                implementation: '1. 调用 uni.startBluetoothDeviceDiscovery 开始扫描；2. 通过广播名过滤 目标设备；3. 解析广播数据中的型号、电量、信号强度；4. 按 RSSI 排序展示设备列表。',
                 tech: ['蓝牙 BLE', '广播数据解析', 'RSSI'],
                 selectionReason: '蓝牙 BLE 是最低功耗的设备发现方式，适合电池供电的传感器。',
                 alternatives: [
@@ -799,7 +920,7 @@ export const companies: Company[] = [
           { title: '离线优先设计', detail: '核心功能不依赖网络，蓝牙配网和本地存储确保在现场无网络环境下也能正常工作。' }
         ],
         futurePlans: [
-          '扩展支持 LoRaWAN 设备激活，完善星纵产品线全场景覆盖',
+          '扩展支持 LoRaWAN 设备激活，完善传感器产品线全场景覆盖',
           '增加设备诊断功能，通过蓝牙读取传感器更多运行状态',
           '探索 Apple Watch / 安卓手表适配，进一一部降低操作门槛'
         ]
@@ -807,14 +928,14 @@ export const companies: Company[] = [
     ]
   },
   {
-    name: '深圳高速工程顾问有限公司',
-    shortName: '高速工程顾问',
+    name: '工程管理平台项目',
+    shortName: '工程平台',
     period: '2020.12 - 2023.01',
     position: '前端开发工程师',
     icon: '🏗️',
     color: 'blue',
     gradient: 'from-blue-400 to-cyan-300',
-    summary: '高速工程顾问是由深圳高速公路股份有限公司（深高速，A+H 股上市）发起设立的工程咨询公司，业务覆盖工程全生命周期（咨询、勘察、设计、监理、检测、养护等），深度集成 BIM、3DGIS、北斗等技术，参与港珠澳大桥、深中通道等国家重点工程。主导玄同微前端架构体系建设（基于 single-spa，整合 Svelte 与 React 跨框架子应用），构建个人/岗位/应用/用户四层 RBAC 权限体系（精确到按钮级），推进 TypeScript 覆盖率从 5% 提升至 40%，独立承担平台约 70% 页面开发。',
+    summary: '主导微前端企业管理平台建设，整合 Svelte 与 React 子应用；构建个人、岗位、应用、用户多层 RBAC 权限体系，参与工程、合同段、流程和电子签章等业务模块研发。',
     totalStats: [
       { label: 'TS 覆盖率提升', value: '5%→40%' },
       { label: '页面开发占比', value: '70%' },
@@ -823,11 +944,11 @@ export const companies: Company[] = [
     ],
     projects: [
       {
-        title: '玄同微前端企业管理平台',
+        title: '微前端企业管理平台',
         role: '前端负责人',
         period: '2022.01 - 2022.07',
         icon: '🏗️',
-        description: '基于 single-spa 的微前端架构企业管理平台，平台命名为"玄同"，整合 Svelte 与 React 跨框架子应用，深度集成政务级电子签章服务。',
+        description: '基于 single-spa 的微前端架构企业管理平台，整合 Svelte 与 React 跨框架子应用，深度集成政务级电子签章服务。',
         tags: ['React', 'single-spa', '微前端'],
         metrics: [
           { value: '5%→40%', label: 'TypeScript 覆盖率提升', detail: '从几乎无类型的 JS 代码库，逐步迁移到 40% TS 覆盖，类型安全大幅增强' },
@@ -1210,19 +1331,210 @@ export const companies: Company[] = [
   {
     name: '个人开源项目',
     shortName: '个人项目',
-    period: '2025.11 - 至今',
-    position: '独立开发者',
+    period: '2024 - 持续迭代',
+    position: '独立开发',
     icon: '🚀',
     color: 'purple',
     gradient: 'from-purple-400 to-pink-300',
-    summary: '独立完成多个全栈项目，涵盖 GIS 数据可视化、企业级管理系统、跨平台聊天应用等方向。',
+    summary: '独立开发多个开源项目，涵盖桌面工作台、GIS 信息可视化、企业管理、实时通信与工业自动化等方向。',
     totalStats: [
-      { label: '开源项目', value: '4个' },
-      { label: '技术栈覆盖', value: '全栈' },
-      { label: 'GitHub Stars', value: '持续增长' },
-      { label: '跨平台支持', value: '5端' }
+      { label: '开源项目', value: '5 个' },
+      { label: '项目方向', value: 'Web / 桌面 / GIS / IoT' },
+      { label: '开发模式', value: '独立设计与实现' }
     ],
     projects: [
+      {
+        title: 'Bench 桌面工作台',
+        role: '独立开发',
+        period: '持续迭代',
+        icon: '▣',
+        description: '基于 Tauri v2 的 macOS 优先本地桌面工作台，整合应用管理、隔离账号与系统设置；2.0 正推进插件化，目标平台真实验收尚未完成。',
+        tags: ['Tauri v2', 'React', 'TypeScript', 'Rust', '桌面应用'],
+        link: 'https://github.com/indredK/bench',
+        metrics: [],
+        approach: [
+          {
+            title: '桌面工作台与插件化架构',
+            detail: '把应用管理、隔离账号与系统控制收敛到统一桌面入口，并通过 feature 分层和插件边界承接持续扩展。',
+            requirement: '面向需要频繁启动桌面应用、维护多个隔离登录态并调整系统设置的重度用户。核心流程依赖本机能力，单纯 Web 页面难以提供一致的系统访问与账号隔离体验；新增工具也需要明确的模块边界。',
+            implementation: '以 Tauri v2 作为桌面宿主，React/TypeScript 负责界面，Rust 负责系统能力；前端按 feature 分层，系统命令通过类型化 IPC contract。2.0 采用 B′ 插件架构：宿主加载前端 bundle，在独立 WebView 中渲染插件界面，后端通过 IPC 白名单网关暴露受控能力。应用管理按 bundled extension 由插件中心打开；插件包完整性与正式包集成仍在待办中。',
+            tech: ['Tauri v2', 'React 19', 'TypeScript', 'Rust', '独立 WebView', 'IPC ACL'],
+            selectionReason: 'Bench 的主要功能需要完整 UI，B′ 能加载插件页面，同时保留宿主对插件能力的控制。相较早期 B-lite（WASM/sidecar/远程），该方案不依赖 Wasmtime，并通过 IPC 白名单限制插件可调用的后端能力。',
+            alternatives: [
+              {
+                name: '静态内置 feature 模块',
+                pros: '构建、权限和发布链路较直接。',
+                cons: '无法满足插件中心按需扩展及插件市场的产品目标。'
+              },
+              {
+                name: 'B-lite：WASM / sidecar / 远程能力（早期提案）',
+                pros: '可按计算、重型和远程能力区分插件执行形态。',
+                cons: '难以覆盖以完整界面为主的插件需求，且需要维护额外运行时。'
+              },
+              {
+                name: 'B′：独立 WebView + 前端 bundle + IPC 白名单（当前方案）',
+                pros: '插件可以提供完整界面，宿主仍控制可调用命令和能力边界。',
+                cons: '需要额外完成包完整性校验、降级防护、bundled 集成与目标平台发布验证。',
+                selected: true
+              }
+            ],
+            challenges: [
+              {
+                problem: '插件页面需要动态加载，但本机系统能力与数据不能直接暴露给下载的前端代码。',
+                solution: '插件 UI 在独立 WebView 中运行，只能通过宿主登记的 IPC 白名单和 ACL 请求能力；manifest 由受控 registry 提供，插件不能自行指定最终下载地址。'
+              },
+              {
+                problem: '新架构可以运行不代表可安全发布；Windows CI 当前暂停，包完整性安全地基与 bundled 发布集成尚未完成。',
+                solution: '按 P0–P6 分阶段推进，把包校验/降级防护、Windows 门禁和 bundled 集成列为明确前置；在目标平台证据齐全前保留待验收状态。'
+              }
+            ]
+          },
+          {
+            title: '统一应用清单与安全管理',
+            detail: 'Quick Launch 与 App Manager 复用后端应用清单；渲染层提交稳定 appId，由 Rust 解析并执行启动或管理操作。',
+            requirement: 'macOS 应用包与 Windows 的 EXE/MSI、注册表、Start Apps 和 AUMID 来源不同。快速启动和应用管理若各自扫描，会造成分类、更新状态和操作目标不一致；升级、卸载等破坏性操作还需要确认准确的软件身份。',
+            implementation: '应用清单由 Rust 后端统一发现与维护，覆盖 macOS `.app`、bundle 和安装来源，以及 Windows EXE/MSI、Registry、Start Apps 与 AUMID。插件界面提供搜索、分类、排序、用户覆盖和虚拟化网格。启动仅提交稳定 appId，由后端解析目标；更新/卸载校验 receipt、package ID 或 ProductCode，并经过 HTTPS、签名/哈希、架构和资源上限等检查。',
+            tech: ['Rust', 'Tauri IPC', '稳定 appId', '系统应用清单', '虚拟化列表'],
+            selectionReason: 'Quick Launch 和 App Manager 共享一份后端清单可避免扫描结果与状态漂移；由 Rust 根据 appId 解析目标，比信任 renderer 传入任意路径更容易验证身份并控制高风险操作。',
+            alternatives: [
+              {
+                name: '插件各自维护应用清单',
+                pros: '模块内部可以独立演进和展示。',
+                cons: '扫描、分类、更新状态可能重复实现并产生不一致。'
+              },
+              {
+                name: '共享后端清单 + appId（当前方案）',
+                pros: '启动和管理使用同一来源，后端可统一验证平台标识与操作目标。',
+                cons: '需要维护跨平台标识映射和 provider 能力状态。',
+                selected: true
+              },
+              {
+                name: '渲染层直接传入可执行路径',
+                pros: '调用链较短，前端实现简单。',
+                cons: '扩大不可信 UI 对本机执行目标的控制范围，难以保证路径与已发现应用身份一致。'
+              }
+            ],
+            challenges: [
+              {
+                problem: '不同操作系统的安装来源和管理接口不统一，部分应用也没有可安全卸载的包身份。',
+                solution: '按平台解析应用标识，provider 对每项操作返回 ok、partial、unsupported 或 failed；只有取得可验证的 receipt、package ID 或 ProductCode 才允许破坏性更新/卸载。'
+              },
+              {
+                problem: '插件化迁移与正式分发存在独立门禁，代码接线完成不能代表插件已随正式包可用。',
+                solution: '把插件包完整性校验、bundled 发布集成与目标平台 smoke 留作明确发布前置条件，不把待验收能力描述为已正式交付。'
+              }
+            ]
+          },
+          {
+            title: '隔离账号与会话生命周期',
+            detail: '账号拥有独立 WebView 数据目录；凭据加密持久化，会话恢复先经过认证探测再更新就绪状态。',
+            requirement: '同一站点的多个账号需要并存，Cookie、Web Storage 和登录态必须互不串号；同时需要支持会话保存/恢复、登录状态探测以及外部应用发起的登录代理。',
+            implementation: '每个账号使用独立 WebView data directory/data store。主密钥存入 macOS Keychain 或 Windows Credential Manager，凭据与 Session 使用 AES-256-GCM 加密。恢复流程按 canonical expiry 和精确 origin 处理 Cookie/Storage，并限制 IndexedDB schema；随后执行 HTTP、WebView 或 Hybrid probe，确认登录状态后才标记 Ready。外部登录通过 bench-auth://、一次性 ticket 及 callback/state/origin 校验传递结果。',
+            tech: ['Tauri WebView', 'Rust', 'AES-256-GCM', 'Keychain / Credential Manager', 'HTTP/WebView/Hybrid probe'],
+            selectionReason: '账号级独立数据目录从存储层隔离登录态；系统凭据库保护加密主密钥，AES-GCM 保护持久化内容。恢复后的 probe 用真实认证结果确认状态，避免仅凭本地数据存在就误报已登录。',
+            alternatives: [
+              {
+                name: '多个账号共用 WebView 数据目录',
+                pros: '窗口和数据管理较简单。',
+                cons: 'Cookie 与站点存储共享，容易出现账号状态串扰。'
+              },
+              {
+                name: '每账号独立存储 + 加密恢复（当前方案）',
+                pros: '把账号边界落到 WebView 数据目录，并能在恢复后重新验证登录状态。',
+                cons: '需要分别处理平台 Keyring、WebView、Cookie 与 Storage 能力差异。',
+                selected: true
+              },
+              {
+                name: '只恢复本地 Session 快照并直接设为已登录',
+                pros: '恢复过程快，逻辑较少。',
+                cons: '无法证明服务端仍接受 Session，过期或失效数据会造成错误的 Ready 状态。'
+              }
+            ],
+            challenges: [
+              {
+                problem: '平台 WebView、Keyring 和 Cookie 能力并不完全一致，少数存储类型无法安全降级。',
+                solution: '后端逐项回报 supported、partial、unsupported 或 failed；受限能力禁用并说明原因。Tauri 不提供 partitioned Cookie key 时，不把该 Cookie 降级送入 HTTP probe。'
+              },
+              {
+                problem: '并发刷新或外部回调可能造成重复认证请求、账号状态竞态或不可信 URL 进入前端状态。',
+                solution: '按账号 single-flight，限制并发和瞬态重试预算；外部登录使用一次性 ticket 并精确校验 callback、state 与 origin，原始敏感 URL 不进入前端 store。'
+              }
+            ]
+          },
+          {
+            title: '可验证的系统设置操作',
+            detail: '系统设置限定为受控子集；写入后重新读取并核对目标值，失败或不支持时明确反馈。',
+            requirement: '用户希望从工作台快速调整 Dock、Finder、截图、键盘、网络和授权等常用设置，但设置接口受系统版本、隐私权限与平台限制影响；不能把写入命令发出就当成操作成功。',
+            implementation: '前端按领域组合设置页面，Rust 后端以 dock、finder、display、keyboard、network、privacy、screenshot 等 adapter 读写。流程为读取基线、执行受控 adapter、重新读取并比较目标值，再更新 UI 或报告失败。通过 capability 层呈现 unsupported；权限拒绝、timeout 和读取异常保留稳定错误，不回退成 false。',
+            tech: ['React', 'Rust adapters', 'Tauri IPC', 'Capability API', 'i18next'],
+            selectionReason: '领域 adapter 将系统版本差异和原生 API 隔离在后端；类型化参数禁止 renderer 拼接 shell 命令，read-after-write 则确保 UI 展示来自回读证据，而不是乐观假成功。',
+            alternatives: [
+              {
+                name: 'renderer 直接拼接 shell / defaults 命令',
+                pros: '实现入口少，原型验证快。',
+                cons: '命令输入边界弱，系统版本差异和失败状态容易扩散到组件。'
+              },
+              {
+                name: 'Rust 领域 adapter + 读写回读（当前方案）',
+                pros: '命令参数结构化、平台边界集中，能校验设置是否真实生效。',
+                cons: '每个设置都需要确认真实控制接口并处理权限、版本和错误分支。',
+                selected: true
+              },
+              {
+                name: '只展示跳转到系统设置',
+                pros: '权限风险最低，系统负责最终操作。',
+                cons: '无法在工作台内完成可控的常用设置流程，也缺少操作结果反馈。'
+              }
+            ],
+            challenges: [
+              {
+                problem: 'TCC、辅助功能权限、System Events 和系统版本变更可能导致同一设置的读取或写入失败。',
+                solution: '为 adapter 设置 timeout 与结构化错误；高影响操作二次确认。写入后回读不一致即视为失败，无法稳定控制时保留只读状态或显示系统设置入口。'
+              }
+            ]
+          },
+          {
+            title: '桌面工具集与能力边界',
+            detail: '围绕开发者和桌面重度用户聚合命令、网络诊断、开发工具与轻量插件，并按实际平台能力呈现入口。',
+            requirement: '应用启动、命令运行、网络排障、端口检查和硬件/术语查询分散在多个系统工具与页面中；工作台需要提供统一入口，同时避免把尚未实现或当前平台不支持的能力显示成可用功能。',
+            implementation: '在主工作台中组合 Command Center、Network Probe、Dev Toolbox，以及 Clean Space、Hardware Compare、Terminology 等工具/插件。Command Center 将 shell、shellAdmin、copy、open 等动作做成可排序、可导入导出的命令卡片，并支持终止运行任务；插件由 manifest 描述能力和权限，宿主按 capability 状态启用、降级或禁用入口。全局提供中英文、主题、菜单栏托盘和带 minisign 校验的应用内更新。',
+            tech: ['Tauri v2', 'Rust commands', 'Extension manifest', 'Capability matrix', 'i18next', 'Zustand'],
+            selectionReason: '轻量工具适合用统一工作台降低切换成本，但各模块的平台权限和成熟度不同。按领域隔离实现、用 manifest/ACL 管理扩展，并用 capability 状态驱动 UI，可以复用宿主体验而不把未支持功能伪装为成功。',
+            alternatives: [
+              {
+                name: '将全部工具硬编码在单一页面',
+                pros: '入口直接，初期接线较少。',
+                cons: '功能列表和平台差异集中在宿主 UI，持续增加工具会扩大耦合。'
+              },
+              {
+                name: '每类工具拆成独立桌面应用',
+                pros: '各工具可以独立发布和维护。',
+                cons: '用户需要在多个应用间切换，公共导航、主题和权限提示难以统一。'
+              },
+              {
+                name: '宿主工作台 + manifest/ACL 扩展（当前方向）',
+                pros: '保留统一桌面入口，同时可按模块扩展和声明能力边界。',
+                cons: '增加插件兼容、包校验、生命周期与发布链路的治理成本。',
+                selected: true
+              }
+            ],
+            challenges: [
+              {
+                problem: 'Clean Space、Hardware、System Settings 等能力为 macOS 专属，插件和 Network Probe 功能也按阶段交付。',
+                solution: '按平台能力矩阵显示 supported、partial、unsupported 或 failed，明确标出 Post-MVP/未验收项；对不可用能力禁用具体操作并提供原因。'
+              },
+              {
+                problem: '插件中心允许扩展功能，也带来版本、权限和分发完整性风险。',
+                solution: '通过 manifest、ACL 白名单、签名校验与发布门禁控制扩展边界；包完整性和 bundled/Windows 正式发布验收完成前不将其描述为发布就绪。'
+              }
+            ]
+          }
+        ],
+        futurePlans: [
+          '完成插件包完整性与降级防护；bundled 正式包集成和恢复 Windows release 门禁仍未完成，插件市场能力按路线图继续推进。',
+          '完成 macOS 14+ 与 Windows 11 的真实应用清单、启动/更新/卸载及账号会话验收；macOS 系统设置补齐权限拒绝、read-after-write 与回滚验证，并完成 500+ 应用性能检查。'
+        ]
+      },
       {
         title: '中国历史全视界',
         role: '独立开发',
@@ -1328,8 +1640,8 @@ export const companies: Company[] = [
 ]
 
 export const principles: Principle[] = [
-  { icon: '📊', title: '量化先行', desc: '用具体数据衡量问题严重程度，而不是靠"感觉慢"来做判断。' },
-  { icon: '🔬', title: '根因分析', desc: '追溯性能瓶颈的根本原因，避免"头痛医头"的临时方案。' },
-  { icon: '🧪', title: '方案验证', desc: '每个优化方案上线前，必须有对比实验和数据支撑。' },
-  { icon: '🔄', title: '持续迭代', desc: '性能优化没有终点，建立监控体系实现持续改进。' }
+  { icon: '◇', title: '先拆业务边界', desc: '先对齐流程、数据和权限，再组织页面状态与组件职责。' },
+  { icon: '▦', title: '优先复用共性', desc: '将稳定的交互和跨端能力收敛到明确模块，减少重复实现。' },
+  { icon: '↔', title: '保持端间一致', desc: '显式处理平台差异，并检查不同入口下的状态和操作反馈。' },
+  { icon: '✓', title: '以验证闭环', desc: '通过接口联调、多端运行和端到端场景确认交付结果。' }
 ]

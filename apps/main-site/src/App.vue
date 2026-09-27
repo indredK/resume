@@ -33,19 +33,13 @@
           <div>
             <p class="footer-title font-display">Portfolio Hub</p>
             <p class="footer-body">
-              Zhong 的个人技术能力展示中心。<br>
+              个人技术能力展示中心。<br>
               专注 IoT 物联网与高性能 Web 架构设计。
             </p>
           </div>
           <div>
             <p class="footer-label">联系方式</p>
             <ul class="footer-list">
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="footer-icon" aria-hidden="true">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.28-2.28a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                </svg>
-                <span class="font-mono">{{ CONTACT.phoneDisplay }}</span>
-              </li>
               <li>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="footer-icon" aria-hidden="true">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
@@ -61,7 +55,7 @@
               <span>Vite</span><span aria-hidden="true">·</span>
               <span>TailwindCSS</span>
             </div>
-            <p class="footer-credit font-mono">© 2026 Zhong Youshen · Built with Passion.</p>
+            <p class="footer-credit font-mono">© 2026 Portfolio Hub.</p>
           </div>
         </div>
       </div>
@@ -77,6 +71,7 @@ const navItems = [
   { name: '简历', path: '/' },
   { name: '技能树', path: '/skills' },
   { name: '成果', path: '/case-studies' },
+  { name: 'AI 实践', path: '/ai-agent' },
   { name: '关于我', path: '/about' }
 ]
 </script>
@@ -186,6 +181,36 @@ const navItems = [
   bottom: -0.2rem;
   height: 1px;
   background: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .brand-name {
+    display: none;
+  }
+
+  .site-header nav > div {
+    flex: 1;
+    min-width: 0;
+    gap: 0.35rem;
+  }
+
+  .nav-tabs {
+    flex: 1;
+    min-width: 0;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-tab {
+    flex: 0 0 auto;
+    padding-inline: 0.38rem;
+    font-size: 0.68rem;
+  }
 }
 
 /* ============================================================

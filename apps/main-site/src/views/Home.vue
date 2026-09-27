@@ -1,15 +1,15 @@
 <template>
   <div class="home-page animate-fade-in">
     <!-- ============================================================
-     * Hero — name, role, contact CTAs, stats
+     * Hero — role, contact CTAs, stats
      * ============================================================ -->
     <section class="hero">
       <div class="container mx-auto px-6 hero-grid">
         <div class="hero-lead">
-          <div class="hero-eyebrow font-mono">前端开发工程师 · 5 年经验</div>
-          <h1 class="hero-name font-display">Zhong</h1>
+          <div class="hero-eyebrow font-mono">前端开发工程师 · 近 6 年经验</div>
+          <h1 class="hero-name font-display">Frontend</h1>
           <p class="hero-tagline">
-            深耕 <strong>IoT 物联网</strong> 与 <strong>微前端架构</strong>。擅长复杂权限体系、工业数据可视化与组件化架构设计,具备从 0 到 1 构建系统能力。
+            使用 <strong>Vue / React</strong> 构建企业级 Web 与多端应用，覆盖物联网和业务管理场景；关注复杂流程拆解、组件复用与跨端体验一致性。
           </p>
           <div class="hero-ctas">
             <a :href="`mailto:${CONTACT.email}`" class="cta-btn">
@@ -19,12 +19,6 @@
               </svg>
               <span>Email</span>
             </a>
-            <span class="cta-btn cta-static">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="cta-icon" aria-hidden="true">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.28-2.28a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-              </svg>
-              <span class="font-mono">{{ CONTACT.phoneDisplay }}</span>
-            </span>
             <a :href="CONTACT.github" target="_blank" rel="noopener noreferrer" class="cta-btn">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="cta-icon" aria-hidden="true">
                 <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A3.37 3.37 0 0 0 22.42 4.42 3.37 3.37 0 0 0 21.31.52S19.95.11 16.89 2.12a11.36 11.36 0 0 0-6 0C7.71.11 6.35.52 6.35.52a3.37 3.37 0 0 0-1.11 3.9 3.37 3.37 0 0 0-1.31 2.38c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9.43 16.5V22" />
@@ -71,9 +65,9 @@
           </section>
 
           <section>
-            <h2 class="section-title font-display"><span>核心项目经历</span></h2>
+            <h2 class="section-title font-display"><span>代表项目经历</span></h2>
             <div class="project-stack">
-              <article v-for="project in projects.slice(0, 3)" :key="project.title" class="project-card">
+              <article v-for="project in projects" :key="project.title" class="project-card">
                 <header class="project-header">
                   <span class="project-icon" aria-hidden="true">{{ project.icon }}</span>
                   <h3 class="project-title font-display">{{ project.title }}</h3>
@@ -120,7 +114,7 @@
             <h2 class="section-title font-display"><span>自我评价</span></h2>
             <div class="panel panel-prose">
               <p>
-                精通 Vue3 与 React 双框架,具备从 0 到 1 构建复杂系统的完整能力。5 年企业级后台系统与物联网平台开发经验,主导过多个大型项目的前端架构设计。擅长复杂权限体系、工业数据可视化、微前端架构设计与组件化开发。注重工程化实践与代码质量,具备优秀的技术领导力和跨团队协作能力。
+                具备近六年前端开发经验，覆盖企业级管理系统、物联网平台与 H5 / App / 小程序。熟悉 Vue、React 与微前端实践，能从需求梳理、模块设计和接口协同推进到多端验收；重视可复用组件、权限边界、状态一致性与工程质量。
               </p>
             </div>
           </section>
@@ -131,83 +125,93 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { CONTACT } from '@/data/contact'
 
-const statistics = ref([
-  { label: 'Experience', value: '5+' },
-  { label: 'IoT Projects', value: '40+' },
-  { label: 'Sub-apps', value: '4' },
-  { label: 'Open Source', value: '3+' }
-])
+const statistics = [
+  { label: '从业经验', value: '近 6 年' },
+  { label: '主力框架', value: 'Vue / React' },
+  { label: '交付形态', value: '多端应用' },
+  { label: '项目领域', value: 'IoT / 企业应用' }
+]
 
-const skillSummary = ref([
-  { title: '框架与语言', items: ['Vue 3', 'React', 'TypeScript', 'UniApp', 'Svelte'] },
-  { title: '工程化与 UI', items: ['Vite', 'single-spa', 'Ant Design', 'Element Plus', 'ECharts'] },
-  { title: '业务与可视化', items: ['WebSocket', 'MQTT', 'RBAC 权限', 'GIS 地图', '工业 IoT'] }
-])
+const skillSummary = [
+  { title: '框架与语言', items: ['Vue 3', 'React', 'TypeScript', 'uni-app'] },
+  { title: '工程化与 UI', items: ['Vite', 'single-spa', 'Pinia', 'ECharts', 'Vue I18n'] },
+  { title: '质量与交付', items: ['Playwright', 'Vitest', 'CI/CD', '多端验收'] },
+  { title: '业务能力', items: ['多端适配', '权限路由', '流程与消息', '接口联调'] }
+]
 
-const projects = ref([
+const projects = [
   {
-    title: '星纵云物联网管理平台',
+    title: '多端业务管理应用',
     highlights: [
-      '主导实时仪表盘开发,利用 WebSocket + 请求合并解决 200+ 传感器高频刷新下的卡顿问题',
-      '设计可视化规则引擎,支持 8 种条件组合与 40+ 种触发动作,显著提升配置效率',
-      '实现设备全生命周期管理流程(注册 → 配置 → 监控 → 升级 → 维护)'
+      '基于 uni-app、Vue 3 与 Pinia 交付 H5、App 和微信小程序端功能',
+      '覆盖销售、拜访、活动、申请审批、待办消息、附件资料与考核报表等业务',
+      '完成真实接口联调、SSO 登录接入、SignalR 消息推送及 Playwright 端到端验收'
     ],
-    icon: '☁︎',
+    icon: '◇',
+    duration: '2026.07 — 2026.08'
+  },
+  {
+    title: '物联网设备管理平台',
+    highlights: [
+      '参与设备管理、规则配置与数据可视化等平台模块开发',
+      '优化实时数据更新与页面渲染，改善高频刷新场景下的交互流畅度',
+      '通过组件拆分与状态管理优化，提升模块可维护性'
+    ],
+    icon: '◈',
     duration: '2023.02 — 2024.07'
   },
   {
-    title: '微前端企业管理平台',
+    title: '企业管理平台微前端改造',
     highlights: [
-      '处理 Svelte 与 React 跨框架生命周期通信,解决样式冲突与全局状态污染',
-      '构建覆盖个人/岗位/应用/用户的四层权限体系,承担组织管理、个人中心等 70% 页面开发',
-      '主导 4 个子应用从 JS/Class 到 TS/Hooks 的全面升级,类型覆盖率提升至 40%'
+      '参与跨框架子应用集成与生命周期协作，处理样式隔离和状态通信',
+      '建设动态路由与角色权限能力，抽离可复用组件和组合式逻辑',
+      '推动历史模块向 TypeScript 与现代组件模式渐进迁移'
     ],
     icon: '◫',
     duration: '2022.01 — 2022.07'
   },
   {
-    title: '特殊网关后台系统',
+    title: 'Bench 桌面工作台 · 开源',
     highlights: [
-      '设计模块化组件体系,为后续 9 种网关型号扩展提供统一技术框架',
-      '主导从 jQuery 到 React 的架构迁移,建立标准化的前端工程化规范',
-      '实现设备参数配置、状态监控与权限管理功能'
+      '基于 Tauri v2、React、TypeScript 与 Rust 构建 macOS 优先的桌面工作台',
+      '围绕应用管理、隔离账号和系统设置组织核心能力，并持续推进插件化扩展',
+      '关注插件权限边界、账号数据隔离与真实平台验收，项目持续迭代中'
     ],
-    icon: '◊',
-    duration: '2025.02 — 2025.07'
+    icon: '▣',
+    duration: 'GitHub · 持续迭代'
   }
-])
+]
 
-const experiences = ref([
+const experiences = [
   {
     period: '2023.02 — 2025.11',
-    company: '厦门星纵物联科技有限公司',
+    company: '物联网科技企业',
     position: '前端开发工程师',
-    techStack: ['React', 'Vue 3', 'WebSocket', 'ECharts', 'UniApp', 'MQTT'],
-    summary: '负责物联网平台核心开发,主导网关系统架构升级与传感器配置移动端应用。',
+    techStack: ['React', 'Vue 3', 'WebSocket', 'ECharts', 'uni-app'],
+    summary: '负责物联网平台、设备管理界面与跨端配置工具的前端研发。',
     details: [
-      '支撑 40+ 类工业设备与 200+ 种传感器的接入管理,独立负责设备管理、规则引擎等核心模块',
-      '基于 UniApp 独立开发 Toolbox App,支持蓝牙/WiFi 扫描及固件升级,解决工业现场调试痛点',
-      '主导特殊网关后台从 jQuery 到 React 的完整迁移,设计可复用组件库支撑 9 种网关型号扩展',
-      '参与工业路由器 Web 管理后台开发,实现 LAN/WAN/VPN/APN 等复杂网络配置功能'
+      '参与设备管理、规则配置与数据可视化模块开发，优化实时数据展示与页面渲染',
+      '参与移动端设备配置工具研发，处理跨端界面、设备接入流程与异常状态反馈',
+      '推进既有设备管理后台的模块化改造，抽象通用组件并协同完成端侧接口联调',
+      '与后端、固件及产品角色协作，完成需求澄清、接口对接和问题定位'
     ]
   },
   {
     period: '2020.12 — 2023.01',
-    company: '深圳高速工程顾问有限公司',
+    company: '工程技术服务企业',
     position: '前端开发工程师',
-    techStack: ['React', 'single-spa', 'Ant Design', 'ECharts', 'Bpmn.js'],
-    summary: '主导微前端架构体系建设,构建颗粒度精确到按钮级的 RBAC 权限系统。',
+    techStack: ['Vue 3', 'React', 'single-spa', 'TypeScript', 'Pinia'],
+    summary: '参与企业管理平台研发，侧重微前端集成、权限路由与公共组件建设。',
     details: [
-      '主导 4 个子应用的从零构建与 single-spa 跨框架(Svelte/React)生命周期通信',
-      '构建覆盖个人/岗位/应用/用户的四层权限体系,承担组织管理、个人中心等 70% 页面开发',
-      '利用 React Hooks 对历史复杂组件进行逻辑重构,封装 5+ 种跨项目公共组件',
-      '深度集成网政通电子签章服务,实现工程建设合同线上签署全流程闭环'
+      '参与基于 single-spa 的微前端建设，协同不同框架子应用的挂载、通信与样式隔离',
+      '实现动态路由、角色权限与管理后台模块，完善前后端鉴权和页面访问控制',
+      '使用组合式逻辑重构历史组件，抽离跨模块复用的 UI 与业务能力',
+      '参与 JavaScript 向 TypeScript 的渐进迁移，改善代码类型约束和维护体验'
     ]
   }
-])
+]
 </script>
 
 <style scoped>

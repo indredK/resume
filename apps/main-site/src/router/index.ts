@@ -17,6 +17,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/CaseStudies.vue'),
   },
   {
+    path: '/ai-agent',
+    name: 'AIAgent',
+    component: () => import('@/views/AIExperience.vue'),
+  },
+  {
     path: '/about',
     name: 'About',
     component: () => import('@/views/About.vue'),
