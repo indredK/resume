@@ -19,7 +19,7 @@ import { RouterLink } from 'vue-router'
 
 <style scoped>
 .not-found {
-  min-height: calc(100vh - 61px);
+  min-height: calc(100dvh - var(--header-height));
   display: flex;
   align-items: center;
   justify-content: center;

@@ -116,6 +116,47 @@
         <header class="ai-section-head">
           <span class="ai-section-index font-mono">04</span>
           <div>
+            <h2 class="ai-section-title font-display">个人开源产品</h2>
+            <p class="ai-section-sub font-mono">BENCH · OPEN-SOURCE DESKTOP WORKSPACE</p>
+          </div>
+        </header>
+
+        <article class="bench-product">
+          <div class="bench-overview">
+            <div class="bench-product-heading">
+              <div>
+                <p class="bench-product-kicker font-mono">TAURI V2 · MACOS FIRST</p>
+                <h3 class="bench-product-title font-display">Bench 桌面工作台</h3>
+              </div>
+              <a
+                class="bench-github-link font-mono"
+                href="https://github.com/indredK/bench"
+                target="_blank"
+                rel="noopener noreferrer"
+              >GitHub <span aria-hidden="true">↗</span></a>
+            </div>
+            <p class="bench-product-summary">
+              我独立设计并持续开发的本地桌面工作台，将应用启动与管理、隔离账号和系统设置收拢到一个入口。使用 Tauri v2、React、TypeScript 与 Rust，把前端产品体验和受控的系统能力连接起来。
+            </p>
+            <div class="bench-tech-list" role="list" aria-label="Bench 技术栈">
+              <span v-for="tech in benchTech" :key="tech" role="listitem" class="ai-card-tag font-mono">{{ tech }}</span>
+            </div>
+          </div>
+
+          <div class="bench-practice-list">
+            <article v-for="item in benchPractices" :key="item.title" class="bench-practice">
+              <h4 class="bench-practice-title font-display">{{ item.title }}</h4>
+              <p>{{ item.description }}</p>
+            </article>
+            <p class="bench-status">持续迭代中 · 插件包完整性、正式包集成与目标平台验收仍在推进</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="ai-section">
+        <header class="ai-section-head">
+          <span class="ai-section-index font-mono">05</span>
+          <div>
             <h2 class="ai-section-title font-display">可复用的实践成果</h2>
             <p class="ai-section-sub font-mono">From one-off prompting to repeatable engineering assets</p>
           </div>
@@ -282,6 +323,23 @@ const enterprisePractices = [
   }
 ]
 
+const benchTech = ['Tauri v2', 'React 19', 'TypeScript', 'Rust']
+
+const benchPractices = [
+  {
+    title: '统一应用管理',
+    description: '快速启动与应用管理共用后端应用清单，通过稳定 appId 识别操作目标，减少扫描结果和应用状态不一致。'
+  },
+  {
+    title: '隔离本地账号',
+    description: '为账号提供独立 WebView 数据目录，并将系统能力放在 Rust 后端处理，明确界面与本机权限的边界。'
+  },
+  {
+    title: '受控插件架构',
+    description: '2.0 正推进独立 WebView 插件界面与 IPC 白名单，让插件能扩展功能，同时由宿主控制可调用的系统能力。'
+  }
+]
+
 const evidence = [
   {
     marker: 'A',
@@ -310,7 +368,7 @@ const evidence = [
 }
 
 .ai-hero {
-  padding: 3.8rem 0 3.1rem;
+  padding: 3rem 0 2.35rem;
   border-bottom: 1px solid var(--border-soft);
 }
 
@@ -332,18 +390,18 @@ const evidence = [
 
 .ai-title {
   max-width: 58rem;
-  margin-bottom: 1.2rem;
-  font-size: clamp(2.5rem, 7vw, 4.7rem);
+  margin-bottom: 0.95rem;
+  font-size: clamp(2.15rem, 5.2vw, 3.8rem);
   font-weight: 600;
   letter-spacing: -0.035em;
-  line-height: 1.04;
+  line-height: 1.08;
 }
 
 .ai-lead {
   max-width: 56rem;
   color: var(--muted);
-  font-size: 1.04rem;
-  line-height: 1.8;
+  font-size: 0.98rem;
+  line-height: 1.7;
 }
 
 .ai-hero-tags,
@@ -357,7 +415,7 @@ const evidence = [
 }
 
 .ai-hero-tags {
-  margin-top: 1.5rem;
+  margin-top: 1.1rem;
 }
 
 .ai-chip,
@@ -365,7 +423,7 @@ const evidence = [
 .ai-card-tag {
   display: inline-flex;
   align-items: center;
-  padding: 0.42rem 0.62rem;
+  padding: 0.36rem 0.55rem;
   border: 1px solid var(--border-soft);
   background: var(--surface);
   color: var(--muted);
@@ -380,30 +438,30 @@ const evidence = [
 .ai-content {
   display: flex;
   flex-direction: column;
-  gap: 4.5rem;
-  padding-top: 3.5rem;
+  gap: 3.2rem;
+  padding-top: 2.6rem;
   padding-bottom: 2rem;
 }
 
 .ai-section-head {
   display: flex;
   align-items: flex-start;
-  gap: 1.25rem;
-  margin-bottom: 1.7rem;
-  padding-bottom: 1.05rem;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.8rem;
   border-bottom: 1px solid var(--border-soft);
 }
 
 .ai-section-index {
   min-width: 2rem;
-  padding-top: 0.36rem;
+  padding-top: 0.25rem;
   color: var(--accent);
   font-size: 0.72rem;
 }
 
 .ai-section-title {
   margin-bottom: 0.35rem;
-  font-size: 1.65rem;
+  font-size: 1.42rem;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
@@ -415,7 +473,7 @@ const evidence = [
 }
 
 .ai-tool-cloud {
-  margin: 0 0 1.35rem 3.25rem;
+  margin: 0 0 1.1rem 3rem;
 }
 
 .ai-tool-pill {
@@ -431,12 +489,12 @@ const evidence = [
 }
 
 .ai-subsection-head {
-  margin: 1.75rem 0 1rem 3.25rem;
+  margin: 1.4rem 0 0.8rem 3rem;
 }
 
 .ai-subsection-title {
   margin-bottom: 0.35rem;
-  font-size: 1.08rem;
+  font-size: 1rem;
   font-weight: 600;
 }
 
@@ -452,20 +510,20 @@ const evidence = [
 
 .ai-card {
   min-width: 0;
-  padding: 1.35rem;
+  padding: 1.1rem;
   border: 1px solid var(--border-soft);
   background: var(--surface);
 }
 
 .ai-card-kicker {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.6rem;
   color: var(--faint);
   font-size: 0.62rem;
 }
 
 .ai-card-title {
-  margin-bottom: 0.7rem;
-  font-size: 1.25rem;
+  margin-bottom: 0.55rem;
+  font-size: 1.13rem;
   font-weight: 600;
 }
 
@@ -473,12 +531,12 @@ const evidence = [
 .workflow-body,
 .evidence-body {
   color: var(--muted);
-  font-size: 0.87rem;
-  line-height: 1.75;
+  font-size: 0.84rem;
+  line-height: 1.65;
 }
 
 .ai-card-tags {
-  margin-top: 1.1rem;
+  margin-top: 0.8rem;
   gap: 0.4rem;
 }
 
@@ -500,7 +558,7 @@ const evidence = [
 }
 
 .token-head {
-  margin-top: 2.1rem;
+  margin-top: 1.6rem;
 }
 
 .token-metric-grid {
@@ -517,7 +575,7 @@ const evidence = [
 }
 
 .token-metric-value {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.6rem;
   color: var(--accent);
   font-size: clamp(1.2rem, 2.4vw, 1.75rem);
   letter-spacing: -0.04em;
@@ -545,7 +603,7 @@ const evidence = [
 }
 
 .token-breakdown {
-  margin-top: 1.2rem;
+  margin-top: 1rem;
   border-top: 1px solid var(--border-soft);
 }
 
@@ -601,15 +659,15 @@ const evidence = [
 }
 
 .workflow-card {
-  min-height: 10.5rem;
-  padding: 1.2rem;
+  min-height: 9.25rem;
+  padding: 1rem;
   border-top: 2px solid var(--accent);
   background: var(--surface-elev);
 }
 
 .workflow-index {
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 0.7rem;
   color: var(--faint);
   font-size: 0.65rem;
 }
@@ -646,8 +704,8 @@ const evidence = [
   display: grid;
   grid-template-columns: 2.5rem minmax(0, 1fr) minmax(9rem, 0.55fr);
   align-items: start;
-  gap: 1rem;
-  padding: 1.25rem 0;
+  gap: 0.8rem;
+  padding: 1rem 0;
   border-bottom: 1px solid var(--border-soft);
 }
 
@@ -667,8 +725,8 @@ const evidence = [
 }
 
 .ai-footer-callout {
-  margin-top: 1.5rem;
-  padding: 1.35rem 1.5rem;
+  margin-top: 1.25rem;
+  padding: 1.1rem 1.25rem;
   border-left: 2px solid var(--accent);
   background: var(--surface-elev);
 }
@@ -680,8 +738,99 @@ const evidence = [
 .ai-footer-callout > p:not(.callout-label) {
   max-width: 52rem;
   color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.65;
+}
+
+.bench-product {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border-soft);
+  background: var(--surface-elev);
+}
+
+.bench-product-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.bench-product-kicker {
+  margin-bottom: 0.4rem;
+  color: var(--accent);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+}
+
+.bench-product-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.bench-product-summary,
+.bench-practice p {
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
+.bench-product-summary {
+  margin-top: 0.75rem;
+}
+
+.bench-tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.85rem;
+}
+
+.bench-github-link {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 0.35rem;
+  padding: 0.42rem 0.6rem;
+  border: 1px solid var(--border);
+  color: var(--ink);
+  font-size: 0.66rem;
+  text-decoration: none;
+}
+
+.bench-github-link:hover {
+  color: var(--bg);
+  background: var(--ink);
+}
+
+.bench-practice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.bench-practice {
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.bench-practice-title {
+  margin-bottom: 0.2rem;
   font-size: 0.9rem;
-  line-height: 1.75;
+  font-weight: 600;
+}
+
+.bench-practice p {
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.bench-status {
+  color: var(--faint);
+  font-size: 0.66rem;
+  line-height: 1.5;
 }
 
 .ai-case-link {
@@ -708,6 +857,21 @@ const evidence = [
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .bench-product {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .bench-practice-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem 1rem;
+  }
+
+  .bench-status {
+    grid-column: 1 / -1;
+  }
+
   .evidence-row {
     grid-template-columns: 2rem minmax(0, 1fr);
   }
@@ -720,12 +884,16 @@ const evidence = [
 
 @media (max-width: 600px) {
   .ai-hero {
-    padding: 2.8rem 0 2.4rem;
+    padding: 2.35rem 0 1.9rem;
+  }
+
+  .ai-title {
+    font-size: clamp(1.95rem, 8vw, 2.35rem);
   }
 
   .ai-content {
-    gap: 3.3rem;
-    padding-top: 2.5rem;
+    gap: 2.5rem;
+    padding-top: 2rem;
   }
 
   .ai-section-head {
@@ -733,7 +901,7 @@ const evidence = [
   }
 
   .ai-section-title {
-    font-size: 1.4rem;
+    font-size: 1.24rem;
   }
 
   .ai-section-sub {
@@ -750,8 +918,13 @@ const evidence = [
   .ai-card-grid,
   .ai-workflow-grid,
   .enterprise-grid,
-  .token-metric-grid {
+  .token-metric-grid,
+  .bench-practice-list {
     grid-template-columns: 1fr;
+  }
+
+  .bench-status {
+    grid-column: auto;
   }
 
   .workflow-card {

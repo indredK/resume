@@ -63,14 +63,14 @@ opacity 修饰符继续可用:`bg-accent/10` `text-ink/60` 等(v4 自动用 `col
 | `--ink` | `#1A1814` | `#E8E8E8` | `#1B1410` | `#E8E8E8` |
 | `--muted` | `#4A463E` | `#888888` | `#5A4E3F` | `#999999` |
 | `--faint` | `#8A8478` | `#555555` | `#8F8270` | `#666666` |
-| `--accent` | `#C8451F` | `#E8E8E8` | `#8A1538` | `#FF6B1A` |
-| `--accent-soft` | `#C8451F` | `#E8E8E8` | `#8A1538` | `#FF6B1A` |
+| `--accent` | `#BE3E1B` | `#E8E8E8` | `#8A1538` | `#FF6B1A` |
+| `--accent-soft` | `#BE3E1B` | `#E8E8E8` | `#8A1538` | `#FF6B1A` |
 | `--border` | `#1A1814` | `#2A2A2A` | `#1B1410` | `#3D3D3D` |
 | `--border-soft` | `#DDD7C8` | `#1F1F1F` | `#D9CFBA` | `#2E2E2E` |
 | `--success` | `#2D6A4F` | `#E8E8E8` | `#2D4A3E` | `#5DAB6B` |
 | `--warning` | `#B07A18` | `#E8E8E8` | `#C19A4B` | `#E0A030` |
 | `--danger` | `#9B1B30` | `#E8E8E8` | `#8A1538` | `#E84B2A` |
-| `--font-display` | `"Newsreader", Georgia, serif` | `ui-monospace, Menlo, monospace` | `"Fraunces", Georgia, serif` | `"Space Grotesk Variable", system-ui` |
+| `--font-display` | `"Space Grotesk Variable", system-ui` | `ui-monospace, Menlo, monospace` | `"Fraunces", Georgia, serif` | `"Space Grotesk Variable", system-ui` |
 | `--font-body` | `"IBM Plex Sans", system-ui` | `ui-monospace, Menlo, monospace` | `"IBM Plex Sans", system-ui` | `"Archivo Narrow", system-ui` |
 | `--font-mono` | `"IBM Plex Mono", ui-monospace` | `ui-monospace, Menlo, monospace` | `ui-monospace, Menlo, monospace` | `"JetBrains Mono", ui-monospace` |
 | `--radius` | `0px` | `0px` | `2px` | `2px` |
@@ -94,12 +94,12 @@ opacity 修饰符继续可用:`bg-accent/10` `text-ink/60` 等(v4 自动用 `col
 
 | Theme | Display | Body | Mono | npm 包 |
 |---|---|---|---|---|
-| Swiss | Newsreader(variable) | IBM Plex Sans(400/600) | IBM Plex Mono(400) | `@fontsource-variable/newsreader`、`@fontsource/ibm-plex-sans`、`@fontsource/ibm-plex-mono` |
+| Swiss | Space Grotesk(variable) | IBM Plex Sans(400/600) | IBM Plex Mono(400) | `@fontsource-variable/space-grotesk`、`@fontsource/ibm-plex-sans`、`@fontsource/ibm-plex-mono` |
 | Brutal | — | — | — | 无(纯 `ui-monospace`,零字节) |
 | Mag | Fraunces(variable, opsz/wght) | 复用 IBM Plex Sans | 复用系统 mono | `@fontsource-variable/fraunces` |
 | Indust | Space Grotesk(variable) | Archivo Narrow(400/700 静态,Google Fonts 上无 variable) | JetBrains Mono(400/700) | `@fontsource-variable/space-grotesk`、`@fontsource/archivo-narrow`、`@fontsource/jetbrains-mono` |
 
-总包数:7 个。一次性 import 到 `src/main.ts`,Vite 会按需 emit 子集化 woff2。`font-display: swap` 默认。
+总包数:6 个。字体文件在 `src/style.css` 本地导入, Vite 会按需 emit 子集化 woff2。`font-display: swap` 默认。
 
 ---
 
@@ -229,15 +229,15 @@ PR4 完成后,访问 `/case-studies` 在 4 主题下:
 | 维度 | 规则 |
 |---|---|
 | 网格 | 12 栏,gutter 24px,max-width 1200px,左右大留白 |
-| 字号刻度 | Display 64/48/32(serif Newsreader,line-height 1.05) · Body 16/14(grotesque,line-height 1.6) · Caption 12(uppercase tracking-wider) |
-| 强色 | 朱红 `#C8451F` 仅用于:链接 hover、强调段落首字、可点击区域 active 态 |
+| 字号刻度 | Display 56/40/30(Space Grotesk,line-height 1.05) · Body 16/14(grotesque,line-height 1.6) · Caption 12(uppercase tracking-wider) |
+| 强色 | 朱红 `#BE3E1B` 仅用于:链接 hover、强调段落首字、可点击区域 active 态 |
 | 装饰 | 极少。允许:`hr` 横线、章节编号(01–04)、列表用 `—` 而非 bullet |
 | 阴影 | 无 |
 | 圆角 | 0 |
-| 标题段落 | 大量留白,标题左对齐而非居中 |
+| 标题段落 | 标题左对齐,以稳定的层级和克制留白突出内容,避免超大标题与过长段间距 |
 | 链接 | 文字内 `text-accent` + `underline-offset: 0.2em` |
 | Hover | 颜色变化,无 transform |
-| Do | 用衬线 display + 大留白讲层级 |
+| Do | 用清晰的 display/正文对比和克制留白建立层级 |
 | Don't | 玻璃、光晕、渐变文字、渐变背景、圆角卡片、阴影 |
 
 ### 8.2 Terminal Brutalism
@@ -247,7 +247,7 @@ PR4 完成后,访问 `/case-studies` 在 4 主题下:
 | 维度 | 规则 |
 |---|---|
 | 网格 | 等宽字符网格,基础单位 1ch |
-| 字号刻度 | 全部 mono。Display 32/24/18 · Body 14 · Caption 12 |
+| 字号刻度 | 全部 mono。Display 28/22/17 · Body 14 · Caption 12 |
 | 强色 | 单色,`--accent === --ink`,无第二色 |
 | 装饰 | ASCII 字符:`┌─┐│└─┘` 边框、`▓▒░` 进度条、`> ` `$ ` 命令提示符、`*` 列表项 |
 | 阴影 | 无 |
@@ -265,12 +265,12 @@ PR4 完成后,访问 `/case-studies` 在 4 主题下:
 | 维度 | 规则 |
 |---|---|
 | 网格 | 不对称,允许 7+5 / 4+8 / 3+9 切分,栏目间 hairline 分隔 |
-| 字号刻度 | Display Fraunces 96/64/40(variable opsz 可变到展示态) · Body Plex Sans 16/14 · Pullquote 32(serif italic) |
+| 字号刻度 | Display Fraunces 64/48/32(variable opsz) · Body Plex Sans 16/14 · Pullquote 28(serif italic) |
 | 强色 | 多色:酒红 `#8A1538` display、芥末黄 `#C19A4B` tag、墨绿 `#2D4A3E` 大引文 |
 | 装饰 | ISSUE/SECTION 编号、大引文、装饰横线 `━━━━━`、可选 noise grain 纸张感(轻) |
 | 阴影 | 微小 hard shadow `0 2px 0 var(--ink)` 用于 tag/box,无 blur |
 | 圆角 | 2px(几乎是直角) |
-| 标题段落 | 标题可超大,正文可错位 |
+| 标题段落 | 保留杂志感与错位编排,标题控制在 64px 左右,让内容密度更均衡 |
 | Hover | 颜色变化,可加 `text-decoration: line-through` 或重描边 |
 | Do | serif + sans 混搭、不对称、大引文、有意的"杂乱" |
 | Don't | 完全对称的居中布局、玻璃、渐变光晕 |
@@ -282,7 +282,7 @@ PR4 完成后,访问 `/case-studies` 在 4 主题下:
 | 维度 | 规则 |
 |---|---|
 | 网格 | 8px 基础栅格 + 背景细 grid(2px dot 或 1px line at 8px interval, very subtle) |
-| 字号刻度 | Display Space Grotesk 56/40/28(narrow, ALL CAPS for h2+) · Body Archivo Narrow 14 · Code JetBrains Mono 13 |
+| 字号刻度 | Display Space Grotesk 48/36/28(narrow, ALL CAPS for h2+) · Body Archivo Narrow 14 · Code JetBrains Mono 13 |
 | 强色 | 警示橙 `#FF6B1A`,用在 status indicator、active state、可点击主按钮 |
 | 装饰 | 技术标注:`REV.04` `SCALE 1:1` `UNIT:rem` 等小字脚注;⊙ ◉ ● 圆点状态;`[ FIG.01 ]` 标记;hairline 边框 |
 | 阴影 | 实色硬阴影 `0 1px 0 var(--border)` + 大范围 `0 8px 24px rgba(0,0,0,0.4)` 凸起感 |

@@ -49,7 +49,7 @@ const selectCategory = (id: string) => {
   color: var(--ink);
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 61px);
+  min-height: calc(100dvh - var(--header-height));
 }
 
 /* ============================================================
@@ -57,9 +57,9 @@ const selectCategory = (id: string) => {
  * ============================================================ */
 .skills-tabs-wrap {
   position: sticky;
-  top: 61px;
+  top: var(--header-height);
   z-index: 40;
-  padding: 1rem 0;
+  padding: 0.75rem 0;
   background-color: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -77,7 +77,7 @@ const selectCategory = (id: string) => {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.45rem 0.8rem;
+  padding: 0.4rem 0.7rem;
   font-size: 0.7rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;

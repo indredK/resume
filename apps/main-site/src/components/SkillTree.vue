@@ -151,14 +151,14 @@ const handleModalSelect = (skill: SkillNode) => {
 .cat-section {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .cat-header {
   display: flex;
   align-items: baseline;
-  gap: 0.85rem;
-  padding-bottom: 0.75rem;
+  gap: 0.7rem;
+  padding-bottom: 0.6rem;
   border-bottom: 1px solid var(--border-soft);
 }
 
@@ -175,7 +175,7 @@ const handleModalSelect = (skill: SkillNode) => {
 }
 
 .cat-title {
-  font-size: 1.2rem;
+  font-size: 1.08rem;
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -195,7 +195,7 @@ const handleModalSelect = (skill: SkillNode) => {
 .sub-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 @media (min-width: 640px) {

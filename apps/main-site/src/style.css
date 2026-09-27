@@ -1,6 +1,5 @@
 /* Fontsource — self-host all theme fonts via npm packages.
    Brutal uses ui-monospace (zero bytes) so no import needed. */
-@import '@fontsource-variable/newsreader';
 @import '@fontsource/ibm-plex-sans';
 @import '@fontsource/ibm-plex-sans/600.css';
 @import '@fontsource/ibm-plex-mono';
@@ -45,20 +44,21 @@
 /* Default + Editorial Swiss */
 :root,
 :root[data-theme="swiss"] {
+  --header-height: 68px;
   --bg: #F4F1EA;
   --surface: #FFFFFF;
   --surface-elev: #FBF8F1;
   --ink: #1A1814;
   --muted: #4A463E;
   --faint: #8A8478;
-  --accent: #C8451F;
-  --accent-soft: #C8451F;
+  --accent: #BE3E1B;
+  --accent-soft: #BE3E1B;
   --border: #1A1814;
   --border-soft: #DDD7C8;
   --success: #2D6A4F;
   --warning: #B07A18;
   --danger: #9B1B30;
-  --font-display: "Newsreader Variable", "Newsreader", Georgia, "Times New Roman", serif;
+  --font-display: "Space Grotesk Variable", "Space Grotesk", system-ui, -apple-system, sans-serif;
   --font-body: "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --radius: 0px;
@@ -142,6 +142,11 @@ body {
   transition: background-color 0.18s ease, color 0.18s ease;
 }
 
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 ::selection {
   background: var(--accent);
   color: var(--bg);
@@ -153,7 +158,7 @@ html[data-theme="brutal"] #app-loading { background: #0A0A0A; }
 html[data-theme="mag"]    #app-loading { background: #F2EDE3; }
 html[data-theme="indust"] #app-loading { background: #1F1F1F; }
 
-html[data-theme="swiss"]  .loading-spinner { border-color: rgba(26, 24, 20, 0.12); border-top-color: #C8451F; }
+html[data-theme="swiss"]  .loading-spinner { border-color: rgba(26, 24, 20, 0.12); border-top-color: #BE3E1B; }
 html[data-theme="brutal"] .loading-spinner { border-color: rgba(232, 232, 232, 0.12); border-top-color: #E8E8E8; }
 html[data-theme="mag"]    .loading-spinner { border-color: rgba(27, 20, 16, 0.12); border-top-color: #8A1538; }
 html[data-theme="indust"] .loading-spinner { border-color: rgba(232, 232, 232, 0.12); border-top-color: #FF6B1A; }
@@ -247,7 +252,24 @@ html[data-theme="indust"] .loading-spinner { border-color: rgba(232, 232, 232, 0
  * Layout helpers (unchanged)
  * ============================================================ */
 .main-content {
-  min-height: calc(100vh - 73px);
+  min-height: calc(100dvh - var(--header-height));
+}
+
+@media (max-width: 760px) {
+  :root {
+    --header-height: 94px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 button:not(:disabled),

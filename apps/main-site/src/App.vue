@@ -1,7 +1,7 @@
 <template>
   <div class="app-root min-h-screen">
     <header class="site-header">
-      <nav class="container mx-auto px-6 py-3 flex items-center justify-between gap-4">
+      <nav class="site-nav container mx-auto px-6 flex items-center justify-between gap-4">
         <router-link to="/" class="brand-mark" aria-label="Portfolio Hub 首页">
           <span class="brand-glyph" aria-hidden="true">P</span>
           <span class="brand-name font-display">Portfolio Hub</span>
@@ -40,21 +40,11 @@
           <div>
             <p class="footer-label">联系方式</p>
             <ul class="footer-list">
-              <li>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="footer-icon" aria-hidden="true">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>
-                <span class="font-mono">{{ CONTACT.email }}</span>
-              </li>
+              <li><span class="font-mono">{{ CONTACT.email }}</span></li>
             </ul>
           </div>
           <div class="md:items-end md:text-right flex flex-col gap-4">
-            <div class="footer-stack font-mono">
-              <span>Vue 3</span><span aria-hidden="true">·</span>
-              <span>Vite</span><span aria-hidden="true">·</span>
-              <span>TailwindCSS</span>
-            </div>
+            <p class="footer-stack font-mono">Vue 3 / Vite / TailwindCSS</p>
             <p class="footer-credit font-mono">© 2026 Portfolio Hub.</p>
           </div>
         </div>
@@ -103,23 +93,26 @@ const navItems = [
  * ============================================================ */
 .site-header {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: 0 0 auto;
   z-index: 100;
-  background-color: color-mix(in srgb, var(--bg) 88%, transparent);
+  height: var(--header-height);
+  border-bottom: 1px solid var(--border-soft);
+  background-color: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-soft);
   transition: background-color 0.18s ease, border-color 0.18s ease;
+}
+
+.site-nav {
+  height: 100%;
 }
 
 .brand-mark {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  text-decoration: none;
   color: inherit;
+  text-decoration: none;
 }
 
 .brand-glyph {
@@ -128,13 +121,13 @@ const navItems = [
   justify-content: center;
   width: 1.85rem;
   height: 1.85rem;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
+  border-radius: var(--radius);
   color: var(--bg);
   background: var(--ink);
-  border-radius: var(--radius);
-  transition: transform 0.25s ease;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  transition: transform 0.2s ease;
 }
 
 .brand-mark:hover .brand-glyph {
@@ -142,94 +135,135 @@ const navItems = [
 }
 
 .brand-name {
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
   color: var(--ink);
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
 }
 
 .nav-tabs {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.2rem;
 }
 
 .nav-tab {
   position: relative;
-  padding: 0.45rem 0.65rem;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.02em;
+  padding: 0.5rem 0.58rem;
   color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
   text-decoration: none;
   transition: color 0.15s ease;
 }
 
-.nav-tab:hover {
-  color: var(--ink);
-}
-
+.nav-tab:hover,
 .nav-tab.router-link-active {
   color: var(--ink);
 }
 
 .nav-tab.router-link-active::after {
-  content: '';
   position: absolute;
-  left: 0.65rem;
-  right: 0.65rem;
-  bottom: -0.2rem;
-  height: 1px;
+  right: 0.58rem;
+  bottom: 0.18rem;
+  left: 0.58rem;
+  height: 2px;
   background: var(--accent);
+  content: '';
 }
 
-@media (max-width: 640px) {
-  .brand-name {
-    display: none;
+@media (max-width: 760px) {
+  :root {
+    --header-height: 94px;
   }
 
-  .site-header nav > div {
-    flex: 1;
-    min-width: 0;
-    gap: 0.35rem;
+  .site-nav {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: 2.2rem 2.2rem;
+    align-content: center;
+    column-gap: 0.55rem;
+    row-gap: 0.15rem;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
   }
 
-  .nav-tabs {
-    flex: 1;
+  .site-nav > .brand-mark {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .site-nav > div {
+    display: contents;
+  }
+
+  .site-nav .theme-switcher {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    gap: 0.15ch;
+    font-size: 0.68rem;
+  }
+
+  .site-nav .nav-tabs {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: space-between;
     min-width: 0;
-    justify-content: flex-start;
     overflow-x: auto;
     scrollbar-width: none;
   }
 
-  .nav-tabs::-webkit-scrollbar {
+  .site-nav .nav-tabs::-webkit-scrollbar {
     display: none;
   }
 
   .nav-tab {
     flex: 0 0 auto;
-    padding-inline: 0.38rem;
-    font-size: 0.68rem;
+    padding: 0.45rem 0.42rem;
+    font-size: 0.74rem;
+  }
+
+  .nav-tab.router-link-active::after {
+    right: 0.42rem;
+    left: 0.42rem;
   }
 }
 
-/* ============================================================
- * Footer
- * ============================================================ */
+@media (max-width: 420px) {
+  .brand-name {
+    display: none;
+  }
+
+  .site-nav .theme-switcher {
+    font-size: 0.64rem;
+  }
+
+  .nav-tab {
+    padding-inline: 0.35rem;
+    font-size: 0.7rem;
+  }
+}
+
 .site-footer {
   position: relative;
   z-index: 10;
-  margin-top: 6rem;
-  border-top: 1px solid var(--border);
+  margin-top: 0;
+  border-top: 1px solid var(--border-soft);
   background: var(--surface-elev);
 }
 
+.site-footer > .container {
+  padding-top: 2.8rem;
+  padding-bottom: 2.8rem;
+}
+
 .footer-title {
+  margin-bottom: 0.5rem;
   color: var(--ink);
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  margin-bottom: 0.5rem;
 }
 
 .footer-body {
@@ -239,47 +273,32 @@ const navItems = [
 }
 
 .footer-label {
+  margin-bottom: 0.85rem;
   color: var(--ink);
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
-  margin-bottom: 1rem;
+  letter-spacing: 0.12em;
 }
 
 .footer-list {
-  list-style: none;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.footer-list li {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-}
-
-.footer-icon {
-  width: 0.95rem;
-  height: 0.95rem;
-  color: var(--accent);
-  flex-shrink: 0;
+  font-size: 0.82rem;
+  list-style: none;
 }
 
 .footer-stack {
+  color: var(--muted);
   font-size: 0.7rem;
-  letter-spacing: 0.04em;
-  color: var(--faint);
-  display: flex;
-  gap: 0.55rem;
+  letter-spacing: 0.035em;
 }
 
 .footer-credit {
+  color: var(--muted);
   font-size: 0.7rem;
-  color: var(--faint);
   letter-spacing: 0.02em;
 }
 
@@ -353,13 +372,13 @@ const navItems = [
  * Layout helpers
  * ============================================================ */
 .main-content {
-  min-height: calc(100vh - 73px);
-  padding-top: 61px;
+  min-height: calc(100dvh - var(--header-height));
+  padding-top: var(--header-height);
 }
 
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .page-enter-from {

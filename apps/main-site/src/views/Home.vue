@@ -1,75 +1,89 @@
 <template>
   <div class="home-page animate-fade-in">
-    <!-- ============================================================
-     * Hero — role, contact CTAs, stats
-     * ============================================================ -->
     <section class="hero">
       <div class="container mx-auto px-6 hero-grid">
         <div class="hero-lead">
-          <div class="hero-eyebrow font-mono">前端开发工程师 · 近 6 年经验</div>
+          <p class="hero-eyebrow font-mono">前端开发工程师 · 六年多经验</p>
           <h1 class="hero-name font-display">Frontend</h1>
           <p class="hero-tagline">
-            使用 <strong>Vue / React</strong> 构建企业级 Web 与多端应用，覆盖物联网和业务管理场景；关注复杂流程拆解、组件复用与跨端体验一致性。
+            使用 <strong>Vue / React</strong> 构建企业级 Web 与多端应用，服务物联网和业务管理场景，关注复杂流程、组件复用及跨端一致性。
           </p>
           <div class="hero-ctas">
-            <a :href="`mailto:${CONTACT.email}`" class="cta-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="cta-icon" aria-hidden="true">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
-              </svg>
-              <span>Email</span>
-            </a>
-            <a :href="CONTACT.github" target="_blank" rel="noopener noreferrer" class="cta-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="cta-icon" aria-hidden="true">
-                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A3.37 3.37 0 0 0 22.42 4.42 3.37 3.37 0 0 0 21.31.52S19.95.11 16.89 2.12a11.36 11.36 0 0 0-6 0C7.71.11 6.35.52 6.35.52a3.37 3.37 0 0 0-1.11 3.9 3.37 3.37 0 0 0-1.31 2.38c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9.43 16.5V22" />
-              </svg>
-              <span>GitHub</span>
-            </a>
+            <a :href="`mailto:${CONTACT.email}`" class="cta-btn">Email</a>
+            <a :href="CONTACT.github" target="_blank" rel="noopener noreferrer" class="cta-btn">GitHub</a>
           </div>
         </div>
 
-        <div class="stats-grid">
-          <div v-for="stat in statistics" :key="stat.label" class="stat-cell">
-            <div class="stat-value font-display">{{ stat.value }}</div>
-            <div class="stat-label font-mono">{{ stat.label }}</div>
-          </div>
-        </div>
+        <figure class="hero-visual">
+          <picture>
+            <source :srcset="`${baseUrl}images/iot-context.webp`" type="image/webp">
+            <img
+              :src="`${baseUrl}images/iot-context.jpg`"
+              width="960"
+              height="720"
+              alt="工业边缘网关与传感器的场景示意"
+              fetchpriority="high"
+            >
+          </picture>
+          <figcaption class="visual-caption font-mono">物联网设备场景示意</figcaption>
+        </figure>
       </div>
+
+      <dl class="container mx-auto px-6 hero-facts" aria-label="职业概况">
+        <div v-for="stat in statistics" :key="stat.label" class="fact-cell">
+          <dt class="fact-label font-mono">{{ stat.label }}</dt>
+          <dd class="fact-value font-display">{{ stat.value }}</dd>
+        </div>
+      </dl>
     </section>
 
-    <div class="container mx-auto px-6 pb-24">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <!-- ============================================================
-         * Main column — Experience + Projects
-         * ============================================================ -->
-        <div class="lg:col-span-2 space-y-16">
-          <section>
-            <h2 class="section-title font-display"><span>工作经历</span></h2>
+    <div class="container mx-auto px-6 resume-content">
+      <div class="resume-grid">
+        <div class="primary-column">
+          <section class="resume-section" aria-labelledby="experience-title">
+            <h2 id="experience-title" class="section-title font-display">工作经历</h2>
             <div class="timeline">
               <article v-for="exp in experiences" :key="exp.company" class="timeline-item">
-                <header class="timeline-header">
-                  <div>
+                <div class="timeline-meta">
+                  <p class="job-period font-mono">{{ exp.period }}</p>
+                  <p class="job-position">{{ exp.position }}</p>
+                </div>
+                <div class="timeline-content">
+                  <header class="timeline-header">
                     <h3 class="job-company font-display">{{ exp.company }}</h3>
-                    <p class="job-role"><span class="job-position">{{ exp.position }}</span> <span class="job-period font-mono">{{ exp.period }}</span></p>
-                  </div>
-                  <div class="tag-list">
-                    <span v-for="tech in exp.techStack.slice(0, 4)" :key="tech" class="tag font-mono">{{ tech }}</span>
-                  </div>
-                </header>
-                <p class="job-summary">{{ exp.summary }}</p>
-                <ul class="bullet-list">
-                  <li v-for="(bullet, i) in exp.details" :key="i">{{ bullet }}</li>
-                </ul>
+                    <div class="tag-list">
+                      <span v-for="tech in exp.techStack.slice(0, 4)" :key="tech" class="tag font-mono">{{ tech }}</span>
+                    </div>
+                  </header>
+                  <p class="job-summary">{{ exp.summary }}</p>
+                  <ul class="bullet-list">
+                    <li v-for="(bullet, i) in exp.details" :key="i">{{ bullet }}</li>
+                  </ul>
+                </div>
               </article>
             </div>
           </section>
 
-          <section>
-            <h2 class="section-title font-display"><span>代表项目经历</span></h2>
+          <section class="resume-section project-section" aria-labelledby="projects-title">
+            <div class="project-intro">
+              <h2 id="projects-title" class="section-title font-display">代表项目经历</h2>
+              <figure class="project-visual">
+                <picture>
+                  <source :srcset="`${baseUrl}images/multidevice-context.webp`" type="image/webp">
+                  <img
+                    :src="`${baseUrl}images/multidevice-context.jpg`"
+                    width="960"
+                    height="640"
+                    alt="笔记本电脑、平板与手机的多端使用场景示意"
+                    loading="lazy"
+                  >
+                </picture>
+                <figcaption class="visual-caption font-mono">多端使用场景示意</figcaption>
+              </figure>
+            </div>
             <div class="project-stack">
-              <article v-for="project in projects" :key="project.title" class="project-card">
+              <article v-for="project in projects" :key="project.title" class="project-item">
                 <header class="project-header">
-                  <span class="project-icon" aria-hidden="true">{{ project.icon }}</span>
                   <h3 class="project-title font-display">{{ project.title }}</h3>
                   <span class="project-duration font-mono">{{ project.duration }}</span>
                 </header>
@@ -81,42 +95,35 @@
           </section>
         </div>
 
-        <!-- ============================================================
-         * Sidebar — Skills, Education, Self-eval
-         * ============================================================ -->
-        <aside class="space-y-12">
-          <section>
-            <h2 class="section-title font-display"><span>专业技能</span></h2>
-            <div class="panel">
+        <aside class="sidebar-column">
+          <section class="resume-section sidebar-section" aria-labelledby="skills-title">
+            <h2 id="skills-title" class="section-title font-display">专业技能</h2>
+            <div class="skill-groups">
               <div v-for="skillGroup in skillSummary" :key="skillGroup.title" class="skill-group">
-                <h4 class="skill-group-title">{{ skillGroup.title }}</h4>
+                <h3 class="skill-group-title">{{ skillGroup.title }}</h3>
                 <div class="tag-list">
                   <span v-for="skill in skillGroup.items" :key="skill" class="tag font-mono">{{ skill }}</span>
                 </div>
               </div>
-              <router-link to="/skills" class="panel-link font-mono">查看完整技能树 →</router-link>
+            </div>
+            <router-link to="/skills" class="panel-link font-mono">查看完整技能树 <span aria-hidden="true">→</span></router-link>
+          </section>
+
+          <section class="resume-section sidebar-section" aria-labelledby="education-title">
+            <h2 id="education-title" class="section-title font-display">教育背景</h2>
+            <h3 class="edu-school font-display">深圳大学</h3>
+            <p class="edu-degree">应用物理学 · 本科</p>
+            <p class="edu-period font-mono">2016-2020</p>
+            <div class="tag-list edu-tags">
+              <span class="tag font-mono">CET-4</span>
             </div>
           </section>
 
-          <section>
-            <h2 class="section-title font-display"><span>教育背景</span></h2>
-            <div class="panel">
-              <h4 class="edu-school font-display">深圳大学</h4>
-              <p class="edu-degree">应用物理学 · 本科</p>
-              <p class="edu-period font-mono">2016 — 2020</p>
-              <div class="tag-list edu-tags">
-                <span class="tag font-mono">CET-4</span>
-              </div>
-            </div>
-          </section>
-
-          <section>
-            <h2 class="section-title font-display"><span>自我评价</span></h2>
-            <div class="panel panel-prose">
-              <p>
-                具备近六年前端开发经验，覆盖企业级管理系统、物联网平台与 H5 / App / 小程序。熟悉 Vue、React 与微前端实践，能从需求梳理、模块设计和接口协同推进到多端验收；重视可复用组件、权限边界、状态一致性与工程质量。
-              </p>
-            </div>
+          <section class="resume-section sidebar-section" aria-labelledby="summary-title">
+            <h2 id="summary-title" class="section-title font-display">自我评价</h2>
+            <p class="panel-prose">
+              具备六年多前端开发经验，覆盖企业级管理系统、物联网平台与 H5 / App / 小程序。熟悉 Vue、React 与微前端实践，能从需求梳理、模块设计和接口协同推进到多端验收；重视可复用组件、权限边界、状态一致性与工程质量。
+            </p>
           </section>
         </aside>
       </div>
@@ -127,8 +134,10 @@
 <script setup lang="ts">
 import { CONTACT } from '@/data/contact'
 
+const baseUrl = import.meta.env.BASE_URL
+
 const statistics = [
-  { label: '从业经验', value: '近 6 年' },
+  { label: '从业经验', value: '六年多' },
   { label: '主力框架', value: 'Vue / React' },
   { label: '交付形态', value: '多端应用' },
   { label: '项目领域', value: 'IoT / 企业应用' }
@@ -150,7 +159,7 @@ const projects = [
       '完成真实接口联调、SSO 登录接入、SignalR 消息推送及 Playwright 端到端验收'
     ],
     icon: '◇',
-    duration: '2026.07 — 2026.08'
+    duration: '2026.07 - 2026.08'
   },
   {
     title: '物联网设备管理平台',
@@ -160,7 +169,7 @@ const projects = [
       '通过组件拆分与状态管理优化，提升模块可维护性'
     ],
     icon: '◈',
-    duration: '2023.02 — 2024.07'
+    duration: '2023.02 - 2024.07'
   },
   {
     title: '企业管理平台微前端改造',
@@ -170,7 +179,7 @@ const projects = [
       '推动历史模块向 TypeScript 与现代组件模式渐进迁移'
     ],
     icon: '◫',
-    duration: '2022.01 — 2022.07'
+    duration: '2022.01 - 2022.07'
   },
   {
     title: 'Bench 桌面工作台 · 开源',
@@ -186,7 +195,7 @@ const projects = [
 
 const experiences = [
   {
-    period: '2023.02 — 2025.11',
+    period: '2023.02 - 2025.11',
     company: '物联网科技企业',
     position: '前端开发工程师',
     techStack: ['React', 'Vue 3', 'WebSocket', 'ECharts', 'uni-app'],
@@ -199,7 +208,7 @@ const experiences = [
     ]
   },
   {
-    period: '2020.12 — 2023.01',
+    period: '2020.12 - 2023.01',
     company: '工程技术服务企业',
     position: '前端开发工程师',
     techStack: ['Vue 3', 'React', 'single-spa', 'TypeScript', 'Pinia'],
@@ -214,56 +223,49 @@ const experiences = [
 ]
 </script>
 
-<style scoped>
+<style>
 .home-page {
   color: var(--ink);
 }
 
-/* ============================================================
- * Hero
- * ============================================================ */
 .hero {
-  padding: 4rem 0 3rem;
+  padding: 2.5rem 0 0;
   border-bottom: 1px solid var(--border-soft);
 }
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 2.5rem;
-  align-items: end;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.9rem;
+  align-items: center;
 }
 
-@media (min-width: 768px) {
-  .hero-grid {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-    gap: 4rem;
-  }
+.hero-lead {
+  max-width: 42rem;
 }
 
 .hero-eyebrow {
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  margin-bottom: 0.9rem;
   color: var(--accent);
-  margin-bottom: 1.25rem;
+  font-size: 0.76rem;
+  letter-spacing: 0.07em;
 }
 
 .hero-name {
-  font-size: clamp(3.5rem, 9vw, 6.5rem);
-  line-height: 0.95;
-  letter-spacing: -0.035em;
+  margin-bottom: 0.85rem;
   color: var(--ink);
+  font-size: clamp(3rem, 6vw, 4.8rem);
   font-weight: 600;
-  margin-bottom: 1.75rem;
+  line-height: 1;
+  letter-spacing: -0.055em;
 }
 
 .hero-tagline {
-  font-size: 1.05rem;
-  line-height: 1.65;
+  max-width: 39rem;
+  margin-bottom: 1.35rem;
   color: var(--muted);
-  max-width: 36rem;
-  margin-bottom: 2rem;
+  font-size: 0.96rem;
+  line-height: 1.68;
 }
 
 .hero-tagline strong {
@@ -280,474 +282,472 @@ const experiences = [
 .cta-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 0.9rem;
-  font-size: 0.82rem;
-  color: var(--ink);
-  background: transparent;
-  border: 1px solid var(--border);
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.6rem 1.05rem;
+  border: 1px solid var(--ink);
   border-radius: var(--radius);
+  color: var(--bg);
+  background: var(--ink);
+  font-size: 0.84rem;
+  font-weight: 600;
   text-decoration: none;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
 }
 
 .cta-btn:hover {
-  background: var(--ink);
-  color: var(--bg);
-}
-
-.cta-btn.cta-static {
-  cursor: default;
-}
-
-.cta-btn.cta-static:hover {
+  color: var(--ink);
   background: transparent;
-  color: var(--ink);
 }
 
-.cta-icon {
-  width: 0.95rem;
-  height: 0.95rem;
-  flex-shrink: 0;
+.cta-btn:active {
+  transform: translateY(1px);
 }
 
-/* ============================================================
- * Stats grid
- * ============================================================ */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+.hero-visual,
+.project-visual {
+  min-width: 0;
+  margin: 0;
 }
 
-.stat-cell {
-  padding: 1.25rem 1rem;
+.hero-visual picture,
+.project-visual picture {
+  display: block;
+  width: 100%;
+}
+
+.hero-visual img,
+.project-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  background: var(--surface-elev);
+}
+
+.hero-visual img {
+  aspect-ratio: 4 / 3;
   border: 1px solid var(--border-soft);
-  background: var(--surface);
-  border-radius: var(--radius);
-  text-align: center;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-.stat-cell:hover {
-  border-color: var(--ink);
-}
-
-.stat-value {
-  font-size: 2.25rem;
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  color: var(--accent);
-  line-height: 1;
-  margin-bottom: 0.5rem;
-}
-
-.stat-label {
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
+.visual-caption {
+  padding-top: 0.55rem;
   color: var(--muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
 }
 
-/* ============================================================
- * Section title (shared)
- * ============================================================ */
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 1.4rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  margin: 3rem 0 2rem;
+.hero-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 2rem;
+  padding-top: 0.75rem;
+  padding-bottom: 1.25rem;
 }
 
-.section-title::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border-soft);
-}
-
-/* ============================================================
- * Timeline (Experience)
- * ============================================================ */
-.timeline {
+.fact-cell {
   display: flex;
   flex-direction: column;
+  gap: 0.28rem;
+  min-width: 0;
+  padding: 0.7rem 0.65rem;
+}
+
+.fact-cell:nth-child(odd) {
+  padding-left: 0;
+}
+
+.fact-value {
+  order: 1;
+  color: var(--accent);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.fact-label {
+  order: 2;
+  color: var(--muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+}
+
+.resume-content {
+  padding-top: 2.65rem;
+  padding-bottom: 4rem;
+}
+
+.resume-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 3rem;
 }
 
-.timeline-item {
-  position: relative;
-  padding-left: 1.75rem;
-  border-left: 1px solid var(--border-soft);
+.primary-column,
+.sidebar-column {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
 }
 
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  top: 0.5rem;
-  left: -4px;
-  width: 7px;
-  height: 7px;
-  background: var(--accent);
-  border-radius: 50%;
+.primary-column {
+  gap: 3rem;
 }
 
-.timeline-header {
+.sidebar-column {
+  gap: 2rem;
+}
+
+.section-title {
+  margin: 0 0 1.2rem;
+  color: var(--ink);
+  font-size: 1.38rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+.timeline {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
 }
 
-@media (min-width: 640px) {
-  .timeline-header {
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1.5rem;
-  }
+.timeline-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.85rem;
+  padding: 1.3rem 0 1.55rem;
+  border-top: 1px solid var(--border-soft);
 }
 
-.job-company {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--ink);
-  letter-spacing: -0.01em;
-  margin-bottom: 0.25rem;
+.timeline-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
-.job-role {
-  font-size: 0.82rem;
+.job-period,
+.edu-period {
   color: var(--muted);
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
 }
 
 .job-position {
   color: var(--accent);
+  font-size: 0.78rem;
   font-weight: 600;
-  margin-right: 0.5rem;
 }
 
-.job-period {
-  font-size: 0.78rem;
-  color: var(--muted);
-  letter-spacing: 0.02em;
+.timeline-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  margin-bottom: 0.65rem;
+}
+
+.job-company {
+  color: var(--ink);
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
 }
 
 .job-summary {
-  font-size: 0.9rem;
-  line-height: 1.7;
+  margin-bottom: 0.8rem;
   color: var(--muted);
-  margin-bottom: 1rem;
-  font-style: italic;
+  font-size: 0.9rem;
+  line-height: 1.65;
 }
 
-/* ============================================================
- * Bullet list
- * ============================================================ */
 .bullet-list {
-  list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.5rem;
+  list-style: none;
 }
 
 .bullet-list li {
   position: relative;
-  padding-left: 1.1rem;
-  font-size: 0.82rem;
-  line-height: 1.65;
+  padding-left: 1rem;
   color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.65;
 }
 
 .bullet-list li::before {
-  content: '—';
   position: absolute;
+  top: 0.72em;
   left: 0;
-  color: var(--accent);
-  font-weight: 700;
+  width: 0.42rem;
+  height: 1px;
+  background: var(--accent);
+  content: '';
 }
 
-/* ============================================================
- * Tags
- * ============================================================ */
 .tag-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.38rem;
 }
 
 .tag {
   display: inline-flex;
   align-items: center;
-  padding: 0.18rem 0.5rem;
-  font-size: 0.68rem;
-  color: var(--muted);
-  background: transparent;
+  min-height: 1.55rem;
+  padding: 0.18rem 0.48rem;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius);
-  letter-spacing: 0.02em;
+  color: var(--muted);
+  background: transparent;
+  font-size: 0.68rem;
+  letter-spacing: 0.015em;
 }
 
-/* ============================================================
- * Project cards
- * ============================================================ */
+.project-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 1.25rem;
+  margin-bottom: 1.7rem;
+}
+
+.project-intro .section-title {
+  margin-bottom: 0;
+}
+
+.project-visual img {
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--border-soft);
+}
+
 .project-stack {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
 }
 
-.project-card {
-  padding: 1.5rem;
-  border: 1px solid var(--border-soft);
-  background: var(--surface);
-  border-radius: var(--radius);
-  transition: border-color 0.15s ease;
+.project-item {
+  padding: 1.35rem 0;
 }
 
-.project-card:hover {
-  border-color: var(--ink);
+.project-item + .project-item {
+  border-top: 1px solid var(--border-soft);
 }
 
 .project-header {
   display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin-bottom: 1.1rem;
+  align-items: baseline;
+  justify-content: space-between;
   flex-wrap: wrap;
-}
-
-.project-icon {
-  font-size: 1.25rem;
-  color: var(--accent);
-  line-height: 1;
+  gap: 0.45rem 1rem;
+  margin-bottom: 0.7rem;
 }
 
 .project-title {
-  font-size: 1.05rem;
-  font-weight: 600;
   color: var(--ink);
-  letter-spacing: -0.01em;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
 .project-duration {
-  font-size: 0.7rem;
-  color: var(--faint);
-  letter-spacing: 0.04em;
-  margin-left: auto;
-}
-
-/* ============================================================
- * Sidebar panel
- * ============================================================ */
-.panel {
-  padding: 1.5rem;
-  border: 1px solid var(--border-soft);
-  background: var(--surface);
-  border-radius: var(--radius);
-}
-
-.panel-prose {
-  font-size: 0.85rem;
-  line-height: 1.75;
   color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.015em;
 }
 
-.skill-group {
-  margin-bottom: 1.25rem;
-}
-
-.skill-group:last-of-type {
-  margin-bottom: 1.5rem;
+.skill-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
 }
 
 .skill-group-title {
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
+  margin-bottom: 0.6rem;
   color: var(--accent);
-  margin-bottom: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.055em;
 }
 
 .panel-link {
-  display: block;
-  text-align: center;
-  padding: 0.65rem;
-  font-size: 0.78rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 1.35rem;
+  padding-bottom: 0.38rem;
+  border-bottom: 1px solid var(--border-soft);
   color: var(--accent);
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius);
+  font-size: 0.76rem;
   text-decoration: none;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: border-color 0.18s ease, color 0.18s ease, gap 0.18s ease;
 }
 
 .panel-link:hover {
-  background: var(--accent);
-  color: var(--bg);
+  gap: 0.8rem;
   border-color: var(--accent);
+  color: var(--ink);
 }
 
 .edu-school {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--ink);
   margin-bottom: 0.35rem;
+  color: var(--ink);
+  font-size: 1.12rem;
+  font-weight: 600;
 }
 
 .edu-degree {
-  font-size: 0.85rem;
-  color: var(--accent);
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.edu-period {
-  font-size: 0.72rem;
-  color: var(--faint);
-  letter-spacing: 0.04em;
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.35rem;
+  color: var(--muted);
+  font-size: 0.87rem;
 }
 
 .edu-tags {
-  margin-top: 0.5rem;
+  margin-top: 0.7rem;
 }
-</style>
 
-<style>
-/* ============================================================
- * Theme-specific overrides (global, not scoped) — keyed off
- * :root[data-theme] selectors. These flip thematic details on
- * the same DOM so each theme reads as itself.
- * ============================================================ */
+.panel-prose {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.75;
+}
 
-/* ---- Brutal: ASCII timeline, square tags, no italics ---- */
 :root[data-theme="brutal"] .home-page .hero-name {
   font-weight: 400;
   letter-spacing: 0;
 }
 
-:root[data-theme="brutal"] .home-page .hero-eyebrow {
-  color: var(--ink);
-}
-
-:root[data-theme="brutal"] .home-page .timeline-item {
-  border-left-style: dashed;
-}
-
-:root[data-theme="brutal"] .home-page .timeline-item::before {
-  border-radius: 0;
-  width: 9px;
-  height: 9px;
-  background: var(--ink);
+:root[data-theme="brutal"] .home-page .timeline-item,
+:root[data-theme="brutal"] .home-page .project-item + .project-item {
+  border-top-style: dashed;
 }
 
 :root[data-theme="brutal"] .home-page .bullet-list li::before {
-  content: '>';
-  color: var(--ink);
-}
-
-:root[data-theme="brutal"] .home-page .job-position,
-:root[data-theme="brutal"] .home-page .skill-group-title,
-:root[data-theme="brutal"] .home-page .edu-degree,
-:root[data-theme="brutal"] .home-page .project-icon,
-:root[data-theme="brutal"] .home-page .stat-value {
-  color: var(--ink);
-}
-
-:root[data-theme="brutal"] .home-page .stat-cell,
-:root[data-theme="brutal"] .home-page .project-card,
-:root[data-theme="brutal"] .home-page .panel {
-  background: transparent;
-  border-color: var(--border);
-}
-
-:root[data-theme="brutal"] .home-page .panel-link {
-  border: 1px dashed var(--border);
-  color: var(--ink);
-}
-
-:root[data-theme="brutal"] .home-page .panel-link:hover {
   background: var(--ink);
-  color: var(--bg);
-  border-color: var(--ink);
 }
 
-:root[data-theme="brutal"] .home-page .job-summary {
-  font-style: normal;
-}
-
-/* ---- Mag: italic display, dramatic drop-shadow on name, drop-cap on prose ---- */
-:root[data-theme="mag"] .home-page .hero-name {
-  font-style: italic;
-  font-weight: 500;
-  letter-spacing: -0.04em;
-}
-
-:root[data-theme="mag"] .home-page .section-title {
-  font-style: italic;
-}
-
+:root[data-theme="mag"] .home-page .hero-name,
+:root[data-theme="mag"] .home-page .section-title,
 :root[data-theme="mag"] .home-page .job-company,
 :root[data-theme="mag"] .home-page .project-title,
 :root[data-theme="mag"] .home-page .edu-school {
   font-style: italic;
 }
 
-:root[data-theme="mag"] .home-page .panel-prose p::first-letter {
-  font-family: var(--font-display);
-  font-size: 3.2em;
-  font-style: italic;
+:root[data-theme="mag"] .home-page .hero-name {
   font-weight: 500;
-  float: left;
-  line-height: 0.85;
-  margin: 0.15em 0.12em 0 0;
-  color: var(--accent);
+  letter-spacing: -0.04em;
 }
 
-:root[data-theme="mag"] .home-page .stat-value {
-  font-style: italic;
-}
-
-/* ---- Indust: condensed, sharp orange, slab-tracking labels ---- */
 :root[data-theme="indust"] .home-page .hero-name {
-  letter-spacing: -0.02em;
   font-weight: 500;
+  letter-spacing: -0.025em;
 }
 
 :root[data-theme="indust"] .home-page .hero-eyebrow,
 :root[data-theme="indust"] .home-page .skill-group-title {
-  font-size: 0.65rem;
-  letter-spacing: 0.22em;
-}
-
-:root[data-theme="indust"] .home-page .section-title {
-  text-transform: uppercase;
-  font-size: 1.15rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.12em;
 }
 
 :root[data-theme="indust"] .home-page .tag {
   background: var(--surface-elev);
   border-color: var(--border);
   text-transform: uppercase;
-  font-size: 0.62rem;
-  letter-spacing: 0.06em;
 }
 
-:root[data-theme="indust"] .home-page .timeline-item::before {
-  border-radius: 0;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+@media (min-width: 768px) {
+  .hero {
+    padding-top: 2.8rem;
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .hero-facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 1.75rem;
+  }
+
+  .fact-cell {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.45rem;
+    padding: 0.65rem clamp(0.55rem, 1vw, 1rem);
+    border-right: 1px solid var(--border-soft);
+  }
+
+  .fact-cell:first-child {
+    padding-left: 0;
+  }
+
+  .fact-cell:nth-child(odd):not(:first-child) {
+    padding-left: clamp(0.55rem, 1vw, 1rem);
+  }
+
+  .fact-cell:nth-child(even) {
+    padding-left: clamp(0.55rem, 1vw, 1rem);
+  }
+
+  .fact-cell:last-child {
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  .resume-content {
+    padding-top: 3.4rem;
+  }
+
+  .resume-grid {
+    grid-template-columns: minmax(0, 2fr) minmax(15rem, 0.88fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .timeline-item {
+    grid-template-columns: minmax(8.5rem, 0.38fr) minmax(0, 1.62fr);
+    gap: 1.25rem;
+    padding: 1.3rem 0 1.5rem;
+  }
+
+  .timeline-meta {
+    display: block;
+    padding-top: 0.15rem;
+  }
+
+  .job-position {
+    margin-top: 0.45rem;
+  }
+
+  .project-intro {
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.7fr);
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.4rem;
+  }
 }
 
-:root[data-theme="indust"] .home-page .bullet-list li::before {
-  content: '▸';
-  color: var(--accent);
+@media (min-width: 1024px) {
+  .hero {
+    padding-top: 2.75rem;
+  }
+
+  .hero-facts {
+    padding-bottom: 1.45rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
 }
 
-/* ---- Swiss (default): bullet uses em-dash already; no extra overrides ---- */
+@media (max-width: 767px) {
+  .project-visual img {
+    max-height: 15rem;
+  }
+}
 </style>

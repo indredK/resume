@@ -25,7 +25,7 @@
     <!-- ============================================================
      * Main two-column layout
      * ============================================================ -->
-    <section class="container mx-auto px-6 pt-8 pb-24">
+    <section class="container mx-auto px-6 pt-6 pb-16">
       <div class="main-layout">
         <!-- ===== LEFT: Project nav ===== -->
         <aside v-if="currentCompany" class="left-panel">
@@ -368,7 +368,7 @@ function closeDrawer(): void {
  * ============================================================ */
 .cat-bar {
   position: sticky;
-  top: 61px;
+  top: var(--header-height);
   z-index: 40;
   background-color: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: blur(10px);
@@ -379,7 +379,7 @@ function closeDrawer(): void {
 .cat-bar-inner {
   display: flex;
   gap: 0.5rem;
-  padding: 0.85rem 0;
+  padding: 0.65rem 0;
   overflow-x: auto;
   justify-content: center;
 }
@@ -388,7 +388,7 @@ function closeDrawer(): void {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.95rem;
+  padding: 0.42rem 0.8rem;
   font-size: 0.72rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -577,12 +577,12 @@ function closeDrawer(): void {
 .detail-content {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2rem;
 }
 
 /* ----- Detail header ----- */
 .detail-header {
-  padding-bottom: 2rem;
+  padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--border-soft);
   position: relative;
 }
@@ -600,9 +600,9 @@ function closeDrawer(): void {
 .detail-head-row {
   display: flex;
   align-items: flex-start;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-  margin-bottom: 1.25rem;
+  gap: 1.1rem;
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
 }
 
@@ -618,11 +618,11 @@ function closeDrawer(): void {
 }
 
 .detail-title {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-size: clamp(1.5rem, 3.3vw, 2.15rem);
   font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--ink);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
   line-height: 1.15;
 }
 
@@ -645,8 +645,8 @@ function closeDrawer(): void {
 }
 
 .detail-summary {
-  font-size: 0.95rem;
-  line-height: 1.75;
+  font-size: 0.9rem;
+  line-height: 1.65;
   color: var(--muted);
   max-width: 50rem;
 }
@@ -690,7 +690,7 @@ function closeDrawer(): void {
 .detail-section {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .section-title {
@@ -739,7 +739,7 @@ function closeDrawer(): void {
 }
 
 .metric-value {
-  font-size: 2rem;
+  font-size: 1.7rem;
   font-weight: 600;
   letter-spacing: -0.03em;
   color: var(--co-color);

@@ -13,8 +13,8 @@
       </div>
     </section>
 
-    <div class="container mx-auto px-6 pb-24">
-      <div class="max-w-5xl mx-auto space-y-16">
+    <div class="container mx-auto px-6 pb-16">
+      <div class="max-w-5xl mx-auto space-y-12">
         <!-- ============================================================
          * Engineering strengths
          * ============================================================ -->
@@ -213,7 +213,7 @@ onMounted(async () => {
  * Hero
  * ============================================================ */
 .about-hero {
-  padding: 3.5rem 0 2.5rem;
+  padding: 2.8rem 0 2rem;
   border-bottom: 1px solid var(--border-soft);
 }
 
@@ -226,12 +226,12 @@ onMounted(async () => {
 }
 
 .hero-title {
-  font-size: clamp(2.8rem, 7vw, 4.5rem);
+  font-size: clamp(2.3rem, 5.5vw, 3.8rem);
   line-height: 1;
   letter-spacing: -0.03em;
   color: var(--ink);
   font-weight: 600;
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.9rem;
 }
 
 .hero-tag {
@@ -260,9 +260,9 @@ onMounted(async () => {
 .block-header {
   display: flex;
   align-items: flex-start;
-  gap: 1.5rem;
-  margin: 3rem 0 2rem;
-  padding-bottom: 1.25rem;
+  gap: 1.1rem;
+  margin: 2.35rem 0 1.45rem;
+  padding-bottom: 0.9rem;
   border-bottom: 1px solid var(--border-soft);
 }
 
@@ -275,7 +275,7 @@ onMounted(async () => {
 }
 
 .block-title {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--ink);
