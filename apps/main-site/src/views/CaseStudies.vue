@@ -207,7 +207,7 @@
               <!-- Project overview (no module selected) -->
               <template v-else>
                 <section v-if="currentProject.metrics.length > 0" class="detail-section">
-                  <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 核心数据提升</h3>
+                  <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 项目要点</h3>
                   <div class="metric-grid metric-grid-3">
                     <div v-for="metric in currentProject.metrics" :key="metric.label" class="metric-card">
                       <div class="metric-value font-display">{{ metric.value }}</div>
@@ -218,7 +218,7 @@
                 </section>
 
                 <section v-if="currentProject.approach.length > 0" class="detail-section">
-                  <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 我是如何做到的</h3>
+                  <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 实现与设计</h3>
                   <div class="approach-grid">
                     <button
                       v-for="(step, i) in currentProject.approach"
@@ -238,7 +238,7 @@
                 </section>
 
                 <section v-if="currentProject.futurePlans.length > 0" class="detail-section">
-                  <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 未来我会如何做</h3>
+                  <h3 class="section-title font-mono"><span class="section-title-mark">▸</span> 后续计划</h3>
                   <ul class="future-list">
                     <li v-for="(plan, i) in currentProject.futurePlans" :key="i">
                       <span class="future-glyph font-mono">→</span>

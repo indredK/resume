@@ -1,5 +1,9 @@
 <template>
   <div class="skills-page">
+    <section class="skills-intro container mx-auto px-6" aria-labelledby="skills-heading">
+      <h1 id="skills-heading" class="skills-heading font-display">技术选型图谱</h1>
+      <p class="skills-description">整理前端、跨端及其他技术方向的选型资料。个人项目经历与实际交付见<router-link to="/">简历</router-link>和<router-link to="/case-studies">成果案例</router-link>；此页不按个人熟练度评级。</p>
+    </section>
     <div class="skills-tabs-wrap">
       <div class="container mx-auto px-6">
         <div class="skills-tabs">
@@ -50,6 +54,30 @@ const selectCategory = (id: string) => {
   display: flex;
   flex-direction: column;
   min-height: calc(100dvh - var(--header-height));
+}
+
+.skills-intro {
+  padding-top: 2.5rem;
+  padding-bottom: 1.6rem;
+}
+
+.skills-heading {
+  margin-bottom: 0.7rem;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 600;
+}
+
+.skills-description {
+  max-width: 52rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.skills-description a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 /* ============================================================

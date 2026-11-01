@@ -33,8 +33,8 @@
           <div>
             <p class="footer-title font-display">Portfolio Hub</p>
             <p class="footer-body">
-              个人技术能力展示中心。<br>
-              专注 IoT 物联网与高性能 Web 架构设计。
+              前端开发与多端业务实践。<br>
+              记录企业项目、桌面产品与 AI 工具协作。
             </p>
           </div>
           <div>
@@ -59,7 +59,7 @@ import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
 
 const navItems = [
   { name: '简历', path: '/' },
-  { name: '技能树', path: '/skills' },
+  { name: '技术图谱', path: '/skills' },
   { name: '成果', path: '/case-studies' },
   { name: 'AI 实践', path: '/ai-agent' },
   { name: '关于我', path: '/about' }

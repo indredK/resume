@@ -125,7 +125,6 @@
                           <span class="child-name">{{ child.name }}</span>
                           <div class="child-tags">
                             <span v-if="child.version" class="child-version font-mono">{{ child.version }}</span>
-                            <span v-if="child.level" class="child-level font-mono">Lv.{{ child.level }}</span>
                           </div>
                         </div>
                         <span class="child-arrow" aria-hidden="true">→</span>
@@ -154,7 +153,6 @@
                         <div class="bt-tool-card">
                           <span class="bt-dot" aria-hidden="true"></span>
                           <span class="bt-name font-mono">{{ item.name }}</span>
-                          <span class="bt-level font-mono">Lv.{{ item.level }}</span>
                         </div>
                       </div>
                     </div>
@@ -1019,12 +1017,6 @@ onUnmounted(() => {
   color: var(--faint);
 }
 
-.child-level {
-  font-size: 0.66rem;
-  color: var(--success);
-  font-weight: 600;
-}
-
 .child-arrow {
   font-size: 0.95rem;
   color: var(--faint);
@@ -1116,11 +1108,6 @@ onUnmounted(() => {
   font-weight: 700;
   color: var(--ink);
   flex: 1;
-}
-
-.bt-level {
-  font-size: 0.66rem;
-  color: var(--muted);
 }
 
 .bt-col-adv { background: color-mix(in srgb, var(--success) 4%, transparent); }

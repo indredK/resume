@@ -3,14 +3,15 @@
     <section class="hero">
       <div class="container mx-auto px-6 hero-grid">
         <div class="hero-lead">
-          <p class="hero-eyebrow font-mono">前端开发工程师 · 六年多经验</p>
-          <h1 class="hero-name font-display">Frontend</h1>
+          <p class="hero-eyebrow font-mono">前端开发工程师 · 2020 年起从事前端研发</p>
+          <h1 class="hero-name font-display">前端开发</h1>
           <p class="hero-tagline">
-            使用 <strong>Vue / React</strong> 构建企业级 Web 与多端应用，服务物联网和业务管理场景，关注复杂流程、组件复用及跨端一致性。
+            以 <strong>Vue / React / uni-app</strong> 交付企业 Web 与 H5、App、小程序应用；现聚焦销售与服务业务，同时持续实践桌面产品和 AI Agent 工作流。
           </p>
           <div class="hero-ctas">
             <a :href="`mailto:${CONTACT.email}`" class="cta-btn">Email</a>
             <a :href="CONTACT.github" target="_blank" rel="noopener noreferrer" class="cta-btn">GitHub</a>
+            <router-link to="/case-studies" class="cta-btn cta-btn-outline">项目案例</router-link>
           </div>
         </div>
 
@@ -92,6 +93,7 @@
                 </ul>
               </article>
             </div>
+            <router-link to="/case-studies" class="panel-link font-mono">查看项目实现与当前进度 <span aria-hidden="true">→</span></router-link>
           </section>
         </div>
 
@@ -106,7 +108,7 @@
                 </div>
               </div>
             </div>
-            <router-link to="/skills" class="panel-link font-mono">查看完整技能树 <span aria-hidden="true">→</span></router-link>
+            <router-link to="/skills" class="panel-link font-mono">查看技术选型图谱 <span aria-hidden="true">→</span></router-link>
           </section>
 
           <section class="resume-section sidebar-section" aria-labelledby="education-title">
@@ -122,8 +124,9 @@
           <section class="resume-section sidebar-section" aria-labelledby="summary-title">
             <h2 id="summary-title" class="section-title font-display">自我评价</h2>
             <p class="panel-prose">
-              具备六年多前端开发经验，覆盖企业级管理系统、物联网平台与 H5 / App / 小程序。熟悉 Vue、React 与微前端实践，能从需求梳理、模块设计和接口协同推进到多端验收；重视可复用组件、权限边界、状态一致性与工程质量。
+              2020 年起参与企业管理、物联网和多端业务系统研发。以需求与接口契约为起点，推进组件复用、权限与状态管理、国际化及跨端验收；个人项目延伸到 Tauri / Rust 桌面应用和 AI 工具协作。
             </p>
+            <router-link to="/ai-agent" class="panel-link font-mono">查看 AI 与 Agent 实践 <span aria-hidden="true">→</span></router-link>
           </section>
         </aside>
       </div>
@@ -137,10 +140,10 @@ import { CONTACT } from '@/data/contact'
 const baseUrl = import.meta.env.BASE_URL
 
 const statistics = [
-  { label: '从业经验', value: '六年多' },
+  { label: '前端经历', value: '2020 年起' },
   { label: '主力框架', value: 'Vue / React' },
-  { label: '交付形态', value: '多端应用' },
-  { label: '项目领域', value: 'IoT / 企业应用' }
+  { label: '交付形态', value: 'Web / 多端' },
+  { label: '个人实践', value: '桌面 / Agent' }
 ]
 
 const skillSummary = [
@@ -154,12 +157,22 @@ const projects = [
   {
     title: '多端业务管理应用',
     highlights: [
-      '基于 uni-app、Vue 3 与 Pinia 交付 H5、App 和微信小程序端功能',
-      '覆盖销售、拜访、活动、申请审批、待办消息、附件资料与考核报表等业务',
-      '完成真实接口联调、SSO 登录接入、SignalR 消息推送及 Playwright 端到端验收'
+      '基于 uni-app、Vue 3 与 Pinia 开发 H5、App 和微信小程序共用的销售业务前端',
+      '参与销售记录、拜访申请、审批待办、消息通知与资料管理等模块',
+      '对齐接口字段、角色菜单和登录流程，并用自动化用例检查关键业务链路'
     ],
     icon: '◇',
     duration: '2026.07 - 2026.08'
+  },
+  {
+    title: '服务工单前端 · 在研',
+    highlights: [
+      '参与人员资质审核与仪器流转等服务场景的前端开发',
+      '按确认的需求和接口契约梳理页面状态、权限入口与多端差异',
+      '当前仍在开发与验证阶段，三端验收结果以项目记录为准'
+    ],
+    icon: '◇',
+    duration: '2026 - 至今'
   },
   {
     title: '物联网设备管理平台',
@@ -194,6 +207,18 @@ const projects = [
 ]
 
 const experiences = [
+  {
+    period: '2026.06 - 至今',
+    company: '工业技术企业（现职）',
+    position: '前端开发工程师',
+    techStack: ['Vue 3', 'TypeScript', 'uni-app', 'Pinia', 'Vue I18n'],
+    summary: '负责销售与服务业务的共用前端；销售平台已上线，资质审核与仪器流转等服务模块持续开发中。',
+    details: [
+      '参与 H5、App、微信小程序共用前端的业务模块开发，处理平台差异和响应式布局',
+      '围绕角色菜单、表单与接口契约协同后端联调，梳理审批、待办和消息状态',
+      '推进多语言、组件复用和自动化验收，跟踪尚未完成的端侧验证'
+    ]
+  },
   {
     period: '2023.02 - 2025.11',
     company: '物联网科技企业',
@@ -298,6 +323,16 @@ const experiences = [
 .cta-btn:hover {
   color: var(--ink);
   background: transparent;
+}
+
+.cta-btn-outline {
+  color: var(--ink);
+  background: transparent;
+}
+
+.cta-btn-outline:hover {
+  color: var(--bg);
+  background: var(--ink);
 }
 
 .cta-btn:active {

@@ -2,14 +2,14 @@ import type { Company, Principle } from './types'
 
 export const companies: Company[] = [
   {
-    name: '销售管理系统项目',
-    shortName: '销售系统',
-    period: '2026.07 - 2026.08',
-    position: '前端研发',
+    name: '工业企业业务平台（现职）',
+    shortName: '业务平台',
+    period: '2026.06 - 至今',
+    position: '前端开发工程师',
     icon: '◆',
     color: 'emerald',
     gradient: 'from-emerald-400 to-green-300',
-    summary: '面向销售团队的多端业务管理系统，覆盖客户与销售活动、拜访、申请审批、公告消息、附件资料及考核报表。负责前端需求拆解、业务模块交付、接口联调与多端质量闭环。',
+    summary: '参与销售与服务业务的共用前端研发。销售多端应用已上线；人员资质审核与仪器流转等服务模块仍在开发和验证中。后端按业务域拆分，前端统一维护多端交互、权限入口与接口契约。',
     totalStats: [],
     projects: [
       {
@@ -119,6 +119,17 @@ export const companies: Company[] = [
           }
         ],
         futurePlans: []
+      },
+      {
+        title: '服务工单前端：资质与仪器流转（在研）',
+        role: '前端研发',
+        period: '2026 - 至今',
+        icon: '◇',
+        description: '围绕人员资质审核和仪器领用、归还等服务场景开发前端页面与状态流转；当前仍需按需求、接口契约和目标平台逐项验证。',
+        tags: ['uni-app', 'Vue 3', 'TypeScript', 'H5 / App / 微信小程序', '在研'],
+        metrics: [],
+        approach: [],
+        futurePlans: []
       }
     ]
   },
@@ -130,26 +141,17 @@ export const companies: Company[] = [
     icon: '🏢',
     color: 'emerald',
     gradient: 'from-emerald-400 to-green-300',
-    summary: '主导物联网平台核心功能开发，支撑 40+ 类工业设备与 200+ 种传感器接入；推进网关管理系统从 jQuery 向 React 升级，并独立构建可复用组件支撑多型号扩展。',
-    totalStats: [
-      { label: '渲染性能提升', value: '30%+' },
-      { label: '设备型号支撑', value: '9+' },
-      { label: '新型号效率提升', value: '60%+' },
-      { label: '项目数量', value: '4个' }
-    ],
+    summary: '参与物联网平台、设备管理后台与移动端配置工具研发，推进实时数据展示、网关后台组件化和跨端设备接入流程。',
+    totalStats: [],
     projects: [
       {
         title: '物联网设备管理平台',
-        role: '核心开发者',
+        role: '前端开发',
         period: '2023.02 - 2024.07',
         icon: '☁️',
-        description: '工业物联网设备与传感器管理平台，支撑 40+ 类工业设备与 200+ 种传感器的接入管理，覆盖设备全生命周期。核心功能包括仪表盘、地图、规则引擎三大模块，支持页面 Tab 切换展示各模块详情。',
+        description: '工业物联网设备与传感器管理平台，覆盖设备管理、仪表盘、地图和规则配置等模块。',
         tags: ['React', 'WebSocket', 'ECharts', 'Google Maps', 'IoT'],
-        metrics: [
-          { value: '30%+', label: '仪表盘渲染性能提升', detail: '200+ 传感器高频数据刷新场景下，页面帧率从卡顿恢复到流畅' },
-          { value: '8×40+', label: '规则引擎复杂度', detail: '8 种条件组合 × 40+ 种触发动作，用户零代码即可完成自动化配置' },
-          { value: '40+', label: '设备类型覆盖', detail: '从传感器注册→配置→监控→升级→维护，全生命周期管理闭环' }
-        ],
+        metrics: [],
         approach: [
           { title: '设备全生命周期建模', detail: '抽象设备状态机（注册→配置→运行→升级→维护→退役），通过统一接口屏蔽不同设备类型差异。' },
           { title: '增量更新与虚拟滚动', detail: '对大量设备列表采用虚拟滚动渲染，对实时数据使用增量 diff 更新策略，避免全量重绘。' }
@@ -162,13 +164,13 @@ export const companies: Company[] = [
           {
             title: '仪表盘',
             icon: '📊',
-            business: '实时监控 200+ 传感器的数据状态，展示设备运行指标；绘制历史数据趋势图，支持温度、湿度、CO2、用电量等多类型传感器的数据可视化；设置告警阈值，异常数据实时高亮提醒。',
+            business: '实时监控传感器状态并展示设备运行指标；绘制温度、湿度、CO2 和用电量等历史趋势，异常数据按告警阈值高亮。',
             tech: ['React', 'WebSocket', 'ECharts', 'Immer', '请求合并策略'],
             approach: [
               {
                 title: 'WebSocket 长连接 + 请求合并',
-                detail: '通过 WebSocket 接收 200+ 传感器高频推送数据，采用请求合并策略将多次数据更新合并为批量渲染，大幅降低 DOM 操作频率。',
-                requirement: '物联网场景下，200+ 传感器每秒产生大量数据，传统轮询方式无法满足实时性要求，且频繁的 HTTP 请求会造成服务器压力和网络开销。',
+                detail: '通过 WebSocket 接收传感器推送数据，将密集更新合并为批量渲染，减少重复 DOM 操作。',
+                requirement: '物联网场景下，多设备持续上报状态。高频轮询会增加请求量，频繁更新也容易造成页面卡顿。',
                 implementation: '1. 使用 WebSocket 建立长连接，服务端主动推送数据变更；2. 实现请求合并队列，将 500ms 内的多次数据更新合并为一次批量渲染；3. 使用 requestAnimationFrame 确保渲染时机与浏览器刷新同步；4. 实现心跳检测和断线重连机制，保证连接稳定性。',
                 tech: ['WebSocket', 'requestAnimationFrame', 'RxJS'],
                 selectionReason: 'WebSocket 相比轮询能减少 90% 以上的请求次数，请求合并策略进一步降低 DOM 操作频率，避免浏览器主线程阻塞。',
@@ -322,7 +324,7 @@ export const companies: Company[] = [
           {
             title: '规则引擎',
             icon: '⚙️',
-            business: '可视化配置自动化规则，将复杂逻辑抽象为「条件节点 + 动作节点」的树形结构；支持 8 种条件类型（如温度>30℃、时间触发、设备状态变化）和 40+ 种动作（如发送邮件、开关设备、HTTP 回调）；规则下发至边缘网关或云端执行引擎执行。',
+            business: '可视化配置自动化规则，将逻辑抽象为「条件节点 + 动作节点」；条件包括温度阈值、定时触发和设备状态变化，动作包括消息通知、设备控制和 HTTP 回调。',
             tech: ['React', '拖拽编排', 'MQTT', 'WebSocket', 'DSL'],
             approach: [
               {
@@ -406,13 +408,9 @@ export const companies: Company[] = [
         role: '独立开发',
         period: '2025.02 - 2025.07',
         icon: '🌐',
-        description: '从零构建定制化网关后台管理系统，替代传统 jQuery 架构，设计可复用组件库支撑 9 种网关型号扩展。',
+        description: '构建定制化网关后台管理系统，推进传统 jQuery 页面向 React 组件迁移，并抽取多型号共用的界面能力。',
         tags: ['React', '架构迁移', '组件库'],
-        metrics: [
-          { value: '9+', label: '网关型号复用', detail: '统一的模块化组件体系，让新增网关型号的开发成本降低 60%+' },
-          { value: '100%', label: '架构现代化', detail: '从 jQuery 全面迁移到 React Hooks，代码可维护性质的飞跃' },
-          { value: '60%+', label: '新型号开发效率提升', detail: '组件化 + 配置化设计，新增型号只需编写差异化配置' }
-        ],
+        metrics: [],
         approach: [
           { title: '组件化抽象分层', detail: '将网关管理功能拆分为「基础层（通用 UI）+ 协议层（通信逻辑）+ 业务层（设备特性）」三级架构，最大化代码复用。' },
           { title: '配置驱动渲染', detail: '设计 JSON Schema 驱动的动态表单系统，新增网关型号只需编写配置文件，无需修改组件代码。' },
@@ -432,11 +430,7 @@ export const companies: Company[] = [
         icon: '📡',
         description: '工业级路由器设备管理后台，负责常规功能迭代开发与维护，基于 jQuery 技术栈，并尝试在项目中混合 React 技术进行页面开发。',
         tags: ['jQuery', 'React', '混合开发', 'WebSocket', 'VPN'],
-        metrics: [
-          { value: '50+', label: '功能迭代数量', detail: '持续迭代开发路由器配置、监控、日志等核心功能模块' },
-          { value: 'jQuery+React', label: '技术栈融合', detail: '在 jQuery 项目中通过路由机制成功集成 React 页面开发' },
-          { value: '100%', label: '功能稳定性', detail: '保证生产环境功能稳定运行，及时响应客户需求' }
-        ],
+        metrics: [],
         modules: [
           {
             title: '设备状态监控',
@@ -577,11 +571,7 @@ export const companies: Company[] = [
         icon: '🔌',
         description: '工业网关设备管理后台，负责常规功能迭代开发与维护，基于 jQuery 技术栈，并探索在传统项目中引入现代前端技术。',
         tags: ['jQuery', 'React', '技术探索', 'MQTT', '协议转换'],
-        metrics: [
-          { value: '40+', label: '功能模块开发', detail: '开发网关配置、协议管理、数据采集等核心功能模块' },
-          { value: '混合架构', label: '技术栈创新', detail: '在 jQuery 基础上尝试集成 React，探索混合开发模式' },
-          { value: '稳定运行', label: '生产环境表现', detail: '确保系统在工业环境下稳定可靠运行' }
-        ],
+        metrics: [],
         modules: [
           {
             title: '数据处理模块',
@@ -771,11 +761,7 @@ export const companies: Company[] = [
         icon: '📱',
         description: '基于 Vue3 + UniApp 的跨平台移动应用，用于传感器设备的蓝牙激活与网关接入配置。解决工业传感器在无屏幕场景下的配网难题，用户通过手机蓝牙连接传感器完成激活，并将其接入附近网关实现数据上云。',
         tags: ['Vue3', 'UniApp', '蓝牙 BLE', 'IoT'],
-        metrics: [
-          { value: '蓝牙', label: '即连即配', detail: '靠近传感器自动发现，一键激活并接入网关，全流程耗时 < 30秒' },
-          { value: '跨平台', label: 'iOS/Android', detail: '一套代码同时打包 iOS 和 Android，节省 50% 的移动端开发成本' },
-          { value: '离线', label: '无网配置', detail: '传感器激活不依赖 WiFi，通过蓝牙完成全部配置' }
-        ],
+        metrics: [],
         modules: [
           {
             title: '蓝牙扫描与连接',
@@ -935,29 +921,20 @@ export const companies: Company[] = [
     icon: '🏗️',
     color: 'blue',
     gradient: 'from-blue-400 to-cyan-300',
-    summary: '主导微前端企业管理平台建设，整合 Svelte 与 React 子应用；构建个人、岗位、应用、用户多层 RBAC 权限体系，参与工程、合同段、流程和电子签章等业务模块研发。',
-    totalStats: [
-      { label: 'TS 覆盖率提升', value: '5%→40%' },
-      { label: '页面开发占比', value: '70%' },
-      { label: '遗留缺陷修复', value: '20+' },
-      { label: '公共组件封装', value: '5+' }
-    ],
+    summary: '参与微前端企业管理平台建设，处理跨框架子应用集成、角色权限、公共组件和业务模块迭代。',
+    totalStats: [],
     projects: [
       {
         title: '微前端企业管理平台',
-        role: '前端负责人',
+        role: '前端开发',
         period: '2022.01 - 2022.07',
         icon: '🏗️',
         description: '基于 single-spa 的微前端架构企业管理平台，整合 Svelte 与 React 跨框架子应用，深度集成政务级电子签章服务。',
         tags: ['React', 'single-spa', '微前端'],
-        metrics: [
-          { value: '5%→40%', label: 'TypeScript 覆盖率提升', detail: '从几乎无类型的 JS 代码库，逐步迁移到 40% TS 覆盖，类型安全大幅增强' },
-          { value: '70%', label: '页面开发占比', detail: '独立承担组织管理、个人中心及平台管理后台约 70% 的页面开发' },
-          { value: '20+', label: '遗留缺陷修复', detail: '系统性排查并修复历史遗留 Bug，显著降低线上故障率' }
-        ],
+        metrics: [],
         approach: [
           { title: 'JS → TS 渐进式迁移', detail: '采用"新增代码必须 TS + 旧代码按模块迁移"的策略，在不影响正常迭代的前提下逐步提升类型覆盖率。' },
-          { title: 'Class → Hooks 重构', detail: '利用 React Hooks 将冗余的 Class Component 拆解为可复用的自定义 Hook，实现业务逻辑解耦，封装 5+ 种跨项目公共组件。' },
+          { title: 'Class → Hooks 重构', detail: '利用 React Hooks 将 Class Component 中的重复逻辑拆解为可复用的自定义 Hook 和公共组件。' },
           { title: '跨框架生命周期桥接', detail: '深入 single-spa 源码，设计 Svelte（登录）与 React（业务）之间的通信桥，解决样式隔离与全局状态污染问题。' },
           { title: '按钮级 RBAC 权限控制', detail: '构建个人/岗位/应用/用户四层权限体系，使用自定义指令 + HOC 实现精确到按钮级的权限控制。' }
         ],
@@ -1082,11 +1059,7 @@ export const companies: Company[] = [
         icon: '⚙️',
         description: '面向工程企业的综合管理平台，涵盖工程管理、合同段管理、用户权限管理、图片管理等核心模块，支持工程全生命周期管理和数据可视化决策。',
         tags: ['React', 'Ant Design', 'ECharts', '阿里云 OSS'],
-        metrics: [
-          { value: '4+', label: '核心业务模块', detail: '工程管理、合同段、用户权限、图片管理等模块完整实现' },
-          { value: '20+', label: '数据统计图表', detail: '涵盖工程进度、质量、安全等多维度数据可视化' },
-          { value: '70%', label: '前端页面占比', detail: '独立承担约 70% 的页面开发工作' }
-        ],
+        metrics: [],
         modules: [
           {
             title: '工程管理模块',
@@ -1336,11 +1309,11 @@ export const companies: Company[] = [
     icon: '🚀',
     color: 'purple',
     gradient: 'from-purple-400 to-pink-300',
-    summary: '独立开发多个开源项目，涵盖桌面工作台、GIS 信息可视化、企业管理、实时通信与工业自动化等方向。',
+    summary: '维护多个个人项目，探索桌面工作台、历史信息可视化、企业管理与跨端界面等方向；各项目的已实现能力和验证状态以对应仓库为准。',
     totalStats: [
       { label: '开源项目', value: '5 个' },
       { label: '项目方向', value: 'Web / 桌面 / GIS / IoT' },
-      { label: '开发模式', value: '独立设计与实现' }
+      { label: '项目形态', value: '个人实践与持续迭代' }
     ],
     projects: [
       {
@@ -1537,22 +1510,16 @@ export const companies: Company[] = [
       },
       {
         title: '中国历史全视界',
-        role: '独立开发',
+        role: '个人项目',
         period: '2025.11 - 至今',
         icon: '🗺️',
-        description: '多维度历史信息交互可视化平台，整合时间轴、历史事件、人物与地理数据，独立完成前后端全栈开发。',
-        tags: ['Vue3', 'TypeScript', 'GIS'],
+        description: '围绕历史时间轴、事件与地理信息构建交互可视化界面；当前仓库采用 React、TypeScript 前端，并配有 NestJS 数据服务。',
+        tags: ['React', 'TypeScript', 'GIS', 'NestJS'],
         link: 'https://github.com/indredK/history',
-        metrics: [
-          { value: 'GIS 可视化', label: '核心技术', detail: '实现历史疆域和行政区划的时序变化展示，支持交互式地图渲染' },
-          { value: '全栈开发', label: '开发模式', detail: '独立完成前后端分离架构设计与实现' },
-          { value: '多维数据', label: '数据整合', detail: '整合时间轴、历史事件、人物与地理数据的关联展示' }
-        ],
+        metrics: [],
         approach: [
-          { title: 'TypeScript 架构设计', detail: '采用 TypeScript + Vue3 实现可扩展组件架构，确保代码类型安全和可维护性。' },
-          { title: 'GIS 数据建模', detail: '设计历史地理数据模型，支持疆域变迁、行政区划等时空数据的存储与查询。' },
-          { title: '交互式地图渲染', detail: '实现基于时间轴的动态地图渲染，支持历史时期的切换与数据联动展示。' },
-          { title: '前后端分离', detail: '独立完成 GIS 数据服务与前端可视化组件的整体设计与实现。' }
+          { title: '时间轴与地图联动', detail: '在 React 前端按时间轴、地图和数据服务拆分模块，组织历史时期切换与地图展示。' },
+          { title: '前后端接口边界', detail: '仓库使用独立的前端服务层访问 NestJS API，历史数据与地理数据按接口读取。' }
         ],
         futurePlans: [
           '增加更多历史时期的数据覆盖，完善历史事件与人物关系图谱',
@@ -1587,22 +1554,16 @@ export const companies: Company[] = [
       },
       {
         title: 'Discord Clone',
-        role: '独立开发',
+        role: '个人项目',
         period: '2026.03 - 至今',
         icon: '💬',
-        description: '模仿网页版 Discord 的全栈跨平台聊天应用，支持 Web、桌面端（Windows/macOS/Linux）、iOS 和 Android。',
-        tags: ['Vue3', 'Go', 'Tauri', 'WebSocket'],
+        description: '基于 React、TypeScript 与 Tauri 2 构建 Discord 风格的跨端界面实验；仓库包含 Web 前端和 Tauri 宿主，桌面与移动平台交付仍需逐端验证。',
+        tags: ['React', 'TypeScript', 'Tauri 2', 'Zustand'],
         link: 'https://github.com/kindred-react/react-discord',
-        metrics: [
-          { value: '5端支持', label: '跨平台', detail: 'Web + 桌面端（3个系统）+ 移动端（2个平台）全覆盖' },
-          { value: 'WebSocket', label: '实时通信', detail: '基于 WebSocket 实现消息实时推送、输入状态同步等功能' },
-          { value: '全栈开发', label: '技术栈', detail: '前端 Vue3 + 后端 Go + 桌面端 Tauri 2.0（Rust）' }
-        ],
+        metrics: [],
         approach: [
-          { title: 'Tauri 跨平台适配', detail: '使用 Tauri 2.0 实现 Web/Desktop/Mobile 跨平台适配，设计平台检测工具实现差异化渲染。' },
-          { title: 'WebSocket 实时通信', detail: '基于 Gorilla WebSocket 实现消息实时推送、输入状态同步、语音频道在线状态等实时通信机制。' },
-          { title: 'Go 后端架构', detail: '采用 Go + Gin + PostgreSQL 构建高性能后端服务，实现用户认证、消息存储、文件上传等功能。' },
-          { title: '性能优化', detail: '使用 TanStack Virtual 优化长消息列表渲染性能，采用 Pinia 进行全局状态管理。' }
+          { title: '跨端界面组织', detail: '按页面、组件与平台适配层组织 React 代码，Tauri 负责桌面及移动端宿主配置。' },
+          { title: '前端状态与列表', detail: '使用 Zustand 管理前端状态，并在长列表场景引入 TanStack Virtual。' }
         ],
         futurePlans: [
           '增加语音/视频通话功能，基于 WebRTC 实现实时音视频通信',
