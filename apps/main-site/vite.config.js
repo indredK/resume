@@ -13,13 +13,15 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
-    minify: 'esbuild',
+    minify: 'oxc',
     cssCodeSplit: true,
     sourcemap: false,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vue-vendor': ['vue', 'vue-router'],
+        manualChunks(id) {
+          if (/[\\/]node_modules[\\/](vue|vue-router|@vue[\\/][^\\/]+)[\\/]/.test(id)) {
+            return 'vue-vendor'
+          }
         },
       },
     },
